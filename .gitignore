@@ -1,0 +1,37 @@
+vetclinic-server/HELP.md
+target/
+!**/src/main/**
+!**/src/test/**
+
+**/build/
+*.log*
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### NodeJs ###
+/vetclinic-client/node_modules
+/vetclinic-client/build
+/vetclinic-client/coverage
