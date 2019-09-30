@@ -11,4 +11,5 @@ pipelines:
         caches:
           - maven
         script: # Modify the commands below to build your repository.
-          - mvn -f /vetclinic-server/pom.xml -B verify # -B batch mode makes Maven less verbose
+          - cd vetclinic-server
+          - mvn -B verify # -B batch mode makes Maven less verbose
