@@ -1,8 +1,8 @@
 package personal.ciai.vetclinic.model
 
 import io.swagger.annotations.ApiModel
-import personal.ciai.vetclinic.dto.PetDTO
 import kotlin.reflect.full.memberProperties
+import personal.ciai.vetclinic.dto.PetDTO
 
 @ApiModel("Pet model", description = "Used to model pets")
 class Pet(val id: Int, val name: String, val species: String) {
