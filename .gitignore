@@ -1,9 +1,8 @@
 vetclinic-server/HELP.md
 target/
+build/
 !**/src/main/**
 !**/src/test/**
-
-**/build/
 *.log*
 
 ### STS ###
