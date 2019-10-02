@@ -1,6 +1,8 @@
 package personal.ciai.vetclinic
 
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 import personal.ciai.vetclinic.dto.PetDTO
 import personal.ciai.vetclinic.model.Pet
 
@@ -10,7 +12,8 @@ import personal.ciai.vetclinic.model.Pet
 class PetTests {
 
     @Test
-    fun `maps User to UserResponse using extension function`() {
+    @DisplayName("Test function toDTO in the Pet Class")
+    fun testPetToDTO() {
         val pet = buildPet()
         val petDTO = pet.toDTO()
         assertPetDTO(petDTO)
@@ -25,8 +28,8 @@ class PetTests {
     }
 
     private fun assertPetDTO(pet: PetDTO) {
-        assert(2 == pet.id)
-        assert("Duke".equals(pet.name))
-        assert("Doggi".equals(pet.species))
+        assertEquals(2, pet.id)
+        assertEquals("Duke", pet.name)
+        assertEquals("Doggi", pet.species)
     }
 }
