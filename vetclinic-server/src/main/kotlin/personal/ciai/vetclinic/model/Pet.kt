@@ -10,7 +10,16 @@ import personal.ciai.vetclinic.dto.PetDTO
  * @property species the species of this Pet.
  * @constructor Creates a Pet.
  */
-class Pet(id: Int, val name: String, val species: String) : Entity<PetDTO>(id) {
+class Pet(
+    id: Int,
+    val name: String,
+    val species: String,
+    val owner: Client,
+    val appointments: Nothing = TODO("Not Implemented"),
+    val physicalDescription: String,
+    val notes: String,
+    val image: ProfileImage
+) : Entity<PetDTO>(id) {
 
     override fun toDTO() = PetDTO(
         id = id,
