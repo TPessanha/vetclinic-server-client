@@ -13,7 +13,7 @@ import personal.ciai.vetclinic.dto.PetDTO
 
 @Api(
     value = "VetClinic Management System - Pet API",
-    description = "Management operations of Pets in the CIAI 2019 Pet Clinic"
+    description = "Management of Pets in the CIAI 2019 Pet Clinic"
 )
 
 @RestController

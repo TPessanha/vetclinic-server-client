@@ -18,7 +18,7 @@ class SwaggerConfig {
     fun api(): Docket =
         Docket(DocumentationType.SWAGGER_2)
             .select()
-            .apis(RequestHandlerSelectors.basePackage("vetclinic"))
+            .apis(RequestHandlerSelectors.basePackage("personal.ciai.vetclinic"))
             .paths(PathSelectors.any())
             .build().apiInfo(apiEndpointsInfo())
 
