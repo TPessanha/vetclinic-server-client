@@ -1,11 +1,13 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    val kotlinVersion = "1.3.11"
     id("org.springframework.boot") version "2.1.9.RELEASE"
     id("io.spring.dependency-management") version "1.0.8.RELEASE"
     id("com.zoltu.git-versioning") version "3.0.3"
-    kotlin("jvm") version "1.2.71"
-    kotlin("plugin.spring") version "1.2.71"
+//    id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
+    kotlin("jvm") version kotlinVersion
+    kotlin("plugin.spring") version kotlinVersion
 //    kotlin("plugin.jpa") version "1.2.71"
 
 }
@@ -37,12 +39,12 @@ dependencies {
     implementation("io.springfox:springfox-swagger-ui:2.8.0")
 
     implementation("org.springframework.boot:spring-boot-starter-web")
-//    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
-//    runtimeOnly("com.h2database:h2")
-
+    runtimeOnly("com.h2database:h2"
+    )
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.5.2")

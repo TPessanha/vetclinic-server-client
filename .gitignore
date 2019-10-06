@@ -1,4 +1,5 @@
 vetclinic-server/HELP.md
+vetclinic-server/.gradle/
 target/
 build/
 !**/src/main/**
