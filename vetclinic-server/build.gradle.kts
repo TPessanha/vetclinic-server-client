@@ -5,18 +5,13 @@ plugins {
     id("org.springframework.boot") version "2.1.9.RELEASE"
     id("io.spring.dependency-management") version "1.0.8.RELEASE"
     id("com.zoltu.git-versioning") version "3.0.3"
-//    id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
 //    kotlin("plugin.jpa") version "1.2.71"
-
 }
 
 group = "personal.CIAI"
-val artifact = "vetclinic-server"
-val name = "vetclinic - server"
-val dscription = "VetClinic Managment API"
-
+version = "0.1"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 val developmentOnly by configurations.creating
@@ -31,6 +26,7 @@ repositories {
 }
 
 dependencies {
+
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -39,12 +35,11 @@ dependencies {
     implementation("io.springfox:springfox-swagger-ui:2.8.0")
 
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-
+//    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+//
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
-    runtimeOnly("com.h2database:h2"
-    )
+//    runtimeOnly(        "com.h2database:h2")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.5.2")
@@ -63,4 +58,3 @@ tasks.test {
         events("passed", "skipped", "failed")
     }
 }
-

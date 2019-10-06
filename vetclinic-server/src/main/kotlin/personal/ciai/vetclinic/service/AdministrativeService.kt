@@ -2,7 +2,6 @@ package personal.ciai.vetclinic.service
 
 import personal.ciai.vetclinic.dto.AdministrativeDTO
 
-
 /**
  *
  */
