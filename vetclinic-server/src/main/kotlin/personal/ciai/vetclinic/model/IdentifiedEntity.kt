@@ -1,3 +1,13 @@
 package personal.ciai.vetclinic.model
 
-abstract class IdentifiedEntity<DTO>(val id: Int): Entity<DTO>()
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.MappedSuperclass
+
+@MappedSuperclass
+abstract class IdentifiedEntity<DTO>(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Int
+) : Entity<DTO>()

@@ -21,25 +21,23 @@ import io.swagger.annotations.ApiModelProperty
 data class PetDTO(
     @ApiModelProperty("An unique identifier for the pet", required = true, readOnly = true)
     val id: Int,
-    @ApiModelProperty("The pet species", required = true, readOnly = true)
+    @ApiModelProperty("The species of the pet", required = true, readOnly = true)
     val species: String,
-    @ApiModelProperty("The age of the pet", required = true, readOnly = true)
-    val age: Int,
-    @ApiModelProperty("The owner of the pet", required = true, readOnly = true)
-    val owner: String,
-    @ApiModelProperty("A list of appointments scheduled for the pet", required = true, readOnly = true)
-    val appointments: List<String>,
-    @ApiModelProperty("Notes about the pet", required = true, readOnly = true)
-    val notes: String,
-    @ApiModelProperty(
-        "A physical description of the pet",
-        name = "Physical Description",
-        required = true,
-        readOnly = true
-    )
-    val physicalDescription: String,
-    @ApiModelProperty("The pet's medical records", name = "Medical Record", required = true, readOnly = true)
-    val medicalRecord: String,
-    @ApiModelProperty("A picture of the pet", required = true, readOnly = true)
-    val picture: String
+    @ApiModelProperty("The age of the pet", required = true, readOnly = false)
+    val age: Int
+//    @ApiModelProperty("The owner of the pet", required = true, readOnly = true)
+//    val owner: String,
+//    @ApiModelProperty("A list of appointments scheduled for the pet", required = true, readOnly = true)
+//    val appointments: List<String>,
+//    @ApiModelProperty("Notes about the pet", required = true, readOnly = true)
+//    val notes: String,
+//    @ApiModelProperty(
+//        "A physical description of the pet",
+//        name = "Physical Description",
+//        required = true,
+//        readOnly = true
+//    )
+//    val physicalDescription: String,
+//    @ApiModelProperty("The pet's medical records", name = "Medical Record", required = true, readOnly = true)
+//    val medicalRecord: String
 ) : BaseDTO
