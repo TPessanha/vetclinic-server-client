@@ -1,15 +1,21 @@
 package personal.ciai.vetclinic.controller
 
-import com.sun.istack.NotNull
-import io.swagger.annotations.*
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.ApiParam
+import io.swagger.annotations.ApiResponse
+import io.swagger.annotations.ApiResponses
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import personal.ciai.vetclinic.dto.AdministrativeDTO
-import personal.ciai.vetclinic.dto.PetDTO
 import personal.ciai.vetclinic.service.AdministrativeService
-import javax.validation.Valid
-
 
 @Api(
     value = "VetClinic Management System - Administrative API",
@@ -19,7 +25,6 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/admin")
 class AdministrativeController(@Autowired val adminService: AdministrativeService) {
-
 
     @ApiOperation(value = "Get details of a single  Administrative", response = AdministrativeDTO::class)
     @ApiParam(name = "id", required = true, value = "(Required) Administrative identificator (id)")
@@ -36,7 +41,6 @@ class AdministrativeController(@Autowired val adminService: AdministrativeServic
         // TODO to Complete implementation
     }
 
-
     @ApiOperation(value = "View a list of Administratives details", response = AdministrativeDTO::class)
     @ApiResponses(
         value = [
@@ -51,7 +55,6 @@ class AdministrativeController(@Autowired val adminService: AdministrativeServic
         // TODO to Complete implementation
     }
 
-
     @ApiOperation(value = "Add a new Administrative account")
     @ApiResponses(
         value = [
@@ -62,13 +65,12 @@ class AdministrativeController(@Autowired val adminService: AdministrativeServic
             )]
     )
     @PostMapping("")
-    fun add(@Valid @RequestBody admin: AdministrativeDTO) {
+    fun add(@RequestBody admin: AdministrativeDTO) {
         if (this.adminService.exist(admin.email))
             adminService.save(admin)
 
         // TODO to Complete implementation
     }
-
 
     @ApiOperation(value = "Edit Administrative information")
     @ApiResponses(
@@ -83,14 +85,13 @@ class AdministrativeController(@Autowired val adminService: AdministrativeServic
     @PutMapping("/{id}")
     fun update(
         @PathVariable(value = "id", required = true) id: String,
-        @NotNull @RequestBody admin: AdministrativeDTO
+        @RequestBody admin: AdministrativeDTO
     ) {
         if (this.adminService.exist(admin.email))
             adminService.save(admin)
 
         // TODO to Complete implementation
     }
-
 
     @ApiOperation(value = "Delete a Administrative account")
     @ApiParam(name = "id", required = true, value = "(Required) Admin identificator (id)")
@@ -106,9 +107,8 @@ class AdministrativeController(@Autowired val adminService: AdministrativeServic
     @DeleteMapping("/{id}")
     fun delete(@PathVariable(value = "id", required = true) id: String) {
         if (this.adminService.exist(id))
-            this.adminService.delete(id);
+            this.adminService.delete(id)
 
         // TODO to Complete implementation
     }
-
 }

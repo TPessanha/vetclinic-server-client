@@ -1,13 +1,12 @@
 package personal.ciai.vetclinic.dto
 
-
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 
 /**
  * Models a Administrative DTO.
  *
- * @property name the user name of the Administrative.
+ * @property fullName the user name of the Administrative.
  * @property picture the picture belonging to the Administrative.
  * @property email the email of the Administrative.
  * @property phoneNumber the phone number belonging to the Administrative.
