@@ -1,4 +1,5 @@
 vetclinic-server/HELP.md
+
 target/
 build/
 !**/src/main/**
@@ -34,3 +35,4 @@ build/
 /vetclinic-client/node_modules
 /vetclinic-client/build
 /vetclinic-client/coverage
+/vetclinic-server/.gradle/
