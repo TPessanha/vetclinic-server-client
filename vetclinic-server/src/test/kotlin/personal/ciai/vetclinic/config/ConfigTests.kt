@@ -14,7 +14,7 @@ class ConfigTests(
 ) {
     @Test
     fun `Print all configs do manual check`() {
-        println("FullPathToPetPictures: ${configurationProperties.fullPathToPetPictures}")
-        println("FullPathToUserPictures: ${configurationProperties.fullPathToUserPictures}")
+        println("FullPathToPetPictures: ${configurationProperties.fullPathToPetPhotos}")
+        println("FullPathToUserPictures: ${configurationProperties.fullPathToUserPhotos}")
     }
 }

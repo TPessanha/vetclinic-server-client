@@ -5,7 +5,9 @@ import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
+import java.net.URI
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -61,11 +63,7 @@ class PetController(
         @ApiParam(value = "The ID of the pet", required = true) @PathVariable(value = "id")
         id: Int
     ): ResponseEntity<PetDTO> {
-        val pet = petService.getPetById(id)
-        return if (pet != null)
-            ResponseEntity.ok(pet)
-        else
-            ResponseEntity.notFound().build()
+        return ResponseEntity.ok(petService.getPetById(id))
     }
 
     @ApiOperation(value = "Create a new pet")
@@ -83,14 +81,55 @@ class PetController(
     )
     @PostMapping("/new")
     fun addPet(
-        @ApiParam(value = "Details of a pet to be created", required = true) @RequestBody pet: PetDTO,
-        @RequestParam("file") filePicture: MultipartFile?
+        @ApiParam(value = "Details of a pet to be created", required = true) @RequestBody pet: PetDTO
     ) {
-        // TODO Save file to disk
-        if (filePicture != null) {
-            println(filePicture.name)
-            println(filePicture.size)
-        }
         petService.savePet(pet)
+    }
+
+    @ApiOperation(value = "Update a pet photo")
+    @ApiResponses(
+        value = [
+            (ApiResponse(code = 200, message = "Successfully updated the photo")),
+            (ApiResponse(code = 201, message = "Successfully created the photo")),
+            (ApiResponse(code = 401, message = "You are not authorized to create the resource")),
+            (ApiResponse(
+                code = 403,
+                message = "Accessing the resource you were tyring to reach is forbidden"
+            )),
+            (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
+        ]
+    )
+    @PostMapping("/{id}/photo")
+    fun savePhoto(
+        @ApiParam(value = "The ID of the pet", required = true) @PathVariable(value = "id")
+        id: Int,
+        @RequestParam("file")
+        photo: MultipartFile
+    ): ResponseEntity<URI> {
+        return ResponseEntity.ok(petService.updatePhoto(id, photo))
+    }
+
+    @ApiOperation(value = "Get a pet photo")
+    @ApiResponses(
+        value = [
+            (ApiResponse(code = 200, message = "Successfully updated the photo")),
+            (ApiResponse(code = 201, message = "Successfully created the photo")),
+            (ApiResponse(code = 401, message = "You are not authorized to create the resource")),
+            (ApiResponse(
+                code = 403,
+                message = "Accessing the resource you were tyring to reach is forbidden"
+            )),
+            (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
+        ]
+    )
+    @GetMapping("/{id}/photo")
+    fun getPhoto(
+        @ApiParam(value = "The ID of the pet", required = true) @PathVariable(value = "id")
+        id: Int
+    ): ResponseEntity<kotlin.ByteArray> {
+        return ResponseEntity
+            .ok()
+            .contentType(MediaType.IMAGE_JPEG)
+            .body(petService.getPhoto(id).readBytes())
     }
 }

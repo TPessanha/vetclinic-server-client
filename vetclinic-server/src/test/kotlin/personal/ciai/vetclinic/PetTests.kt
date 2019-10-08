@@ -1,5 +1,6 @@
 package personal.ciai.vetclinic
 
+import java.net.URI
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import personal.ciai.vetclinic.dto.PetDTO
@@ -21,7 +22,8 @@ class PetTests {
         return Pet(
             2,
             "Duke",
-            5
+            5,
+            URI.create("asdasd")
         )
     }
 

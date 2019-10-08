@@ -1,5 +1,6 @@
 package personal.ciai.vetclinic.model
 
+import java.net.URI
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Table
@@ -16,7 +17,7 @@ import personal.ciai.vetclinic.dto.PetDTO
  * @property notes String Notes about the pet
  * @property physicalDescription String A physical description of the pet
  * @property medicalRecord String The pet's medical records
- * @property picture File A picture of the pet
+ * @property photo File A photo of the pet
  * @constructor Creates a Pet Entity.
  */
 @Entity
@@ -28,18 +29,21 @@ class Pet(
     val species: String,
 
     @Column(nullable = false)
-    var age: Int
+    var age: Int,
     // var owner: Client<ClientDTO>,
     // val appointments: MutableList<Appointment>,
     // var notes: String ,
     // var physicalDescription: String,
     // var medicalRecord: String =""
+    @Column(nullable = true)
+    var photo: URI? = null
 ) : IdentifiedEntity<PetDTO>(id) {
 
     override fun toDTO() = PetDTO(
         id = id,
         species = species,
-        age = age
+        age = age,
+        photo = photo?.toString()
     )
 //        PetDTO(
 //        id = id,
@@ -50,6 +54,6 @@ class Pet(
 //        physicalDescription = physicalDescription,
 //        medicalRecord = medicalRecord,
 //        owner = owner.username,
-//        picture = picture.name
+//        photo = photo.name
 //    )
 }

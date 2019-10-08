@@ -14,17 +14,17 @@ import io.swagger.annotations.ApiModelProperty
  * @property notes String Notes about the pet
  * @property physicalDescription String A physical description of the pet
  * @property medicalRecord String The pet's medical records
- * @property picture String A picture of the pet
+ * @property photo String A photo of the pet
  * @constructor Creates a Pet DTO.
  */
 @ApiModel("Pet DTO model", description = "Used to model pets")
 data class PetDTO(
-    @ApiModelProperty("An unique identifier for the pet", required = true, readOnly = true)
+    @ApiModelProperty("An unique identifier for the pet", required = true, readOnly = false)
     val id: Int,
-    @ApiModelProperty("The species of the pet", required = true, readOnly = true)
+    @ApiModelProperty("The species of the pet", required = true, readOnly = false)
     val species: String,
     @ApiModelProperty("The age of the pet", required = true, readOnly = false)
-    val age: Int
+    val age: Int,
 //    @ApiModelProperty("The owner of the pet", required = true, readOnly = true)
 //    val owner: String,
 //    @ApiModelProperty("A list of appointments scheduled for the pet", required = true, readOnly = true)
@@ -40,4 +40,6 @@ data class PetDTO(
 //    val physicalDescription: String,
 //    @ApiModelProperty("The pet's medical records", name = "Medical Record", required = true, readOnly = true)
 //    val medicalRecord: String
+    @ApiModelProperty("The resource identifier for the image", required = false, readOnly = false)
+    val photo: String?
 ) : BaseDTO
