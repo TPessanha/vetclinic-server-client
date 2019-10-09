@@ -30,11 +30,14 @@ class Pet(
 
     @Column(nullable = false)
     var age: Int,
-    // var owner: Client<ClientDTO>,
-    // val appointments: MutableList<Appointment>,
-    // var notes: String ,
-    // var physicalDescription: String,
-    // var medicalRecord: String =""
+//    var owner: Client<ClientDTO>, todo link pet to owner
+//    val appointments: MutableList<Appointment>, todo link pet to appointments
+    @Column(nullable = false)
+    var notes: String,
+    @Column(nullable = false)
+    var physicalDescription: String,
+    @Column(nullable = false)
+    var medicalRecord: String,
     @Column(nullable = true)
     var photo: URI? = null
 ) : IdentifiedEntity<PetDTO>(id) {
@@ -43,17 +46,11 @@ class Pet(
         id = id,
         species = species,
         age = age,
+        owner = "NOT IMPLEMENTED",
+        appointments = emptyList(),
+        notes = notes,
+        physicalDescription = physicalDescription,
+        medicalRecord = medicalRecord,
         photo = photo?.toString()
     )
-//        PetDTO(
-//        id = id,
-//        species = species,
-//        age = age,
-//        appointments = TODO("Appointment class is missing"),
-//        notes = notes,
-//        physicalDescription = physicalDescription,
-//        medicalRecord = medicalRecord,
-//        owner = owner.username,
-//        photo = photo.name
-//    )
 }

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -51,7 +52,7 @@ class PetController(
     fun getAllPets() = petService.findAllPets()
 
     @ApiOperation(
-        value = "Get details of a single pet",
+        value = "Get details of a pet",
         produces = "application/json",
         response = PetDTO::class
     )
@@ -73,7 +74,7 @@ class PetController(
     ) = ResponseEntity.ok(petService.getPetById(id))
 
     @ApiOperation(
-        value = "Create a new pet",
+        value = "(Debug) Create a new pet",
         consumes = "application/json"
     )
     @ApiResponses(
@@ -88,12 +89,12 @@ class PetController(
             (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
         ]
     )
-    @PostMapping("/new")
+    @PostMapping("")
     fun addPet(
         @ApiParam(value = "Details of a pet to be created", required = true) @RequestBody pet: PetDTO
     ) = petService.savePet(pet)
 
-    @ApiOperation(value = "Update a pet photo")
+    @ApiOperation(value = "Update photo of a pet")
     @ApiResponses(
         value = [
             (ApiResponse(code = 200, message = "Successfully updated the photo")),
@@ -107,7 +108,7 @@ class PetController(
             (ApiResponse(code = 415, message = "Photos can only be of type (jpg/png)"))
         ]
     )
-    @PostMapping("/{id}/photo")
+    @PutMapping("/{id}/photo")
     fun savePhoto(
         @ApiParam(value = "The ID of the pet", required = true) @PathVariable(value = "id")
         id: Int,
@@ -115,7 +116,10 @@ class PetController(
         photo: MultipartFile
     ) = ResponseEntity.ok(petService.updatePhoto(id, photo).toString())
 
-    @ApiOperation(value = "Get a pet photo", response = ByteArray::class)
+    @ApiOperation(
+        value = "Get photo of a pet",
+        response = ByteArray::class
+    )
     @ApiResponses(
         value = [
             (ApiResponse(code = 200, message = "Successfully retrieved the photo")),
@@ -134,5 +138,26 @@ class PetController(
     ) = ResponseEntity
         .ok()
         .contentType(MediaType.IMAGE_JPEG)
-        .body(petService.getPhoto(id).readBytes())
+        .body(petService.getPhoto(id))
+
+    @ApiOperation(
+        value = "Edit pet information",
+        consumes = "application/json"
+    )
+    @ApiResponses(
+        value = [
+            (ApiResponse(code = 200, message = "Successfully updated the pet")),
+            (ApiResponse(code = 201, message = "Successfully created the pet")),
+            (ApiResponse(code = 401, message = "You are not authorized to edit the pet details")),
+            (ApiResponse(
+                code = 403,
+                message = "Accessing the resource you were tyring to reach is forbidden"
+            )),
+            (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
+        ]
+    )
+    @PutMapping("/{id}")
+    fun updatePet(
+        @ApiParam(value = "Details of a pet to be updated", required = true) @RequestBody pet: PetDTO
+    ) = petService.savePet(pet, update = true)
 }

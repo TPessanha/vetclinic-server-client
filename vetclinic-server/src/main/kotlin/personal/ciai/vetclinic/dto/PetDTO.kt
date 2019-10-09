@@ -19,27 +19,67 @@ import io.swagger.annotations.ApiModelProperty
  */
 @ApiModel("Pet DTO model", description = "Used to model pets")
 data class PetDTO(
-    @ApiModelProperty("An unique identifier for the pet", required = true, readOnly = false)
+    @ApiModelProperty(
+        "An unique identifier for the pet",
+        required = true,
+        readOnly = false,
+        example = "1"
+    )
     val id: Int,
-    @ApiModelProperty("The species of the pet", required = true, readOnly = false)
+    @ApiModelProperty(
+        "The species of the pet",
+        required = true,
+        readOnly = false,
+        example = "Bulldog"
+    )
     val species: String,
-    @ApiModelProperty("The age of the pet", required = true, readOnly = false)
+    @ApiModelProperty(
+        "The age of the pet",
+        required = true,
+        readOnly = false,
+        example = "4"
+    )
     val age: Int,
-//    @ApiModelProperty("The owner of the pet", required = true, readOnly = true)
-//    val owner: String,
-//    @ApiModelProperty("A list of appointments scheduled for the pet", required = true, readOnly = true)
-//    val appointments: List<String>,
-//    @ApiModelProperty("Notes about the pet", required = true, readOnly = true)
-//    val notes: String,
-//    @ApiModelProperty(
-//        "A physical description of the pet",
-//        name = "Physical Description",
-//        required = true,
-//        readOnly = true
-//    )
-//    val physicalDescription: String,
-//    @ApiModelProperty("The pet's medical records", name = "Medical Record", required = true, readOnly = true)
-//    val medicalRecord: String
-    @ApiModelProperty("The resource identifier for the image", required = false, readOnly = false)
+    @ApiModelProperty(
+        "The owner of the pet",
+        required = true,
+        readOnly = false,
+        example = "Tony"
+    )
+    val owner: String,
+    @ApiModelProperty(
+        "A list of appointments scheduled for the pet",
+        required = false,
+        readOnly = true,
+        example = "Client2451"
+    )
+    val appointments: List<String> = emptyList(),
+    @ApiModelProperty(
+        "Notes about the pet",
+        required = false,
+        readOnly = false,
+        example = "Allergy to penicillin"
+    )
+    val notes: String = "",
+    @ApiModelProperty(
+        "A physical description of the pet",
+        name = "Physical Description",
+        required = false,
+        readOnly = false,
+        example = "Weight: 10Kg, height: 42Cm"
+    )
+    val physicalDescription: String,
+    @ApiModelProperty(
+        "The pet's medical records",
+        name = "Medical Record",
+        required = false,
+        readOnly = true
+    )
+    val medicalRecord: String = "",
+    @ApiModelProperty(
+        "The resource identifier for the image",
+        required = false,
+        readOnly = true
+    )
     val photo: String?
 ) : BaseDTO

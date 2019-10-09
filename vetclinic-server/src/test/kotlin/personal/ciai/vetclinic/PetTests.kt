@@ -23,7 +23,10 @@ class PetTests {
             2,
             "Duke",
             5,
-            URI.create("asdasd")
+            notes = "Pretty dog",
+            physicalDescription = "Large dog",
+            medicalRecord = "medical record",
+            photo = URI.create("asdasd")
         )
     }
 
@@ -31,5 +34,8 @@ class PetTests {
         assertEquals(2, pet.id)
         assertEquals("Duke", pet.species)
         assertEquals(5, pet.age)
+        assertEquals("Pretty dog", pet.notes)
+        assertEquals("Large dog", pet.physicalDescription)
+        assertEquals("medical record", pet.medicalRecord)
     }
 }
