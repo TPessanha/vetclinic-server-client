@@ -25,7 +25,13 @@ class SwaggerConfig {
     fun apiEndpointsInfo(): ApiInfo =
         ApiInfoBuilder()
             .title("Spring boot REST API Example for CIAI 19/20").description("CIAI 2019 VetClinic REST API")
-            .contact(Contact("Group xx", "toAdd", "...@gmail.com"))
+            .contact(
+                Contact(
+                    "Group xx",
+                    "https://tomaspessanha@bitbucket.org/tomaspessanha/vetclinic-server-client.git",
+                    "...@gmail.com"
+                )
+            )
             .license("Apach 2.0")
             .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
             .version("0.0.1")
