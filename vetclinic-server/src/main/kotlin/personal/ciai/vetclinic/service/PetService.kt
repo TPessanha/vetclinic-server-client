@@ -1,5 +1,9 @@
 package personal.ciai.vetclinic.service
 
+import java.io.File
+import java.net.URI
+import java.nio.file.Files
+import java.nio.file.Paths
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.MediaType
@@ -12,10 +16,6 @@ import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.exception.UnsupportedMediaTypeException
 import personal.ciai.vetclinic.model.Pet
 import personal.ciai.vetclinic.repository.PetRepository
-import java.io.File
-import java.net.URI
-import java.nio.file.Files
-import java.nio.file.Paths
 
 @Service
 class PetService(
@@ -67,7 +67,6 @@ class PetService(
     fun isPetPresent(id: Int): Boolean {
         return repository.findByIdOrNull(id) != null
     }
-
 
     fun updatePhoto(id: Int, photo: MultipartFile): URI {
         if (photo.contentType !in imageTypes)
