@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
-import java.net.URI
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -32,7 +31,12 @@ class PetController(
     val petService: PetService
 ) {
 
-    @ApiOperation(value = "View a list of registered pets", responseContainer = "List", response = PetDTO::class)
+    @ApiOperation(
+        value = "View a list of registered pets",
+        produces = "application/json",
+        responseContainer = "List",
+        response = PetDTO::class
+    )
     @ApiResponses(
         value = [
             (ApiResponse(code = 200, message = "Successfully retrieved the list of pets")),
@@ -46,7 +50,11 @@ class PetController(
     @GetMapping("")
     fun getAllPets() = petService.findAllPets()
 
-    @ApiOperation(value = "Get details of a single pet", response = PetDTO::class)
+    @ApiOperation(
+        value = "Get details of a single pet",
+        produces = "application/json",
+        response = PetDTO::class
+    )
     @ApiResponses(
         value = [
             (ApiResponse(code = 200, message = "Successfully retrieved the pet details")),
@@ -62,11 +70,12 @@ class PetController(
     fun getOnePet(
         @ApiParam(value = "The ID of the pet", required = true) @PathVariable(value = "id")
         id: Int
-    ): ResponseEntity<PetDTO> {
-        return ResponseEntity.ok(petService.getPetById(id))
-    }
+    ) = ResponseEntity.ok(petService.getPetById(id))
 
-    @ApiOperation(value = "Create a new pet")
+    @ApiOperation(
+        value = "Create a new pet",
+        consumes = "application/json"
+    )
     @ApiResponses(
         value = [
             (ApiResponse(code = 200, message = "Successfully added the pet")),
@@ -82,9 +91,7 @@ class PetController(
     @PostMapping("/new")
     fun addPet(
         @ApiParam(value = "Details of a pet to be created", required = true) @RequestBody pet: PetDTO
-    ) {
-        petService.savePet(pet)
-    }
+    ) = petService.savePet(pet)
 
     @ApiOperation(value = "Update a pet photo")
     @ApiResponses(
@@ -96,7 +103,8 @@ class PetController(
                 code = 403,
                 message = "Accessing the resource you were tyring to reach is forbidden"
             )),
-            (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
+            (ApiResponse(code = 404, message = "The resource you were trying to reach was not found")),
+            (ApiResponse(code = 415, message = "Photos can only be of type (jpg/png)"))
         ]
     )
     @PostMapping("/{id}/photo")
@@ -105,16 +113,13 @@ class PetController(
         id: Int,
         @RequestParam("file")
         photo: MultipartFile
-    ): ResponseEntity<URI> {
-        return ResponseEntity.ok(petService.updatePhoto(id, photo))
-    }
+    ) = ResponseEntity.ok(petService.updatePhoto(id, photo).toString())
 
-    @ApiOperation(value = "Get a pet photo")
+    @ApiOperation(value = "Get a pet photo", response = ByteArray::class)
     @ApiResponses(
         value = [
-            (ApiResponse(code = 200, message = "Successfully updated the photo")),
-            (ApiResponse(code = 201, message = "Successfully created the photo")),
-            (ApiResponse(code = 401, message = "You are not authorized to create the resource")),
+            (ApiResponse(code = 200, message = "Successfully retrieved the photo")),
+            (ApiResponse(code = 401, message = "You are not authorized to view the resource")),
             (ApiResponse(
                 code = 403,
                 message = "Accessing the resource you were tyring to reach is forbidden"
@@ -126,10 +131,8 @@ class PetController(
     fun getPhoto(
         @ApiParam(value = "The ID of the pet", required = true) @PathVariable(value = "id")
         id: Int
-    ): ResponseEntity<kotlin.ByteArray> {
-        return ResponseEntity
-            .ok()
-            .contentType(MediaType.IMAGE_JPEG)
-            .body(petService.getPhoto(id).readBytes())
-    }
+    ) = ResponseEntity
+        .ok()
+        .contentType(MediaType.IMAGE_JPEG)
+        .body(petService.getPhoto(id).readBytes())
 }

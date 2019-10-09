@@ -1,18 +1,20 @@
 package personal.ciai.vetclinic.service
 
-import java.io.File
-import java.net.URI
-import java.nio.file.Files
-import java.nio.file.Paths
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.config.ConfigurationProperties
 import personal.ciai.vetclinic.dto.PetDTO
 import personal.ciai.vetclinic.exception.NotFoundException
+import personal.ciai.vetclinic.exception.UnsupportedMediaTypeException
 import personal.ciai.vetclinic.model.Pet
 import personal.ciai.vetclinic.repository.PetRepository
+import java.io.File
+import java.net.URI
+import java.nio.file.Files
+import java.nio.file.Paths
 
 @Service
 class PetService(
@@ -21,6 +23,12 @@ class PetService(
     private val configurationProperties: ConfigurationProperties
 
 ) {
+    companion object MediaTypes {
+        val imageTypes = listOf<String>(
+            MediaType.IMAGE_JPEG.toString(),
+            MediaType.IMAGE_PNG.toString()
+        )
+    }
     fun getPetById(id: Int) = getPetEntityById(id).toDTO()
 
     private fun getPetEntityById(id: Int): Pet {
@@ -49,24 +57,20 @@ class PetService(
         return repository.findByIdOrNull(id) != null
     }
 
-    private fun getExtension(fileName: String?): String {
-        if (fileName == null)
-            throw IllegalArgumentException("fileName can't be null")
-        return fileName.substring(fileName.lastIndexOf('.'))
-    }
+    fun updatePhoto(id: Int, photo: MultipartFile): URI {
+        if (photo.contentType !in imageTypes)
+            throw UnsupportedMediaTypeException("Photos can only be of type (jpg/png)")
 
-    fun updatePhoto(id: Int, filePicture: MultipartFile): URI {
         val pet = getPetById(id)
         val path = Paths.get(
             configurationProperties.fullPathToPetPhotos, "$id.jpg"
         )
-
         println("PATH: $path")
         println("PATHtoUri: ${path.toUri()}")
 
         val updatedPet = pet.copy(photo = path.toUri().toString())
         File(configurationProperties.fullPathToPetPhotos).mkdirs()
-        Files.write(path, filePicture.bytes)
+        Files.write(path, photo.bytes)
         savePet(updatedPet)
         return path.toUri()
     }
@@ -75,7 +79,7 @@ class PetService(
         val pet = getPetEntityById(id)
         val photoURI = pet.photo
         return if (photoURI == null)
-            throw NotFoundException("Pet does not have a profile picture")
+            throw NotFoundException("Pet does not have a profile photo")
         else
             File(photoURI)
     }
