@@ -5,13 +5,11 @@ import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Paths
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.config.ConfigurationProperties
 import personal.ciai.vetclinic.dto.PetDTO
-import personal.ciai.vetclinic.exception.ConflictException
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.exception.UnsupportedMediaTypeException
 import personal.ciai.vetclinic.model.Pet
@@ -42,30 +40,14 @@ class PetService(
     }
 
     fun savePet(petDTO: PetDTO, update: Boolean = false) {
-        val exists = repository.existsById(petDTO.id)
-        if (!update && exists)
-            throw ConflictException("Pet with that ID already exists")
-        if (update && !exists)
+        if (update && !repository.existsById(petDTO.id))
             throw NotFoundException("Pet with id (${petDTO.id}) not found")
 
-        val pet = Pet(
-            id = petDTO.id,
-            species = petDTO.species,
-            age = petDTO.age,
-            medicalRecord = petDTO.medicalRecord,
-            physicalDescription = petDTO.physicalDescription,
-            notes = petDTO.notes,
-            photo = if (petDTO.photo == null) null else URI.create(petDTO.photo)
-        )
-        repository.save(pet)
+        repository.save(petDTO.toEntity())
     }
 
     fun findAllPets(): List<PetDTO> {
         return repository.findAll().map { it.toDTO() }
-    }
-
-    fun isPetPresent(id: Int): Boolean {
-        return repository.findByIdOrNull(id) != null
     }
 
     fun updatePhoto(id: Int, photo: MultipartFile): URI {
@@ -80,10 +62,14 @@ class PetService(
         println("PATH: $path")
         println("Uri: ${path.toUri()}")
 
-        val updatedPet = pet.copy(photo = path.toUri().toString())
-        File(configurationProperties.fullPathToPetPhotos).mkdirs()
+        val directory = File(configurationProperties.fullPathToPetPhotos)
+        if (!directory.exists())
+            directory.mkdirs()
         Files.write(path, photo.bytes)
+
+        val updatedPet = pet.copy(photo = path.toUri().toString())
         savePet(updatedPet, update = true)
+
         return path.toUri()
     }
 

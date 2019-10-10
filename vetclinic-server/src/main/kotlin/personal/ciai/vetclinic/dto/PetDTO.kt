@@ -2,6 +2,8 @@ package personal.ciai.vetclinic.dto
 
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
+import java.net.URI
+import personal.ciai.vetclinic.model.Pet
 
 /**
  * Models a Pet DTO
@@ -25,7 +27,7 @@ data class PetDTO(
         readOnly = false,
         example = "1"
     )
-    val id: Int,
+    val id: Int = 0,
     @ApiModelProperty(
         "The species of the pet",
         required = true,
@@ -44,14 +46,13 @@ data class PetDTO(
         "The owner of the pet",
         required = true,
         readOnly = false,
-        example = "Tony"
+        example = "Client2451"
     )
     val owner: String,
     @ApiModelProperty(
         "A list of appointments scheduled for the pet",
         required = false,
-        readOnly = true,
-        example = "Client2451"
+        readOnly = true
     )
     val appointments: List<String> = emptyList(),
     @ApiModelProperty(
@@ -68,7 +69,7 @@ data class PetDTO(
         readOnly = false,
         example = "Weight: 10Kg, height: 42Cm"
     )
-    val physicalDescription: String,
+    val physicalDescription: String = "",
     @ApiModelProperty(
         "The pet's medical records",
         name = "Medical Record",
@@ -81,5 +82,15 @@ data class PetDTO(
         required = false,
         readOnly = true
     )
-    val photo: String?
-) : BaseDTO
+    val photo: String? = null
+) : BaseDTO<Pet> {
+    override fun toEntity() = Pet(
+        id = id,
+        species = species,
+        age = age,
+        medicalRecord = medicalRecord,
+        physicalDescription = physicalDescription,
+        notes = notes,
+        photo = if (photo == null) null else URI.create(photo)
+    )
+}

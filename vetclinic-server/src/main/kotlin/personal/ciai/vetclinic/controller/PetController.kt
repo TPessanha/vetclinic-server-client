@@ -71,7 +71,7 @@ class PetController(
     fun getOnePet(
         @ApiParam(value = "The ID of the pet", required = true) @PathVariable(value = "id")
         id: Int
-    ) = ResponseEntity.ok(petService.getPetById(id))
+    ) = petService.getPetById(id)
 
     @ApiOperation(
         value = "(Debug) Create a new pet",
@@ -92,7 +92,30 @@ class PetController(
     @PostMapping("")
     fun addPet(
         @ApiParam(value = "Details of a pet to be created", required = true) @RequestBody pet: PetDTO
-    ) = petService.savePet(pet)
+    ) = petService.savePet(pet.copy(id = 0))
+
+    @ApiOperation(
+        value = "Edit pet information",
+        consumes = "application/json"
+    )
+    @ApiResponses(
+        value = [
+            (ApiResponse(code = 200, message = "Successfully updated the pet")),
+            (ApiResponse(code = 201, message = "Successfully created the pet")),
+            (ApiResponse(code = 401, message = "You are not authorized to edit the pet details")),
+            (ApiResponse(
+                code = 403,
+                message = "Accessing the resource you were tyring to reach is forbidden"
+            )),
+            (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
+        ]
+    )
+    @PutMapping("/{id}")
+    fun updatePet(
+        @ApiParam(value = "The ID of the pet", required = true) @PathVariable(value = "id")
+        id: Int,
+        @ApiParam(value = "Details of a pet to be updated", required = true) @RequestBody pet: PetDTO
+    ) = petService.savePet(pet.copy(id = id), update = true)
 
     @ApiOperation(value = "Update photo of a pet")
     @ApiResponses(
@@ -139,25 +162,4 @@ class PetController(
         .ok()
         .contentType(MediaType.IMAGE_JPEG)
         .body(petService.getPhoto(id))
-
-    @ApiOperation(
-        value = "Edit pet information",
-        consumes = "application/json"
-    )
-    @ApiResponses(
-        value = [
-            (ApiResponse(code = 200, message = "Successfully updated the pet")),
-            (ApiResponse(code = 201, message = "Successfully created the pet")),
-            (ApiResponse(code = 401, message = "You are not authorized to edit the pet details")),
-            (ApiResponse(
-                code = 403,
-                message = "Accessing the resource you were tyring to reach is forbidden"
-            )),
-            (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
-        ]
-    )
-    @PutMapping("/{id}")
-    fun updatePet(
-        @ApiParam(value = "Details of a pet to be updated", required = true) @RequestBody pet: PetDTO
-    ) = petService.savePet(pet, update = true)
 }

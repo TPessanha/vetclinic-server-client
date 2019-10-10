@@ -8,14 +8,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 class ConfigurationProperties {
     lateinit var pathToPhotos: String
     lateinit var author: String
-    lateinit var name: String
+    lateinit var appName: String
 
     val fullPathToPetPhotos: String by lazy {
-        val appDir = AppDirsFactory.getInstance().getUserDataDir(name, null, author)
+        val appDir = AppDirsFactory.getInstance().getUserDataDir(appName, null, author)
         Paths.get(appDir, pathToPhotos, "pets").toString()
     }
     val fullPathToUserPhotos: String by lazy {
-        val appDir = AppDirsFactory.getInstance().getUserDataDir(name, null, author)
+        val appDir = AppDirsFactory.getInstance().getUserDataDir(appName, null, author)
         Paths.get(appDir, pathToPhotos, "users").toString()
     }
 }

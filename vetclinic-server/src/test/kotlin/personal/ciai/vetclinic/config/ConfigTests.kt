@@ -13,8 +13,11 @@ class ConfigTests(
     val configurationProperties: ConfigurationProperties
 ) {
     @Test
-    fun `Print all configs do manual check`() {
+    fun `Print all configs`() {
         println("FullPathToPetPictures: ${configurationProperties.fullPathToPetPhotos}")
         println("FullPathToUserPictures: ${configurationProperties.fullPathToUserPhotos}")
+        println("Author: ${configurationProperties.author}")
+        println("appName: ${configurationProperties.appName}")
+        println("pathToPhotos: ${configurationProperties.pathToPhotos}")
     }
 }

@@ -24,10 +24,8 @@ import personal.ciai.vetclinic.dto.PetDTO
 @Table(name = "pets")
 class Pet(
     id: Int,
-
     @Column(nullable = false)
     val species: String,
-
     @Column(nullable = false)
     var age: Int,
 //    var owner: Client<ClientDTO>, todo link pet to owner
