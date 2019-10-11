@@ -2,8 +2,6 @@ package personal.ciai.vetclinic.dto
 
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
-import java.net.URI
-import personal.ciai.vetclinic.model.Pet
 
 /**
  * Models a Pet DTO

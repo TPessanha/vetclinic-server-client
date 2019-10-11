@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import personal.ciai.vetclinic.dto.AppointmentDTO
-import personal.ciai.vetclinic.dto.PetDTO
 import personal.ciai.vetclinic.service.AppointmentService
-import personal.ciai.vetclinic.service.PetService
 
 @Api(
     value = "VetClinic Management System - Pet API",
@@ -26,7 +24,7 @@ import personal.ciai.vetclinic.service.PetService
 class AppointmentController(
     @Autowired
     val appointmentService: AppointmentService
-){
+) {
     @ApiOperation(
         value = "View a list of appointments",
         produces = "application/json",

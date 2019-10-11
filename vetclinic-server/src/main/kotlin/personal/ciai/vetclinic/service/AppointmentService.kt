@@ -1,13 +1,12 @@
 package personal.ciai.vetclinic.service
 
+import java.util.Date
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import personal.ciai.vetclinic.dto.AppointmentDTO
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.model.Appointment
-import personal.ciai.vetclinic.model.Pet
 import personal.ciai.vetclinic.repository.AppointmentRepository
-import java.util.Date
 
 @Service
 class AppointmentService(
@@ -36,7 +35,6 @@ class AppointmentService(
 
         repository.save(appointmentDTO.toEntity())
     }
-
 
     fun AppointmentDTO.toEntity(): Appointment {
         return Appointment(

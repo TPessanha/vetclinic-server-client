@@ -8,7 +8,6 @@ import org.springframework.boot.runApplication
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
 import personal.ciai.vetclinic.config.ConfigurationProperties
-import personal.ciai.vetclinic.dto.PetDTO
 import personal.ciai.vetclinic.service.PetService
 
 @SpringBootApplication

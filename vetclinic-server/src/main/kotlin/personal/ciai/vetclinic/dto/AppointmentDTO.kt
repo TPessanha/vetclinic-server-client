@@ -2,12 +2,6 @@ package personal.ciai.vetclinic.dto
 
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
-import org.springframework.beans.factory.annotation.Autowired
-import personal.ciai.vetclinic.exception.NotFoundException
-import java.util.Date
-import personal.ciai.vetclinic.model.Appointment
-import personal.ciai.vetclinic.model.Pet
-import personal.ciai.vetclinic.repository.PetRepository
 
 @ApiModel("Appointment DTO model", description = "Used to model appointments")
 data class AppointmentDTO(
@@ -25,7 +19,7 @@ data class AppointmentDTO(
 //        example = "1"
     )
     val date: Long,
-    //val veterinarian: String,
+    // val veterinarian: String,
     @ApiModelProperty(
         "The pet ID scheduled for the appointment",
         required = true,
@@ -33,7 +27,7 @@ data class AppointmentDTO(
         example = "Pet245"
     )
     val pet: Int,
-    //val client: String,
+    // val client: String,
     @ApiModelProperty(
         "A description of what the veterinarian did to the animal",
         required = true,

@@ -7,10 +7,10 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import personal.ciai.vetclinic.ExampleObjects.exampleObjects.dog
 import personal.ciai.vetclinic.dto.PetDTO
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.service.PetService
-import personal.ciai.vetclinic.ExampleObjects.exampleObjects.dog
 
 /**
  * Description:

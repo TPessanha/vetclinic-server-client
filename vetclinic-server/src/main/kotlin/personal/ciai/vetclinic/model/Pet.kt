@@ -3,9 +3,9 @@ package personal.ciai.vetclinic.model
 import java.net.URI
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.OneToMany
 import javax.persistence.Table
 import personal.ciai.vetclinic.dto.PetDTO
-import javax.persistence.OneToMany
 
 /**
  * Models a Pet Entity
