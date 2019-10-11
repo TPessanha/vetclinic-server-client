@@ -1,7 +1,5 @@
 package personal.ciai.vetclinic.model
 
-import personal.ciai.vetclinic.dto.UserDTO
-
 /**
  * Models a User.
  *
@@ -14,7 +12,11 @@ import personal.ciai.vetclinic.dto.UserDTO
  * @constructor Creates a User DTO.
  */
 
-abstract class User (val email:String, val name:String, val phoneNumber:Int, val username:String, val password:String, val address:String) {
-
-
-}
+abstract class User(
+    val email: String,
+    val name: String,
+    val phoneNumber: Int,
+    val username: String,
+    val password: String,
+    val address: String
+)

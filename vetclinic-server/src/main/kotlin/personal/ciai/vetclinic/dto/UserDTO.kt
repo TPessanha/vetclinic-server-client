@@ -2,7 +2,6 @@ package personal.ciai.vetclinic.dto
 
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
-import personal.ciai.vetclinic.model.User
 
 /**
  * Models a User DTO.
@@ -17,7 +16,7 @@ import personal.ciai.vetclinic.model.User
  */
 
 @ApiModel("User DTO model", description = "To model Users")
- data class UserDTO(
+data class UserDTO(
     @ApiModelProperty("The User's Name", name = "name", required = true, readOnly = true)
     val name: String,
     @ApiModelProperty("The User's Email", name = "email", required = true)
@@ -30,6 +29,4 @@ import personal.ciai.vetclinic.model.User
     val password: String,
     @ApiModelProperty("The User's Address", name = "address", required = true)
     val address: String
-) : BaseDTO {
-
-}
+) : BaseDTO
