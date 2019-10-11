@@ -5,6 +5,7 @@ import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Table
 import personal.ciai.vetclinic.dto.PetDTO
+import javax.persistence.OneToMany
 
 /**
  * Models a Pet Entity
@@ -29,13 +30,15 @@ class Pet(
     @Column(nullable = false)
     var age: Int,
 //    var owner: Client<ClientDTO>, todo link pet to owner
-//    val appointments: MutableList<Appointment>, todo link pet to appointments
+//    @OneToMany
+    @OneToMany(mappedBy = "pet")
+    var appointments: List<Appointment> = emptyList(),
     @Column(nullable = false)
-    var notes: String,
+    var notes: String = "",
     @Column(nullable = false)
-    var physicalDescription: String,
+    var physicalDescription: String = "",
     @Column(nullable = false)
-    var medicalRecord: String,
+    var medicalRecord: String = "",
     @Column(nullable = true)
     var photo: URI? = null
 ) : IdentifiedEntity<PetDTO>(id) {
@@ -45,7 +48,7 @@ class Pet(
         species = species,
         age = age,
         owner = "NOT IMPLEMENTED",
-        appointments = emptyList(),
+        appointments = appointments.map { it.id },
         notes = notes,
         physicalDescription = physicalDescription,
         medicalRecord = medicalRecord,

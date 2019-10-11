@@ -26,12 +26,12 @@ class Init(
 ) {
     @EventListener
     fun appReady(event: ApplicationReadyEvent) {
-        val petDTO = PetDTO(
-            species = "Bulldog",
-            age = 4,
-            owner = "Client001"
-        )
-
-        petService.savePet(petDTO)
+//        val petDTO = PetDTO(
+//            species = "Bulldog",
+//            age = 4,
+//            owner = "Client001"
+//        )
+//
+//        petService.savePet(petDTO)
     }
 }

@@ -31,7 +31,7 @@ class PetService(
 
     fun getPetById(id: Int) = getPetEntityById(id).toDTO()
 
-    private fun getPetEntityById(id: Int): Pet {
+    fun getPetEntityById(id: Int): Pet {
         val pet = repository.findById(id)
         if (pet.isPresent)
             return pet.get()
@@ -50,7 +50,7 @@ class PetService(
         return repository.findAll().map { it.toDTO() }
     }
 
-    fun updatePhoto(id: Int, photo: MultipartFile): URI {
+    fun updatePhoto(id: Int, photo: MultipartFile): String {
         if (photo.contentType !in imageTypes)
             throw UnsupportedMediaTypeException("Photos can only be of type (jpg/png)")
 
@@ -70,7 +70,7 @@ class PetService(
         val updatedPet = pet.copy(photo = path.toUri().toString())
         savePet(updatedPet, update = true)
 
-        return path.toUri()
+        return "http://localhost:8080/pets/$id/photo"
     }
 
     fun getPhoto(id: Int): ByteArray {
@@ -80,5 +80,17 @@ class PetService(
             throw NotFoundException("Pet does not have a profile photo")
         else
             File(photoURI).readBytes()
+    }
+
+    fun PetDTO.toEntity(): Pet {
+        return Pet(
+            id = this.id,
+            species = this.species,
+            age = this.age,
+            medicalRecord = this.medicalRecord,
+            physicalDescription = this.physicalDescription,
+            notes = this.notes,
+            photo = if (this.photo == null) null else URI.create(this.photo)
+        )
     }
 }

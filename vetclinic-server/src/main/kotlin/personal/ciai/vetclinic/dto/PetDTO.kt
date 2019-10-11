@@ -54,7 +54,7 @@ data class PetDTO(
         required = false,
         readOnly = true
     )
-    val appointments: List<String> = emptyList(),
+    val appointments: List<Int> = emptyList(),
     @ApiModelProperty(
         "Notes about the pet",
         required = false,
@@ -83,14 +83,4 @@ data class PetDTO(
         readOnly = true
     )
     val photo: String? = null
-) : BaseDTO<Pet> {
-    override fun toEntity() = Pet(
-        id = id,
-        species = species,
-        age = age,
-        medicalRecord = medicalRecord,
-        physicalDescription = physicalDescription,
-        notes = notes,
-        photo = if (photo == null) null else URI.create(photo)
-    )
-}
+) : BaseDTO
