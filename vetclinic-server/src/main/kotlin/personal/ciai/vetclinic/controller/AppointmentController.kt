@@ -62,6 +62,10 @@ class AppointmentController(
     )
     @PostMapping("")
     fun addPet(
-        @ApiParam(value = "Details of an appointment to be created", required = true) @RequestBody appointment: AppointmentDTO
+        @ApiParam(
+            value = "Details of an appointment to be created",
+            required = true
+        )
+        @RequestBody appointment: AppointmentDTO
     ) = appointmentService.saveAppointment(appointment.copy(id = 0))
 }
