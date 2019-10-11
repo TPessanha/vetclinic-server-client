@@ -30,8 +30,6 @@ import personal.ciai.vetclinic.model.User
     val password: String,
     @ApiModelProperty("The User's Address", name = "address", required = true)
     val address: String
-) : BaseDTO<User> {
-    override fun toEntity(): User {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+) : BaseDTO {
+
 }
