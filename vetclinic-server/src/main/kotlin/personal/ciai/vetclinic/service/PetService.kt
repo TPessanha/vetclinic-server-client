@@ -43,10 +43,10 @@ class PetService(
         if (update && !repository.existsById(petDTO.id))
             throw NotFoundException("Pet with id (${petDTO.id}) not found")
 
-        repository.save(petDTO.toEntity())
+        repository.save(petDTO.toEntity()).toDTO()
     }
 
-    fun findAllPets(): List<PetDTO> {
+    fun getAllPets(): List<PetDTO> {
         return repository.findAll().map { it.toDTO() }
     }
 
@@ -93,4 +93,6 @@ class PetService(
             photo = if (this.photo == null) null else URI.create(this.photo)
         )
     }
+
+    fun deletePet(id: Int) = repository.delete(getPetEntityById(id))
 }

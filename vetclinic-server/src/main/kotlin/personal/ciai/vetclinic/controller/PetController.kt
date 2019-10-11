@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiResponses
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -49,7 +50,7 @@ class PetController(
         ]
     )
     @GetMapping("")
-    fun getAllPets() = petService.findAllPets()
+    fun getAllPets() = petService.getAllPets()
 
     @ApiOperation(
         value = "Get details of a pet",
@@ -75,7 +76,8 @@ class PetController(
 
     @ApiOperation(
         value = "(Debug) Create a new pet",
-        consumes = "application/json"
+        consumes = "application/json",
+        response = PetDTO::class
     )
     @ApiResponses(
         value = [
@@ -96,7 +98,9 @@ class PetController(
 
     @ApiOperation(
         value = "Edit pet information",
-        consumes = "application/json"
+        consumes = "application/json",
+        produces = "application/json",
+        response = PetDTO::class
     )
     @ApiResponses(
         value = [
@@ -162,4 +166,18 @@ class PetController(
         .ok()
         .contentType(MediaType.IMAGE_JPEG)
         .body(petService.getPhoto(id))
+
+    @ApiOperation(value = "Delete a pet")
+    @ApiResponses(
+        value = [
+            ApiResponse(code = 200, message = "Successfully deleted a pet"),
+            ApiResponse(code = 401, message = "You are not authorized to use this resource"),
+            ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden")
+        ]
+    )
+    @DeleteMapping("/{id}")
+    fun deletePet(
+        @ApiParam(value = "The ID of the pet", required = true) @PathVariable
+        id: Int
+    ) = petService.deletePet(id)
 }
