@@ -42,7 +42,7 @@ class AppointmentController(
         ]
     )
     @GetMapping("")
-    fun getAllPets() = appointmentService.findAllAppointments()
+    fun getAllAppointments() = appointmentService.findAllAppointments()
 
     @ApiOperation(
         value = "(Debug) Create a new appointment",
@@ -61,7 +61,7 @@ class AppointmentController(
         ]
     )
     @PostMapping("")
-    fun addPet(
+    fun addAppointment(
         @ApiParam(
             value = "Details of an appointment to be created",
             required = true

@@ -23,7 +23,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.dogExample
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.petList
-import personal.ciai.vetclinic.ExampleObjects.exampleObjects.pigExample
 import personal.ciai.vetclinic.dto.PetDTO
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.service.PetService
@@ -45,8 +44,6 @@ class PetControllerTests {
         // see: https://discuss.kotlinlang.org/t/data-class-and-jackson-annotation-conflict/397/6
         val mapper = ObjectMapper().registerModule(KotlinModule())
 
-        val petsDAO = ArrayList(listOf(dogExample, pigExample))
-
         val petsURL = "/pets"
     }
 
@@ -65,7 +62,7 @@ class PetControllerTests {
     }
 
     @Test
-    fun `Test Get One Pet`() {
+    fun `Test GET One Pet`() {
         `when`(pets.getPetById(1)).thenReturn(dogExample.toDTO())
 
         val result = mvc.perform(get("$petsURL/1"))
