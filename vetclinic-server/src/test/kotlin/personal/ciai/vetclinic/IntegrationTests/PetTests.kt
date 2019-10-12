@@ -16,15 +16,13 @@ import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import personal.ciai.vetclinic.ExampleObjects.exampleObjects.dogExample
-import personal.ciai.vetclinic.service.PetService
-import org.springframework.web.context.WebApplicationContext
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
-import personal.ciai.vetclinic.ExampleObjects
-import personal.ciai.vetclinic.UnitTests.controllerTests.PetControllerTests
+import org.springframework.web.context.WebApplicationContext
+import personal.ciai.vetclinic.ExampleObjects.exampleObjects.dogExample
 import personal.ciai.vetclinic.dto.PetDTO
+import personal.ciai.vetclinic.service.PetService
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
@@ -47,10 +45,7 @@ class PetTests {
         val mapper = ObjectMapper().registerModule(KotlinModule())
 
         val petsURL = "/pets"
-
-
     }
-
 
     @Test
     fun `Client add a new pet`() {
@@ -73,10 +68,9 @@ class PetTests {
             .andExpect(status().isOk)
             .andExpect(jsonPath("$", hasSize<Any>(1)))
 
-
         val result = mvc.perform(
             MockMvcRequestBuilders
-                .get("${petsURL}/1")
+                .get("$petsURL/1")
         )
             .andExpect(status().isOk)
             .andReturn()
@@ -94,11 +88,10 @@ class PetTests {
 
         mvc.perform(
             MockMvcRequestBuilders
-                .delete("${petsURL}/1")
+                .delete("$petsURL/1")
         )
             .andExpect(status().isOk)
 
         assertTrue(petService.getAllPets().size == 0)
-
     }
 }
