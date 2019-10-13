@@ -80,7 +80,7 @@ class VeterinarianController(@Autowired val veterinarianService: VeterinarianSer
     @PostMapping("")
     fun addVeterinarian(
         @ApiParam(required = true, value = "(Required) Veterinarian info necessary to created a new account")
-        @RequestBody admin: VeterinarianDTO
+        @RequestBody vet: VeterinarianDTO
     ) {
         // TODO to Complete implementation
     }
@@ -97,10 +97,10 @@ class VeterinarianController(@Autowired val veterinarianService: VeterinarianSer
     )
     @PutMapping("/{id}")
     fun updateVeterinarian(
-        @ApiParam(name = "id", required = true, value = "(Required) Admin identificator (id)")
+        @ApiParam(name = "id", required = true, value = "(Required) Veterinarian identificator (id)")
         @PathVariable(value = "id", required = true) id: String,
-        @ApiParam(required = true, value = "(Required) Admin information to be changed")
-        @RequestBody admin: VeterinarianDTO
+        @ApiParam(required = true, value = "(Required) Veterinarian information to be changed")
+        @RequestBody vet: VeterinarianDTO
     ) {
         // TODO to Complete implementation
     }
@@ -117,7 +117,7 @@ class VeterinarianController(@Autowired val veterinarianService: VeterinarianSer
     )
     @DeleteMapping("/{id}")
     fun deleteVeterinarian(
-        @ApiParam(name = "id", required = true, value = "(Required) Admin identificator (id)")
+        @ApiParam(name = "id", required = true, value = "(Required) Veterinarian identificator (id)")
         @PathVariable(value = "id", required = true) id: String
     ) {
         // TODO to Complete implementation
