@@ -23,25 +23,36 @@ import personal.ciai.vetclinic.service.AdministrativeService
 )
 
 @RestController
-@RequestMapping("/admin")
-class AdministrativeController(@Autowired val adminService: AdministrativeService) {
+@RequestMapping("/administrative")
+class AdministrativeController(@Autowired val administrativeService: AdministrativeService) {
 
-    @ApiOperation(value = "Get details of a single  Administrative", response = AdministrativeDTO::class)
-    @ApiParam(name = "id", required = true, value = "(Required) Administrative identificator (id)")
+    @ApiOperation(
+        value = "Get details of a single  Administrative",
+        produces = "application/json",
+        response = AdministrativeDTO::class
+    )
     @ApiResponses(
         value = [
             ApiResponse(code = 200, message = "Successfully retrieved the administrative details"),
             ApiResponse(code = 401, message = "You are not authorized to access the resource"),
+            ApiResponse(code = 404, message = "The resource not found"),
+
             ApiResponse(
                 code = 403, message = "Accessing the resource you were tyring to reach is forbidden"
             )]
     )
     @GetMapping("/{id}")
-    fun getById(@PathVariable(value = "id", required = true) id: String) {
-        // TODO to Complete implementation
-    }
+    fun getAdministrative(
+        @ApiParam(name = "id", required = true, value = "(Required) Administrative identificator (id)")
+        @PathVariable(value = "id", required = true) id: Long
+    ) = administrativeService.getAdministrativeById(id)
 
-    @ApiOperation(value = "View a list of Administratives details", response = AdministrativeDTO::class)
+    @ApiOperation(
+        value = "View a list of Administratives details",
+        produces = "application/json",
+        responseContainer = "List",
+        response = AdministrativeDTO::class
+    )
     @ApiResponses(
         value = [
             ApiResponse(code = 200, message = "Successfully retrieved a list of all administrative"),
@@ -51,9 +62,7 @@ class AdministrativeController(@Autowired val adminService: AdministrativeServic
             )]
     )
     @GetMapping("")
-    fun getAll() {
-        // TODO to Complete implementation
-    }
+    fun getAllAdministrative() = administrativeService.getAllAdministrative()
 
     @ApiOperation(value = "Add a new Administrative account")
     @ApiResponses(
@@ -65,36 +74,30 @@ class AdministrativeController(@Autowired val adminService: AdministrativeServic
             )]
     )
     @PostMapping("")
-    fun add(@RequestBody admin: AdministrativeDTO) {
-        if (this.adminService.exist(admin.email))
-            adminService.save(admin)
+    fun addAdministrative(
+        @ApiParam(required = true, value = "(Required) Administrative info necessary to created a new account")
+        @RequestBody admin: AdministrativeDTO
+    ) = administrativeService.save(admin)
 
-        // TODO to Complete implementation
-    }
-
-    @ApiOperation(value = "Edit Administrative information")
+    @ApiOperation(value = "Edit Administrative information", consumes = "application/json")
     @ApiResponses(
         value = [
             ApiResponse(code = 200, message = "Successfully edit the Administrative info"),
             ApiResponse(code = 401, message = "You are not authorized to access the resource"),
+            ApiResponse(code = 404, message = "Resource not found"),
             ApiResponse(
                 code = 403, message = "Accessing the resource you were tyring to reach is forbidden"
             )]
     )
-    @ApiParam(name = "id", required = true, value = "(Required) Admin identificator (id)")
     @PutMapping("/{id}")
-    fun update(
-        @PathVariable(value = "id", required = true) id: String,
+    fun updateAdministrative(
+        @ApiParam(name = "id", required = true, value = "(Required) Admin identificator (id)")
+        @PathVariable(value = "id", required = true) id: Long,
+        @ApiParam(required = true, value = "(Required) Admin information to be changed")
         @RequestBody admin: AdministrativeDTO
-    ) {
-        if (this.adminService.exist(admin.email))
-            adminService.save(admin)
-
-        // TODO to Complete implementation
-    }
+    ) = administrativeService.update(admin, id)
 
     @ApiOperation(value = "Delete a Administrative account")
-    @ApiParam(name = "id", required = true, value = "(Required) Admin identificator (id)")
     @ApiResponses(
         value = [
             ApiResponse(code = 200, message = "Successfully delete the administrative"),
@@ -105,10 +108,8 @@ class AdministrativeController(@Autowired val adminService: AdministrativeServic
             )]
     )
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable(value = "id", required = true) id: String) {
-        if (this.adminService.exist(id))
-            this.adminService.delete(id)
-
-        // TODO to Complete implementation
-    }
+    fun deleteAdministrative(
+        @ApiParam(name = "id", required = true, value = "(Required) Admin identificator (id)")
+        @PathVariable(value = "id", required = true) id: Long
+    ) = administrativeService.delete(id)
 }
