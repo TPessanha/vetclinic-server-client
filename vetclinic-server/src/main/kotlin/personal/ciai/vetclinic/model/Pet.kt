@@ -1,7 +1,9 @@
 package personal.ciai.vetclinic.model
 
+import java.net.URI
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.OneToMany
 import javax.persistence.Table
 import personal.ciai.vetclinic.dto.PetDTO
 
@@ -16,40 +18,40 @@ import personal.ciai.vetclinic.dto.PetDTO
  * @property notes String Notes about the pet
  * @property physicalDescription String A physical description of the pet
  * @property medicalRecord String The pet's medical records
- * @property picture File A picture of the pet
+ * @property photo File A photo of the pet
  * @constructor Creates a Pet Entity.
  */
 @Entity
 @Table(name = "pets")
 class Pet(
     id: Int,
-
     @Column(nullable = false)
     val species: String,
-
     @Column(nullable = false)
-    var age: Int
-    // var owner: Client<ClientDTO>,
-    // val appointments: MutableList<Appointment>,
-    // var notes: String ,
-    // var physicalDescription: String,
-    // var medicalRecord: String =""
+    var age: Int,
+//    var owner: Client<ClientDTO>, todo link pet to owner
+//    @OneToMany
+    @OneToMany(mappedBy = "pet")
+    var appointments: List<Appointment> = emptyList(),
+    @Column(nullable = false)
+    var notes: String = "",
+    @Column(nullable = false)
+    var physicalDescription: String = "",
+    @Column(nullable = false)
+    var medicalRecord: String = "",
+    @Column(nullable = true)
+    var photo: URI? = null
 ) : IdentifiedEntity<PetDTO>(id) {
 
     override fun toDTO() = PetDTO(
         id = id,
         species = species,
-        age = age
+        age = age,
+        owner = "NOT IMPLEMENTED",
+        appointments = appointments.map { it.id },
+        notes = notes,
+        physicalDescription = physicalDescription,
+        medicalRecord = medicalRecord,
+        photo = photo?.toString()
     )
-//        PetDTO(
-//        id = id,
-//        species = species,
-//        age = age,
-//        appointments = TODO("Appointment class is missing"),
-//        notes = notes,
-//        physicalDescription = physicalDescription,
-//        medicalRecord = medicalRecord,
-//        owner = owner.username,
-//        picture = picture.name
-//    )
 }

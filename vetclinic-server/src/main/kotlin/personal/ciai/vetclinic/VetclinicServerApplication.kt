@@ -12,3 +12,20 @@ class VetclinicServerApplication
 fun main(args: Array<String>) {
     runApplication<VetclinicServerApplication>(*args)
 }
+
+// @Component
+// class Init(
+//    @Autowired
+//    val petService: PetService
+// ) {
+//    @EventListener
+//    fun appReady(event: ApplicationReadyEvent) {
+//        val petDTO = PetDTO(
+//            species = "Bulldog",
+//            age = 4,
+//            owner = "Client001"
+//        )
+//
+//        petService.savePet(petDTO)
+//    }
+// }

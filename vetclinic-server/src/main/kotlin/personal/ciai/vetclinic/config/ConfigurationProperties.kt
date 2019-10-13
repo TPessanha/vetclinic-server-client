@@ -6,16 +6,16 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 
 @ConfigurationProperties("vetclinic")
 class ConfigurationProperties {
-    lateinit var pathToPictures: String
+    lateinit var pathToPhotos: String
     lateinit var author: String
-    lateinit var name: String
+    lateinit var appName: String
 
-    val fullPathToPetPictures: String by lazy {
-        val appDir = AppDirsFactory.getInstance().getUserDataDir(name, null, author)
-        Paths.get(appDir, pathToPictures, "pets").toString()
+    val fullPathToPetPhotos: String by lazy {
+        val appDir = AppDirsFactory.getInstance().getUserDataDir(appName, null, author)
+        Paths.get(appDir, pathToPhotos, "pets").toString()
     }
-    val fullPathToUserPictures: String by lazy {
-        val appDir = AppDirsFactory.getInstance().getUserDataDir(name, null, author)
-        Paths.get(appDir, pathToPictures, "users").toString()
+    val fullPathToUserPhotos: String by lazy {
+        val appDir = AppDirsFactory.getInstance().getUserDataDir(appName, null, author)
+        Paths.get(appDir, pathToPhotos, "users").toString()
     }
 }
