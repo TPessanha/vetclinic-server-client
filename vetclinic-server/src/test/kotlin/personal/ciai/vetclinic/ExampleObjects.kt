@@ -38,7 +38,6 @@ class ExampleObjects {
         val petList = listOf<PetDTO>(dogExample.toDTO(), pigExample.toDTO(), iguanaExample.toDTO())
         val petListPet = listOf<Pet>(dogExample, pigExample, iguanaExample)
 
-
         // Administrative
 
         val admin1 = Administrative(

@@ -21,7 +21,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.context.WebApplicationContext
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.admin1
-import personal.ciai.vetclinic.ExampleObjects.exampleObjects.dogExample
 import personal.ciai.vetclinic.dto.AdministrativeDTO
 import personal.ciai.vetclinic.service.AdministrativeService
 
