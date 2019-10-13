@@ -8,7 +8,7 @@ import personal.ciai.vetclinic.dto.AdministrativeDTO
 @Entity
 @Table(name = "administrative")
 class Administrative(
-    id: Long,
+    id: Int,
     email: String,
     name: String,
     phoneNumber: Int,

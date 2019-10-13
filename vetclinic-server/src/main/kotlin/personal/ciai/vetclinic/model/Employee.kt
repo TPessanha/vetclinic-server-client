@@ -16,7 +16,7 @@ import javax.persistence.MappedSuperclass
 abstract class Employee<DTO>(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long,
+    var id: Int,
     email: String,
     name: String,
     phoneNumber: Int,

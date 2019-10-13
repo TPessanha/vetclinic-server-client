@@ -1,5 +1,8 @@
 package personal.ciai.vetclinic.model
 
+import javax.persistence.Column
+import javax.persistence.MappedSuperclass
+
 /**
  * Models a User.
  *
@@ -12,11 +15,18 @@ package personal.ciai.vetclinic.model
  * @constructor Creates a User DTO.
  */
 
+@MappedSuperclass
 abstract class User(
+    @Column(nullable = false)
     val email: String,
+    @Column(nullable = false)
     val name: String,
+    @Column(nullable = false)
     val phoneNumber: Int,
+    @Column(nullable = false)
     val username: String,
+    @Column(nullable = false)
     val password: String,
+    @Column(nullable = false)
     val address: String
 )

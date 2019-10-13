@@ -5,4 +5,4 @@ import org.springframework.stereotype.Repository
 import personal.ciai.vetclinic.model.Administrative
 
 @Repository
-interface AdministrativeRepository : CrudRepository<Administrative, Long>
+interface AdministrativeRepository : CrudRepository<Administrative, Int>

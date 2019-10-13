@@ -24,7 +24,7 @@ data class AdministrativeDTO(
         readOnly = false,
         example = "34"
     )
-    val id: Long,
+    val id: Int,
 
     @ApiModelProperty(
         "The Administrative  full name",

@@ -44,7 +44,7 @@ class AdministrativeController(@Autowired val administrativeService: Administrat
     @GetMapping("/{id}")
     fun getAdministrative(
         @ApiParam(name = "id", required = true, value = "(Required) Administrative identificator (id)")
-        @PathVariable(value = "id", required = true) id: Long
+        @PathVariable(value = "id", required = true) id: Int
     ) = administrativeService.getAdministrativeById(id)
 
     @ApiOperation(
@@ -92,7 +92,7 @@ class AdministrativeController(@Autowired val administrativeService: Administrat
     @PutMapping("/{id}")
     fun updateAdministrative(
         @ApiParam(name = "id", required = true, value = "(Required) Admin identificator (id)")
-        @PathVariable(value = "id", required = true) id: Long,
+        @PathVariable(value = "id", required = true) id: Int,
         @ApiParam(required = true, value = "(Required) Admin information to be changed")
         @RequestBody admin: AdministrativeDTO
     ) = administrativeService.update(admin, id)
@@ -110,6 +110,6 @@ class AdministrativeController(@Autowired val administrativeService: Administrat
     @DeleteMapping("/{id}")
     fun deleteAdministrative(
         @ApiParam(name = "id", required = true, value = "(Required) Admin identificator (id)")
-        @PathVariable(value = "id", required = true) id: Long
+        @PathVariable(value = "id", required = true) id: Int
     ) = administrativeService.delete(id)
 }
