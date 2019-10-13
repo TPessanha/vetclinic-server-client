@@ -3,8 +3,10 @@ package personal.ciai.vetclinic
 import java.net.URI
 import personal.ciai.vetclinic.dto.AdministrativeDTO
 import personal.ciai.vetclinic.dto.PetDTO
+import personal.ciai.vetclinic.dto.VeterinarianDTO
 import personal.ciai.vetclinic.model.Administrative
 import personal.ciai.vetclinic.model.Pet
+import personal.ciai.vetclinic.model.Veterinarian
 
 class ExampleObjects {
     companion object exampleObjects {
@@ -37,6 +39,32 @@ class ExampleObjects {
         )
         val petList = listOf<PetDTO>(dogExample.toDTO(), pigExample.toDTO(), iguanaExample.toDTO())
         val petListPet = listOf<Pet>(dogExample, pigExample, iguanaExample)
+
+        // Veterinarian
+
+        val vet1 = Veterinarian(
+            -1,
+            "vet1@vetclinic.pt",
+            "Joao Han",
+            954223134,
+            "Vet1",
+            "1234",
+            "Rua de Cima 44, 4243-432, Lisboa",
+            URI.create("vets/1")
+        )
+        val vet2 = Veterinarian(
+            -1,
+            "vet2@vetclinic.pt",
+            "Ash Ketchum",
+            925653938,
+            "AshK",
+            "1234",
+            "Rua da Linha 3, Lisboa",
+            URI.create("vets2/2")
+        )
+
+        val vetList = listOf<Veterinarian>(vet1, vet2)
+        val vetDTOList = listOf<VeterinarianDTO>(vet1.toDTO(), vet2.toDTO())
 
         // Administrative
 
