@@ -15,8 +15,8 @@ data class AppointmentDTO(
     @ApiModelProperty(
         "The date of the appointment",
         required = true,
-        readOnly = false
-//        example = "1"
+        readOnly = false,
+        example = "1539555316323"
     )
     val date: Long,
     // val veterinarian: String,
@@ -24,7 +24,7 @@ data class AppointmentDTO(
         "The pet ID scheduled for the appointment",
         required = true,
         readOnly = false,
-        example = "Pet245"
+        example = "1"
     )
     val pet: Int,
     // val client: String,
@@ -32,7 +32,7 @@ data class AppointmentDTO(
         "A description of what the veterinarian did to the animal",
         required = true,
         readOnly = false,
-        example = "1"
+        example = "Cured the animal"
     )
     val description: String
 ) : BaseDTO

@@ -23,7 +23,7 @@ class PetService(
 
 ) {
     companion object MediaTypes {
-        val imageTypes = listOf<String>(
+        val imageTypes = listOf(
             MediaType.IMAGE_JPEG.toString(),
             MediaType.IMAGE_PNG.toString()
         )
@@ -39,11 +39,11 @@ class PetService(
             throw NotFoundException("Pet with id ($id) not found")
     }
 
-    fun savePet(petDTO: PetDTO, update: Boolean = false) {
-        if (update && !repository.existsById(petDTO.id))
+    fun savePet(petDTO: PetDTO, id: Int = -1) {
+        if (id > 0 && !repository.existsById(petDTO.id))
             throw NotFoundException("Pet with id (${petDTO.id}) not found")
 
-        repository.save(petDTO.toEntity()).toDTO()
+        repository.save(petDTO.copy(id = id).toEntity())
     }
 
     fun getAllPets(): List<PetDTO> {
@@ -68,7 +68,7 @@ class PetService(
         Files.write(path, photo.bytes)
 
         val updatedPet = pet.copy(photo = path.toUri().toString())
-        savePet(updatedPet, update = true)
+        savePet(updatedPet, id)
 
         return "http://localhost:8080/pets/$id/photo"
     }

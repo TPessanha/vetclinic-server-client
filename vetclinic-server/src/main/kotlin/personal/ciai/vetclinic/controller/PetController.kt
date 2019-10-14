@@ -27,7 +27,7 @@ import personal.ciai.vetclinic.service.PetService
 )
 
 @RestController
-@RequestMapping("/pets")
+@RequestMapping("/clients/{clientId}/pets")
 class PetController(
     @Autowired
     val petService: PetService
@@ -94,7 +94,7 @@ class PetController(
     @PostMapping("")
     fun addPet(
         @ApiParam(value = "Details of a pet to be created", required = true) @RequestBody pet: PetDTO
-    ) = petService.savePet(pet.copy(id = 0))
+    ) = petService.savePet(pet)
 
     @ApiOperation(
         value = "Edit pet information",
@@ -119,7 +119,7 @@ class PetController(
         @ApiParam(value = "The ID of the pet", required = true) @PathVariable(value = "id")
         id: Int,
         @ApiParam(value = "Details of a pet to be updated", required = true) @RequestBody pet: PetDTO
-    ) = petService.savePet(pet.copy(id = id), update = true)
+    ) = petService.savePet(pet, id = id)
 
     @ApiOperation(value = "Update photo of a pet")
     @ApiResponses(

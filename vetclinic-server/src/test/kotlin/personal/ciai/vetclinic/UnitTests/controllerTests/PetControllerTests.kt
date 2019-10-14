@@ -90,7 +90,7 @@ class PetControllerTests {
 
         val louroJSON = mapper.writeValueAsString(louro)
 
-        `when`(pets.savePet(nonNullAny(PetDTO::class.java), eq(false)))
+        `when`(pets.savePet(nonNullAny(PetDTO::class.java), eq(-1)))
             .then { assertEquals(louro, it.getArgument(0)) }
 
         mvc.perform(post(petsURL)
