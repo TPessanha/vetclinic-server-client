@@ -1,5 +1,7 @@
 package personal.ciai.vetclinic.model
 
+import personal.ciai.vetclinic.dto.UserDTO
+
 /**
  * Models a User.
  *

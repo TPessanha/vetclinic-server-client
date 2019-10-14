@@ -7,11 +7,14 @@ import personal.ciai.vetclinic.repository.AppointmentRepository
 import personal.ciai.vetclinic.repository.ClientRepository
 
 @Service
-class ClientService (val apts: AppointmentRepository) {
+class ClientService () {
 
-    //fun checkAppointments():List<Appointment> pesquisar appointments por id ou email
+    // fun checkAppointments():List<Appointment> {
 
-    // fun bookAppointment()
+
+    //fun bookAppointment()
+
+    //fun checkPet()
 
     //fun addPet()
 

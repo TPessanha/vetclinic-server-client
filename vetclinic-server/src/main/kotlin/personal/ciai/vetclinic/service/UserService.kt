@@ -7,6 +7,10 @@ import personal.ciai.vetclinic.repository.UserRepository
 class UserService( val users: UserRepository) {
     //fun login()
 
+    //fun logout()
+
+    //fun accessInfo()
+
     //fun uploadPhoto()
 
     //fun changeInfo()
