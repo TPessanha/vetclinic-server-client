@@ -19,4 +19,4 @@ abstract class User(
     val username: String,
     val password: String,
     val address: String
-)
+) : Entity<UserDTO>
