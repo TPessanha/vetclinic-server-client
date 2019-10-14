@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.any
-import org.mockito.Mockito.eq
+import org.mockito.Mockito.anyInt
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -86,11 +86,11 @@ class PetControllerTests {
 
     @Test
     fun `Test POST One Pet`() {
-        val louro = PetDTO(0, "Papagaio", 4, "client0124", notes = "hi hi")
+        val louro = PetDTO(-1, "Papagaio", 4, "client0124", notes = "hi hi")
 
         val louroJSON = mapper.writeValueAsString(louro)
 
-        `when`(pets.savePet(nonNullAny(PetDTO::class.java), eq(-1)))
+        `when`(pets.savePet(nonNullAny(PetDTO::class.java), anyInt()))
             .then { assertEquals(louro, it.getArgument(0)) }
 
         mvc.perform(post(petsURL)

@@ -27,7 +27,7 @@ import personal.ciai.vetclinic.service.PetService
 )
 
 @RestController
-@RequestMapping("/clients/{clientId}/pets")
+@RequestMapping("/pets")
 class PetController(
     @Autowired
     val petService: PetService
