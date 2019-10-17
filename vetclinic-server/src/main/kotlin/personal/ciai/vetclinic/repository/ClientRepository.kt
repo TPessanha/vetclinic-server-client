@@ -5,4 +5,4 @@ import org.springframework.stereotype.Repository
 import personal.ciai.vetclinic.model.Client
 
 @Repository
-interface ClientRepository: CrudRepository<Client, Int>
+interface ClientRepository : CrudRepository<Client, Int>
