@@ -1,6 +1,8 @@
 package personal.ciai.vetclinic.service
 
 import org.springframework.stereotype.Service
+import personal.ciai.vetclinic.dto.ClientDTO
+import personal.ciai.vetclinic.model.Client
 
 @Service
 class ClientService() {
@@ -9,9 +11,15 @@ class ClientService() {
 
     // fun bookAppointment()
 
-    // fun checkPet()
-
-    // fun addPet()
-
-    // fun removePet()
+    fun ClientDTO.toEntity(): Client {
+        return personal.ciai.vetclinic.model.Client(
+            id = this.id,
+            name = this.name,
+            email = this.email,
+            phoneNumber = this.phoneNumber,
+            username = this.username,
+            password = this.password,
+            address = this.address
+        )
+    }
 }
