@@ -20,6 +20,7 @@ class ClientService() {
             username = this.username,
             password = this.password,
             address = this.address
+
         )
     }
 }

@@ -57,6 +57,7 @@ data class ClientDTO(
     val address: String
 ) {
 
+
     constructor(client: Client) : this(client.id, client.name, client.email, client.phoneNumber,
         client.username, client.password, client.address)
 }
