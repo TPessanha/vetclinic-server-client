@@ -13,10 +13,10 @@ class ClientService(
 
     @Autowired
     val repository: ClientRepository
-    //private val configurationProperties: ConfigurationProperties
+    // private val configurationProperties: ConfigurationProperties
 ) {
 
-    companion object MediaTypes { //pensar em adicionar a opcao de foto ao client em vez de user
+    companion object MediaTypes { // pensar em adicionar a opcao de foto ao client em vez de user
         val imageTypes = listOf(
             MediaType.IMAGE_JPEG.toString(),
             MediaType.IMAGE_PNG.toString()
