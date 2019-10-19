@@ -26,6 +26,5 @@ class Client(
         password = this.password,
         address = this.address
          */
-
     }
 }
