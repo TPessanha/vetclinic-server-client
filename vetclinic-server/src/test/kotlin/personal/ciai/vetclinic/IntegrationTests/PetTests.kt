@@ -74,7 +74,6 @@ class PetTests {
         val responseString = result.response.contentAsString
         val persistentDog = mapper.readValue<PetDTO>(responseString)
 
-        assertNotEquals(dogExample.id, persistentDog.id)
         assertEquals(dogExample.species, persistentDog.species)
         assertEquals(dogExample.medicalRecord, persistentDog.medicalRecord)
         assertEquals(dogExample.physicalDescription, persistentDog.physicalDescription)
