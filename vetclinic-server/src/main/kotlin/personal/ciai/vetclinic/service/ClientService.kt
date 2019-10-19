@@ -18,8 +18,6 @@ class ClientService(
     val repository: ClientRepository,
     @Autowired
     val imageService: ImageService
-
-    // private val configurationProperties: ConfigurationProperties
 ) {
 
     companion object MediaTypes {
