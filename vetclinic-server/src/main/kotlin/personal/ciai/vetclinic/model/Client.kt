@@ -24,6 +24,5 @@ class Client(
         username = this.username,
         password = this.password,
         address = this.address)
-
     }
 }

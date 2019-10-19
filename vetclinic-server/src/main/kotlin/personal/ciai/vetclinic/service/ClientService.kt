@@ -2,7 +2,6 @@ package personal.ciai.vetclinic.service
 
 import org.springframework.stereotype.Service
 import personal.ciai.vetclinic.dto.ClientDTO
-import personal.ciai.vetclinic.model.Appointment
 import personal.ciai.vetclinic.model.Client
 
 @Service
