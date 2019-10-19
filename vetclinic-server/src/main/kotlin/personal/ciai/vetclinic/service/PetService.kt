@@ -26,10 +26,12 @@ class PetService(
         if (id > 0 && !repository.existsById(petDTO.id))
             throw NotFoundException("Pet with id (${petDTO.id}) not found")
 
-        if (id < 0 || (id == 0 && petDTO.id != 0))
+        val pet = petDTO.toEntity(id)
+
+        if (pet.id != 0)
             throw ExpectationFailedException("Id must be 0 in insertion or > 0 for update")
 
-        repository.save(petDTO.toEntity())
+        repository.save(pet)
     }
 
     fun getAllPets() = repository.findAll().map { it.toDTO() }

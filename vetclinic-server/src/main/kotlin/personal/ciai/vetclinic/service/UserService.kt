@@ -33,6 +33,8 @@ class UserService(
         if (id > 0 && !repository.existsById(userDTO.id))
             throw NotFoundException("User with id ($userDTO) not found")
 
+        val user = userDTO.toEntity(id)
+
         if (id < 0 || (id == 0 && userDTO.id != 0))
             throw ExpectationFailedException("Id must be 0 in insertion or > 0 for update")
 

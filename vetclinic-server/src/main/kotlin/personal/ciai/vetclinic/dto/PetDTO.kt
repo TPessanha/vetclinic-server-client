@@ -87,8 +87,12 @@ data class PetDTO(
 ) : BaseDTO {
 
     fun toEntity(): Pet {
+        return toEntity(this.id)
+    }
+
+    fun toEntity(newId: Int): Pet {
         return Pet(
-            id = this.id,
+            id = newId,
             species = this.species,
             age = this.age,
             appointments = arrayListOf(),

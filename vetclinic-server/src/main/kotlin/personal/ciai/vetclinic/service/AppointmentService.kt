@@ -23,14 +23,15 @@ class AppointmentService(
         repository.findById(id).orElseThrow { NotFoundException("Appointment with id ($id) not found") }
 
     fun saveAppointment(appointmentDTO: AppointmentDTO, id: Int = 0) {
-        if (id > 0 && !repository.existsById(appointmentDTO.id)) {
+        if (id > 0 && !repository.existsById(appointmentDTO.id))
             throw NotFoundException("Appointment with id (${appointmentDTO.id}) not found")
-        }
 
-        if (id < 0 || (id == 0 && appointmentDTO.id != 0))
+        val appointment = appointmentDTO.toEntity(id, petService)
+
+        if (appointment.id != 0)
             throw ExpectationFailedException("Id must be 0 in insertion or > 0 for update")
 
-        repository.save(appointmentDTO.toEntity(petService))
+        repository.save(appointment)
     }
 
     fun getPetAppointments(petId: Int) =

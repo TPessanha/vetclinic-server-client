@@ -45,9 +45,11 @@ open class UserDTO(
     )
     val photo: String? = null
 ) : BaseDTO {
-    fun toEntity(): User {
-        return User(
-            id = this.id,
+    fun toEntity() = toEntity(this.id)
+
+    fun toEntity(newId: Int) =
+        User(
+            id = newId,
             name = this.name,
             email = this.email,
             phoneNumber = this.phoneNumber,
@@ -56,5 +58,4 @@ open class UserDTO(
             address = this.address,
             photo = if (this.photo == null) null else URI.create(this.photo)
         )
-    }
 }

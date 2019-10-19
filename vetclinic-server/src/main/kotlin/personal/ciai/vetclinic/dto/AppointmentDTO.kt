@@ -39,12 +39,14 @@ data class AppointmentDTO(
     )
     val description: String
 ) : BaseDTO {
-    fun toEntity(petService: PetService) =
+    fun toEntity(petService: PetService) = toEntity(this.id, petService)
+
+    fun toEntity(newId: Int, petService: PetService) =
         Appointment(
-            id = id,
-            date = Date(date),
+            id = newId,
+            date = Date(this.date),
 //            veterinarian = debugvet,
-            description = description,
+            description = this.description,
 //            client = debugClient,
             pet = petService.getPetEntityById(this.pet)
         )
