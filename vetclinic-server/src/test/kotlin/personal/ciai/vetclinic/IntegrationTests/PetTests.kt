@@ -46,7 +46,7 @@ class PetTests {
     @Test
     fun `Client add a new pet`() {
         assertTrue(petService.getAllPets().isEmpty())
-        val dogJSON = mapper.writeValueAsString(dogExample.toDTO())
+        val dogJSON = mapper.writeValueAsString(dogExample.toDTO().copy(id = 0))
 
         mvc.perform(
             MockMvcRequestBuilders
@@ -80,7 +80,6 @@ class PetTests {
         assertEquals(dogExample.physicalDescription, persistentDog.physicalDescription)
         assertEquals(dogExample.notes, persistentDog.notes)
         assertEquals(dogExample.age, persistentDog.age)
-//        assertEquals(toAdd.appointments, persistentDog.appointments)
 
         // clenup
         mvc.perform(
