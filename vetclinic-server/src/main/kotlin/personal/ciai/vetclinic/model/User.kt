@@ -25,11 +25,17 @@ import personal.ciai.vetclinic.dto.UserDTO
 @Inheritance(strategy = InheritanceType.JOINED)
 open class User(
     id: Int,
+    @Column(nullable = false)
     val email: String,
+    @Column(nullable = false)
     val name: String,
+    @Column(nullable = false)
     val phoneNumber: Int,
+    @Column(nullable = false)
     val username: String,
+    @Column(nullable = false)
     val password: String,
+    @Column(nullable = false)
     val address: String,
     @Column(nullable = true)
     var photo: URI? = null
