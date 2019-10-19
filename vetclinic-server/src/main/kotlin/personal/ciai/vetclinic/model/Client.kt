@@ -15,7 +15,8 @@ class Client(
 //    var pets: List<Pet> = emptyList(),
     address: String
 ) : User(id, email, name, phoneNumber, username, password, address) {
-    override fun toDTO(): ClientDTO {
-        TODO("Not implemented")
-    }
+    override fun toDTO(): ClientDTO =
+        ClientDTO(
+            id = this.id, email = this.email, name = this.name, phoneNumber = this.phoneNumber,
+            username = this.username, password = this.password, address = this.address)
 }
