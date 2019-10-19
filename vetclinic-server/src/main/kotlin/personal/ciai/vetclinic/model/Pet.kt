@@ -1,6 +1,7 @@
 package personal.ciai.vetclinic.model
 
 import java.net.URI
+import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.OneToMany
@@ -31,8 +32,8 @@ class Pet(
     var age: Int,
 //    var owner: Client<ClientDTO>, todo link pet to owner
 //    @OneToMany
-    @OneToMany(mappedBy = "pet")
-    var appointments: List<Appointment> = emptyList(),
+    @OneToMany(mappedBy = "pet", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var appointments: MutableList<Appointment> = arrayListOf<Appointment>(),
     @Column(nullable = false)
     var notes: String = "",
     @Column(nullable = false)
@@ -48,7 +49,7 @@ class Pet(
         species = species,
         age = age,
         owner = "NOT IMPLEMENTED",
-        appointments = appointments.map { it.id },
+//        appointments = appointments.map { it.toDTO() },
         notes = notes,
         physicalDescription = physicalDescription,
         medicalRecord = medicalRecord,

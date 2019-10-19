@@ -18,16 +18,16 @@ class Appointment(
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    val date: Date,
+    var date: Date,
 //    @Column(nullable = false)
 //    val veterinarian: Pet,
     @ManyToOne
     @JoinColumn(name = "pet_id")
-    val pet: Pet,
+    var pet: Pet,
 //    @Column(nullable = false)
 //    val client: Pet,
     @Column(nullable = false)
-    val description: String
+    var description: String
 ) : IdentifiedEntity<AppointmentDTO>(id) {
 
     override fun toDTO() = AppointmentDTO(

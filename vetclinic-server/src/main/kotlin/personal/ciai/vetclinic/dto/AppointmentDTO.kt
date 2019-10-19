@@ -2,6 +2,9 @@ package personal.ciai.vetclinic.dto
 
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
+import java.util.Date
+import personal.ciai.vetclinic.model.Appointment
+import personal.ciai.vetclinic.service.PetService
 
 @ApiModel("Appointment DTO model", description = "Used to model appointments")
 data class AppointmentDTO(
@@ -35,4 +38,14 @@ data class AppointmentDTO(
         example = "Cured the animal"
     )
     val description: String
-) : BaseDTO
+) : BaseDTO {
+    fun toEntity(petService: PetService) =
+        Appointment(
+            id = id,
+            date = Date(date),
+//            veterinarian = debugvet,
+            description = description,
+//            client = debugClient,
+            pet = petService.getPetEntityById(this.pet)
+        )
+}

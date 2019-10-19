@@ -19,8 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.web.context.WebApplicationContext
-import personal.ciai.vetclinic.ExampleObjects.exampleObjects.dogExample
+import personal.ciai.vetclinic.TestUtils.dogExample
 import personal.ciai.vetclinic.dto.PetDTO
 import personal.ciai.vetclinic.service.PetService
 
@@ -33,9 +32,6 @@ class PetTests {
     lateinit var petService: PetService
 
     @Autowired
-    lateinit var webApplicationContext: WebApplicationContext
-
-    @Autowired
     lateinit var mvc: MockMvc
 
     companion object {
@@ -44,12 +40,12 @@ class PetTests {
         // see: https://discuss.kotlinlang.org/t/data-class-and-jackson-annotation-conflict/397/6
         val mapper = ObjectMapper().registerModule(KotlinModule())
 
-        val petsURL = "/pets"
+        val petsURL = "/clients/1/pets"
     }
 
     @Test
     fun `Client add a new pet`() {
-        assertTrue(petService.getAllPets().size == 0)
+        assertTrue(petService.getAllPets().isEmpty())
         val dogJSON = mapper.writeValueAsString(dogExample.toDTO())
 
         mvc.perform(
@@ -86,12 +82,13 @@ class PetTests {
         assertEquals(dogExample.age, persistentDog.age)
 //        assertEquals(toAdd.appointments, persistentDog.appointments)
 
+        // clenup
         mvc.perform(
             MockMvcRequestBuilders
                 .delete("$petsURL/1")
         )
             .andExpect(status().isOk)
 
-        assertTrue(petService.getAllPets().size == 0)
+        assertTrue(petService.getAllPets().isEmpty())
     }
 }

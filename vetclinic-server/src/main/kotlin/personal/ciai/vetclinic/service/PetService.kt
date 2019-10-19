@@ -1,7 +1,6 @@
 package personal.ciai.vetclinic.service
 
 import java.io.File
-import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Paths
 import org.springframework.beans.factory.annotation.Autowired
@@ -31,13 +30,8 @@ class PetService(
 
     fun getPetById(id: Int) = getPetEntityById(id).toDTO()
 
-    fun getPetEntityById(id: Int): Pet {
-        val pet = repository.findById(id)
-        if (pet.isPresent)
-            return pet.get()
-        else
-            throw NotFoundException("Pet with id ($id) not found")
-    }
+    fun getPetEntityById(id: Int): Pet =
+        repository.findById(id).orElseThrow { NotFoundException("Pet with id ($id) not found") }
 
     fun savePet(petDTO: PetDTO, id: Int = -1) {
         if (id > 0 && !repository.existsById(petDTO.id))
@@ -46,9 +40,7 @@ class PetService(
         repository.save(petDTO.copy(id = id).toEntity())
     }
 
-    fun getAllPets(): List<PetDTO> {
-        return repository.findAll().map { it.toDTO() }
-    }
+    fun getAllPets() = repository.findAll().map { it.toDTO() }
 
     fun updatePhoto(id: Int, photo: MultipartFile): String {
         if (photo.contentType !in imageTypes)
@@ -82,17 +74,7 @@ class PetService(
             File(photoURI).readBytes()
     }
 
-    fun PetDTO.toEntity(): Pet {
-        return Pet(
-            id = this.id,
-            species = this.species,
-            age = this.age,
-            medicalRecord = this.medicalRecord,
-            physicalDescription = this.physicalDescription,
-            notes = this.notes,
-            photo = if (this.photo == null) null else URI.create(this.photo)
-        )
-    }
+    fun deletePet(id: Int) = repository.deleteById(id)
 
-    fun deletePet(id: Int) = repository.delete(getPetEntityById(id))
+    fun deletePet(pet: Pet) = repository.delete(pet)
 }

@@ -27,7 +27,7 @@ import personal.ciai.vetclinic.service.PetService
 )
 
 @RestController
-@RequestMapping("/pets")
+@RequestMapping("/clients/{clientId:[0-9]+}/pets")
 class PetController(
     @Autowired
     val petService: PetService
@@ -50,7 +50,10 @@ class PetController(
         ]
     )
     @GetMapping("")
-    fun getAllPets() = petService.getAllPets()
+    fun getAllPets(
+        @ApiParam(value = "The ID of the client", required = false, defaultValue = "1") @PathVariable
+        clientId: Int
+    ) = petService.getAllPets()
 
     @ApiOperation(
         value = "Get details of a pet",
@@ -68,9 +71,11 @@ class PetController(
             (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
         ]
     )
-    @GetMapping("/{id}")
+    @GetMapping("/{id:[0-9]+}")
     fun getOnePet(
-        @ApiParam(value = "The ID of the pet", required = true) @PathVariable(value = "id")
+        @ApiParam(value = "The ID of the client", required = true) @PathVariable
+        clientId: Int,
+        @ApiParam(value = "The ID of the pet", required = true) @PathVariable
         id: Int
     ) = petService.getPetById(id)
 
@@ -93,8 +98,13 @@ class PetController(
     )
     @PostMapping("")
     fun addPet(
-        @ApiParam(value = "Details of a pet to be created", required = true) @RequestBody pet: PetDTO
-    ) = petService.savePet(pet)
+        @ApiParam(value = "The ID of the client", required = true)@PathVariable
+        clientId: Int,
+        @ApiParam(value = "Details of a pet to be created", required = true) @RequestBody
+        pet: PetDTO
+    ) {
+        return petService.savePet(pet)
+    }
 
     @ApiOperation(
         value = "Edit pet information",
@@ -114,11 +124,14 @@ class PetController(
             (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
         ]
     )
-    @PutMapping("/{id}")
+    @PutMapping("/{id:[0-9]+}")
     fun updatePet(
-        @ApiParam(value = "The ID of the pet", required = true) @PathVariable(value = "id")
+        @ApiParam(value = "The ID of the client", required = true)@PathVariable
+        clientId: Int,
+        @ApiParam(value = "The ID of the pet", required = true) @PathVariable
         id: Int,
-        @ApiParam(value = "Details of a pet to be updated", required = true) @RequestBody pet: PetDTO
+        @ApiParam(value = "Details of a pet to be updated", required = true) @RequestBody
+        pet: PetDTO
     ) = petService.savePet(pet, id = id)
 
     @ApiOperation(value = "Update photo of a pet")
@@ -135,11 +148,13 @@ class PetController(
             (ApiResponse(code = 415, message = "Photos can only be of type (jpg/png)"))
         ]
     )
-    @PutMapping("/{id}/photo")
+    @PutMapping("/{id:[0-9]+}/photo")
     fun savePhoto(
-        @ApiParam(value = "The ID of the pet", required = true) @PathVariable(value = "id")
+        @ApiParam(value = "The ID of the client", required = true)@PathVariable
+        clientId: Int,
+        @ApiParam(value = "The ID of the pet", required = true) @PathVariable
         id: Int,
-        @RequestParam("file")
+        @RequestParam("photo")
         photo: MultipartFile
     ) = ResponseEntity.ok(petService.updatePhoto(id, photo))
 
@@ -158,9 +173,11 @@ class PetController(
             (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
         ]
     )
-    @GetMapping("/{id}/photo")
+    @GetMapping("/{id:[0-9]+}/photo")
     fun getPhoto(
-        @ApiParam(value = "The ID of the pet", required = true) @PathVariable(value = "id")
+        @ApiParam(value = "The ID of the client", required = true)@PathVariable
+        clientId: Int,
+        @ApiParam(value = "The ID of the pet", required = true) @PathVariable
         id: Int
     ) = ResponseEntity
         .ok()
@@ -175,8 +192,10 @@ class PetController(
             ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden")
         ]
     )
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id:[0-9]+}")
     fun deletePet(
+        @ApiParam(value = "The ID of the client", required = true)@PathVariable
+        clientId: Int,
         @ApiParam(value = "The ID of the pet", required = true) @PathVariable
         id: Int
     ) = petService.deletePet(id)

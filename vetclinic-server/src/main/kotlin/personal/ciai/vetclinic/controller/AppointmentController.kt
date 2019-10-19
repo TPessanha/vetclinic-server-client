@@ -21,20 +21,20 @@ import personal.ciai.vetclinic.service.AppointmentService
 )
 
 @RestController
-@RequestMapping("/appointments")
+@RequestMapping("/clients/{clientId:[0-9]+}/pets/{petId:[0-9]+}/appointments")
 class AppointmentController(
     @Autowired
     val appointmentService: AppointmentService
 ) {
     @ApiOperation(
-        value = "View a list of appointments",
+        value = "View a list of appointments for the pet",
         produces = "application/json",
         responseContainer = "List",
         response = AppointmentDTO::class
     )
     @ApiResponses(
         value = [
-            (ApiResponse(code = 200, message = "Successfully retrieved the list of appointments")),
+            (ApiResponse(code = 200, message = "Successfully retrieved the list of appointments of the pet")),
             (ApiResponse(code = 401, message = "You are not authorized to view the resource")),
             (ApiResponse(
                 code = 403,
@@ -43,10 +43,12 @@ class AppointmentController(
         ]
     )
     @GetMapping("")
-    fun getAllAppointments(
-        @ApiParam(value = "The ID of the pet", required = true) @PathVariable(value = "petId")
-        id: Int
-    ) = appointmentService.getAllAppointments()
+    fun getPetAppointments(
+        @ApiParam(value = "The ID of the client", required = true)@PathVariable
+        clientId: Int,
+        @ApiParam(value = "The ID of the pet", required = true) @PathVariable
+        petId: Int
+    ) = appointmentService.getPetAppointments(petId)
 
     @ApiOperation(
         value = "Get details of an appointment",
@@ -64,9 +66,13 @@ class AppointmentController(
             (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
         ]
     )
-    @GetMapping("/{id}")
+    @GetMapping("/{id:[0-9]+}")
     fun getOneAppointment(
-        @ApiParam(value = "The ID of the appointment", required = true) @PathVariable(value = "id")
+        @ApiParam(value = "The ID of the client", required = true)@PathVariable
+        clientId: Int,
+        @ApiParam(value = "The ID of the pet", required = true)@PathVariable
+        petId: Int,
+        @ApiParam(value = "The ID of the appointment", required = true) @PathVariable
         id: Int
     ) = appointmentService.getAppointmentById(id)
 
@@ -84,17 +90,19 @@ class AppointmentController(
     )
     @PostMapping("")
     fun addAppointment(
+        @ApiParam(value = "The ID of the client", required = true)@PathVariable
+        clientId: Int,
+        @ApiParam(value = "The ID of the pet", required = true) @PathVariable
+        petId: Int,
         @ApiParam(
             value = "Details of an appointment to be created",
             required = true
-        )
-        @RequestBody appointment: AppointmentDTO,
-        @ApiParam(value = "The ID of the pet", required = true) @PathVariable(value = "petId")
-        petID: Int
+        ) @RequestBody
+        appointment: AppointmentDTO
 //        TODO add vet and client
 //        @ApiParam(value = "The username of the client", required = true) @PathVariable(value = "clientId")
 //        clientId: Int,
 //        @ApiParam(value = "The ID of the vet", required = true) @PathVariable(value = "vetId")
 //        vetId: Int
-    ) = appointmentService.saveAppointment(appointment.copy(id = -1))
+    ) = appointmentService.saveAppointment(appointment.copy(pet = petId))
 }

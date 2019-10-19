@@ -4,6 +4,7 @@ import java.util.Optional
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
@@ -11,9 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import personal.ciai.vetclinic.ExampleObjects.exampleObjects.dogExample
-import personal.ciai.vetclinic.ExampleObjects.exampleObjects.petList
-import personal.ciai.vetclinic.ExampleObjects.exampleObjects.petListPet
+import personal.ciai.vetclinic.TestUtils.dogExample
+import personal.ciai.vetclinic.TestUtils.petListDTOs
+import personal.ciai.vetclinic.TestUtils.petListEntities
 import personal.ciai.vetclinic.dto.PetDTO
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.model.Pet
@@ -35,9 +36,9 @@ class PetServiceTests {
 
     @Test
     fun `basic test on getAll`() {
-        `when`(repository.findAll()).thenReturn(petListPet)
+        `when`(repository.findAll()).thenReturn(petListEntities)
 
-        assertEquals(petService.getAllPets().map { it.copy(id = -1) }, petList)
+        assertEquals(petService.getAllPets(), petListDTOs)
     }
 
     @Test
@@ -48,7 +49,7 @@ class PetServiceTests {
     }
 
     @Test
-    fun `test on getPetById() exception`() {
+    fun `test on getPetById() (Not Found))`() {
         `when`(repository.findById(5)).thenThrow(NotFoundException("not found"))
 
         assertThrows(NotFoundException::class.java) {
@@ -57,7 +58,7 @@ class PetServiceTests {
     }
 
     @Test
-    fun `test on addNewPet()`() {
+    fun `test on savePet()`() {
         `when`(repository.save(Mockito.any(Pet::class.java)))
             .then {
                 val pet: Pet = it.getArgument(0)
@@ -76,11 +77,13 @@ class PetServiceTests {
     }
 
     private fun assertPetDTO(pet: PetDTO) {
-        assertEquals(dogExample.id, pet.id)
-        assertEquals(dogExample.species, pet.species)
-        assertEquals(dogExample.age, pet.age)
-        assertEquals(dogExample.notes, pet.notes)
-        assertEquals(dogExample.physicalDescription, pet.physicalDescription)
-        assertEquals(dogExample.medicalRecord, pet.medicalRecord)
+        assertAll("Is petDTO the same?",
+            { assertEquals(dogExample.id, pet.id) },
+            { assertEquals(dogExample.species, pet.species) },
+            { assertEquals(dogExample.age, pet.age) },
+            { assertEquals(dogExample.notes, pet.notes) },
+            { assertEquals(dogExample.physicalDescription, pet.physicalDescription) },
+            { assertEquals(dogExample.medicalRecord, pet.medicalRecord) }
+        )
     }
 }
