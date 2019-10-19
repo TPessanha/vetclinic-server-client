@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.dto.ClientDTO
 import personal.ciai.vetclinic.exception.ExpectationFailedException
 import personal.ciai.vetclinic.exception.NotFoundException
-import personal.ciai.vetclinic.model.Appointment
+// import personal.ciai.vetclinic.model.Appointment
 import personal.ciai.vetclinic.model.Client
 import personal.ciai.vetclinic.repository.ClientRepository
 
@@ -26,13 +26,14 @@ class ClientService(
             MediaType.IMAGE_PNG.toString()
         )
     }
-
+    /*
     fun checkAppointments(id: Int): List<Appointment> {
         val client =
             repository.findByIdWithAppointment(id)
                 .orElseThrow { NotFoundException("Pet with id ($id) not found") }
         return client.appointments
     }
+    */
 
     fun getClientById(id: Int) = getClientEntityById(id).toDTO()
 
