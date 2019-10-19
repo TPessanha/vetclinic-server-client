@@ -1,7 +1,9 @@
 package personal.ciai.vetclinic.model
 
 import java.net.URI
+import javax.persistence.CascadeType
 import javax.persistence.Entity
+import javax.persistence.OneToMany
 import javax.persistence.Table
 import personal.ciai.vetclinic.dto.ClientDTO
 
@@ -14,8 +16,8 @@ class Client(
     phoneNumber: Int,
     username: String,
     password: String,
-//    var appointments: List<Appointment> = emptyList(),
-//    var pets: List<Pet> = emptyList(),
+    @OneToMany(mappedBy = "client", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var appointments: MutableList<Appointment> = arrayListOf(),
     address: String,
     photo: URI?
 ) : User(id, email, name, phoneNumber, username, password, address, photo) {
