@@ -1,9 +1,9 @@
 package personal.ciai.vetclinic.service
 
-import java.util.Date
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import personal.ciai.vetclinic.dto.AppointmentDTO
+import personal.ciai.vetclinic.exception.ExpectationFailedException
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.model.Appointment
 import personal.ciai.vetclinic.repository.AppointmentRepository
@@ -15,35 +15,25 @@ class AppointmentService(
     @Autowired
     val petService: PetService
 ) {
-    fun findAllAppointments(): List<AppointmentDTO> {
-        return repository.findAll().map { it.toDTO() }
-    }
+    fun getAllAppointments() = repository.findAll().map { it.toDTO() }
 
-    fun getAppointmentById(id: Int) = getPetEntityById(id).toDTO()
+    fun getAppointmentById(id: Int) = getAppointmentEntityById(id).toDTO()
 
-    fun getPetEntityById(id: Int): Appointment {
-        val appointment = repository.findById(id)
-        if (appointment.isPresent)
-            return appointment.get()
-        else
-            throw NotFoundException("Appointment with id ($id) not found")
-    }
+    fun getAppointmentEntityById(id: Int): Appointment =
+        repository.findById(id).orElseThrow { NotFoundException("Appointment with id ($id) not found") }
 
-    fun saveAppointment(appointmentDTO: AppointmentDTO, update: Boolean = false) {
-        if (update && !repository.existsById(appointmentDTO.id))
+    fun saveAppointment(appointmentDTO: AppointmentDTO, id: Int = 0) {
+        if (id > 0 && !repository.existsById(appointmentDTO.id))
             throw NotFoundException("Appointment with id (${appointmentDTO.id}) not found")
 
-        repository.save(appointmentDTO.toEntity())
+        val appointment = appointmentDTO.toEntity(id, petService)
+
+        if (appointment.id != 0)
+            throw ExpectationFailedException("Id must be 0 in insertion or > 0 for update")
+
+        repository.save(appointment)
     }
 
-    fun AppointmentDTO.toEntity(): Appointment {
-        return Appointment(
-            id = id,
-            date = Date(date),
-//            veterinarian = debugvet,
-            description = description,
-//            client = debugClient,
-            pet = petService.getPetEntityById(this.pet)
-        )
-    }
+    fun getPetAppointments(petId: Int) =
+        petService.getPetAppointments(petId).map { it.toDTO() }
 }

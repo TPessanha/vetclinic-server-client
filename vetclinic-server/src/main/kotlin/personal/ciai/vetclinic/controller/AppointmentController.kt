@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -20,20 +21,20 @@ import personal.ciai.vetclinic.service.AppointmentService
 )
 
 @RestController
-@RequestMapping("/appointments")
+@RequestMapping("/clients/{clientId:[0-9]+}/pets/{petId:[0-9]+}/appointments")
 class AppointmentController(
     @Autowired
     val appointmentService: AppointmentService
 ) {
     @ApiOperation(
-        value = "View a list of appointments",
+        value = "View a list of appointments for the pet",
         produces = "application/json",
         responseContainer = "List",
         response = AppointmentDTO::class
     )
     @ApiResponses(
         value = [
-            (ApiResponse(code = 200, message = "Successfully retrieved the list of appointments")),
+            (ApiResponse(code = 200, message = "Successfully retrieved the list of appointments of the pet")),
             (ApiResponse(code = 401, message = "You are not authorized to view the resource")),
             (ApiResponse(
                 code = 403,
@@ -42,12 +43,39 @@ class AppointmentController(
         ]
     )
     @GetMapping("")
-    fun getAllAppointments() = appointmentService.findAllAppointments()
+    fun getPetAppointments(
+        @ApiParam(value = "The ID of the client", required = true)@PathVariable
+        clientId: Int,
+        @ApiParam(value = "The ID of the pet", required = true) @PathVariable
+        petId: Int
+    ) = appointmentService.getPetAppointments(petId)
 
     @ApiOperation(
-        value = "(Debug) Create a new appointment",
-        consumes = "application/json"
+        value = "Get details of an appointment",
+        produces = "application/json",
+        response = AppointmentDTO::class
     )
+    @ApiResponses(
+        value = [
+            (ApiResponse(code = 200, message = "Successfully retrieved the appointment details")),
+            (ApiResponse(code = 401, message = "You are not authorized to view the resource")),
+            (ApiResponse(
+                code = 403,
+                message = "Accessing the resource you were tyring to reach is forbidden"
+            )),
+            (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
+        ]
+    )
+    @GetMapping("/{id:[0-9]+}")
+    fun getOneAppointment(
+        @ApiParam(value = "The ID of the client", required = true)@PathVariable
+        clientId: Int,
+        @ApiParam(value = "The ID of the pet", required = true)@PathVariable
+        petId: Int,
+        @ApiParam(value = "The ID of the appointment", required = true) @PathVariable
+        id: Int
+    ) = appointmentService.getAppointmentById(id)
+
     @ApiResponses(
         value = [
             (ApiResponse(code = 200, message = "Successfully added the appointment")),
@@ -62,10 +90,19 @@ class AppointmentController(
     )
     @PostMapping("")
     fun addAppointment(
+        @ApiParam(value = "The ID of the client", required = true)@PathVariable
+        clientId: Int,
+        @ApiParam(value = "The ID of the pet", required = true) @PathVariable
+        petId: Int,
         @ApiParam(
             value = "Details of an appointment to be created",
             required = true
-        )
-        @RequestBody appointment: AppointmentDTO
-    ) = appointmentService.saveAppointment(appointment.copy(id = 0))
+        ) @RequestBody
+        appointment: AppointmentDTO
+//        TODO add vet and client
+//        @ApiParam(value = "The username of the client", required = true) @PathVariable(value = "clientId")
+//        clientId: Int,
+//        @ApiParam(value = "The ID of the vet", required = true) @PathVariable(value = "vetId")
+//        vetId: Int
+    ) = appointmentService.saveAppointment(appointment.copy(pet = petId))
 }

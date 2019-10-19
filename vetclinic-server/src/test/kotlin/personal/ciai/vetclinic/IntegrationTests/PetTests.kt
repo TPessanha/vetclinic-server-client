@@ -5,7 +5,6 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -19,8 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.web.context.WebApplicationContext
-import personal.ciai.vetclinic.ExampleObjects.exampleObjects.dogExample
+import personal.ciai.vetclinic.TestUtils.dogExample
 import personal.ciai.vetclinic.dto.PetDTO
 import personal.ciai.vetclinic.service.PetService
 
@@ -33,9 +31,6 @@ class PetTests {
     lateinit var petService: PetService
 
     @Autowired
-    lateinit var webApplicationContext: WebApplicationContext
-
-    @Autowired
     lateinit var mvc: MockMvc
 
     companion object {
@@ -44,13 +39,13 @@ class PetTests {
         // see: https://discuss.kotlinlang.org/t/data-class-and-jackson-annotation-conflict/397/6
         val mapper = ObjectMapper().registerModule(KotlinModule())
 
-        val petsURL = "/pets"
+        val petsURL = "/clients/1/pets"
     }
 
     @Test
     fun `Client add a new pet`() {
-        assertTrue(petService.getAllPets().size == 0)
-        val dogJSON = mapper.writeValueAsString(dogExample.toDTO())
+        assertTrue(petService.getAllPets().isEmpty())
+        val dogJSON = mapper.writeValueAsString(dogExample.toDTO().copy(id = 0))
 
         mvc.perform(
             MockMvcRequestBuilders
@@ -78,20 +73,19 @@ class PetTests {
         val responseString = result.response.contentAsString
         val persistentDog = mapper.readValue<PetDTO>(responseString)
 
-        assertNotEquals(dogExample.id, persistentDog.id)
         assertEquals(dogExample.species, persistentDog.species)
         assertEquals(dogExample.medicalRecord, persistentDog.medicalRecord)
         assertEquals(dogExample.physicalDescription, persistentDog.physicalDescription)
         assertEquals(dogExample.notes, persistentDog.notes)
         assertEquals(dogExample.age, persistentDog.age)
-//        assertEquals(toAdd.appointments, persistentDog.appointments)
 
+        // clenup
         mvc.perform(
             MockMvcRequestBuilders
                 .delete("$petsURL/1")
         )
             .andExpect(status().isOk)
 
-        assertTrue(petService.getAllPets().size == 0)
+        assertTrue(petService.getAllPets().isEmpty())
     }
 }

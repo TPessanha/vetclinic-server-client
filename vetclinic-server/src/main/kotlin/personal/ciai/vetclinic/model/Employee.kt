@@ -26,3 +26,5 @@ abstract class Employee<DTO>(
     @Column(nullable = false)
     var photo: URI
 ) : User(email, name, phoneNumber, username, password, address), Entity<DTO>
+
+abstract class Employee(id: Int) : IdentifiedEntity(id)

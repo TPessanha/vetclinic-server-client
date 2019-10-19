@@ -1,7 +1,8 @@
 package personal.ciai.vetclinic.model
 
 import java.io.Serializable
+import personal.ciai.vetclinic.dto.BaseDTO
 
-interface Entity<out DTO> : Serializable {
-    fun toDTO(): DTO
+interface Entity : Serializable {
+    fun toDTO(): BaseDTO
 }

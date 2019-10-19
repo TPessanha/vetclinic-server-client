@@ -3,7 +3,6 @@ package personal.ciai.vetclinic.UnitTests.controllerTests
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
-import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -19,24 +18,22 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import personal.ciai.vetclinic.TestUtils.dogExample
-import personal.ciai.vetclinic.TestUtils.petList
-import personal.ciai.vetclinic.dto.PetDTO
+import personal.ciai.vetclinic.TestUtils.appointmentExample1
+import personal.ciai.vetclinic.dto.AppointmentDTO
 import personal.ciai.vetclinic.exception.NotFoundException
-import personal.ciai.vetclinic.service.PetService
+import personal.ciai.vetclinic.service.AppointmentService
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
 @AutoConfigureMockMvc
-class PetControllerTests {
-
+class AppointmentControllerTests {
     @Autowired
     lateinit var mvc: MockMvc
 
     @MockBean
-    lateinit var pets: PetService
+    lateinit var appointmentService: AppointmentService
 
     companion object {
         // To avoid all annotations JsonProperties in data classes
@@ -44,44 +41,44 @@ class PetControllerTests {
         // see: https://discuss.kotlinlang.org/t/data-class-and-jackson-annotation-conflict/397/6
         val mapper = ObjectMapper().registerModule(KotlinModule())
 
-        val petsURL = "/clients/1/pets"
+        val requestURL = "/clients/1/pets/1/appointments"
     }
 
     @Test
-    fun `Test GET all pets`() {
-        val dtoList = petList.map { it.toDTO() }
-        `when`(pets.getAllPets()).thenReturn(dtoList)
+    fun `Test GET getPetWithAppointments`() {
+//        val appointmentListDTOs =appointmentList.map { it.toDTO() }
+        `when`(appointmentService.getPetAppointments(1)).thenReturn(arrayListOf())
 
-        val result = mvc.perform(get(petsURL))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize<Any>(petList.size)))
-            .andReturn()
-
-        val responseString = result.response.contentAsString
-        val responseDTO = mapper.readValue<List<PetDTO>>(responseString)
-        assertEquals(responseDTO, dtoList)
-    }
-
-    @Test
-    fun `Test GET One Pet`() {
-        val dtoList = petList.map { it.toDTO() }
-
-        `when`(pets.getPetById(1)).thenReturn(dogExample.toDTO())
-
-        val result = mvc.perform(get("$petsURL/1"))
+        val result = mvc.perform(get(requestURL))
             .andExpect(status().isOk)
             .andReturn()
 
         val responseString = result.response.contentAsString
-        val responseDTO = mapper.readValue<PetDTO>(responseString)
-        assertEquals(responseDTO, dtoList[0])
+//        val responseDTO = mapper.readValue<Pet>(responseString)
+        assertEquals(responseString, "[]")
+//        assertTrue(responseDTO.appointments.isEmpty())
     }
 
     @Test
-    fun `Test GET One Pet (Not Found)`() {
-        `when`(pets.getPetById(2)).thenThrow(NotFoundException("not found"))
+    fun `Test GET One Appointment`() {
+        val dto = appointmentExample1.toDTO()
 
-        mvc.perform(get("$petsURL/2"))
+        `when`(appointmentService.getAppointmentById(1)).thenReturn(dto)
+
+        val result = mvc.perform(get("$requestURL/1"))
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andReturn()
+
+        val responseString = result.response.contentAsString
+        val responseDTO = mapper.readValue<AppointmentDTO>(responseString)
+        assertEquals(responseDTO, dto)
+    }
+
+    @Test
+    fun `Test GET One Appointment (Not Found)`() {
+        `when`(appointmentService.getAppointmentById(2)).thenThrow(NotFoundException("not found"))
+
+        mvc.perform(get("$requestURL/2"))
             .andExpect(status().is4xxClientError)
     }
 
@@ -89,17 +86,17 @@ class PetControllerTests {
 
     @Test
     fun `Test POST One Pet`() {
-        val dtoList = petList.map { it.toDTO() }
+        val dto = appointmentExample1.toDTO()
 
-        val petJSON = mapper.writeValueAsString(dtoList[0])
+        val appointmentJSON = mapper.writeValueAsString(dto)
 
-        `when`(pets.savePet(nonNullAny(PetDTO::class.java), anyInt()))
-            .then { assertEquals(dtoList[0], it.getArgument(0)) }
+        `when`(appointmentService.saveAppointment(nonNullAny(AppointmentDTO::class.java), anyInt()))
+            .then { assertEquals(dto.copy(pet = 1), it.getArgument(0)) }
 
-        mvc.perform(post(petsURL)
+        mvc.perform(post(requestURL)
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
-            .content(petJSON))
+            .content(appointmentJSON))
             .andExpect(status().isOk)
     }
 }
