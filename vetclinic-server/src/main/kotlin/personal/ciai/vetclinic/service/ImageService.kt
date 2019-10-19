@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.config.ConfigurationProperties
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.exception.UnsupportedMediaTypeException
+import personal.ciai.vetclinic.model.Client
 import personal.ciai.vetclinic.model.Pet
 import personal.ciai.vetclinic.model.User
 
@@ -77,6 +78,36 @@ class ImageService(
 
     fun getUserPhoto(user: User): ByteArray {
         val photoURI = user.photo
+        if (photoURI == null)
+            throw NotFoundException("User does not have a profile photo")
+        else
+            return File(photoURI).readBytes()
+    }
+
+    /*** Clients ***/
+
+    fun updateClientPhoto(client: Client, photo: MultipartFile): Client {
+        if (photo.contentType !in imageTypes)
+            throw UnsupportedMediaTypeException("Photos can only be of type (jpg/png)")
+
+        val path = Paths.get(
+            configurationProperties.fullPathToUserPhotos, "${client.id}.jpg"
+        )
+        println("PATH: $path")
+        println("Uri: ${path.toUri()}")
+
+        val directory = File(configurationProperties.fullPathToUserPhotos)
+        if (!directory.exists())
+            directory.mkdirs()
+        Files.write(path, photo.bytes)
+
+        client.photo = path.toUri()
+
+        return client // TODO set owner
+    }
+
+    fun getClientPhoto(client: Client): ByteArray {
+        val photoURI = client.photo
         if (photoURI == null)
             throw NotFoundException("User does not have a profile photo")
         else
