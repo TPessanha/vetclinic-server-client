@@ -23,9 +23,9 @@ import personal.ciai.vetclinic.model.Pet
 data class PetDTO(
     @ApiModelProperty(
         "An unique identifier for the pet",
-        required = true,
+        required = false,
         readOnly = false,
-        example = "1"
+        example = "0"
     )
     val id: Int = 0,
     @ApiModelProperty(

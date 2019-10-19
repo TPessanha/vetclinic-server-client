@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.orm.jpa.JpaObjectRetrievalFailureException
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.transaction.annotation.Transactional
-import personal.ciai.vetclinic.TestUtils.appointmentExample1
+import personal.ciai.vetclinic.TestUtils.assertAppointmentEquals
 import personal.ciai.vetclinic.model.Appointment
 import personal.ciai.vetclinic.model.Pet
 import personal.ciai.vetclinic.repository.AppointmentRepository
@@ -23,6 +23,7 @@ import personal.ciai.vetclinic.repository.PetRepository
 class AppointmentRepositoryTests {
     @Autowired
     lateinit var appointments: AppointmentRepository
+
     @Autowired
     lateinit var pets: PetRepository
 
@@ -34,9 +35,14 @@ class AppointmentRepositoryTests {
 
     @Test
     @Transactional
-    fun `test save Appointment with no Pet (EntityNotFound)`() {
-        assertThrows(JpaObjectRetrievalFailureException::class.java) {
-            appointments.save(appointmentExample1)
+    fun `test save Appointment with no Pet (Data Integrity Violation)`() {
+        val fakePet = Pet(555, "moon dog", 2)
+        val app = Appointment(0, Date(1571414431763), fakePet, "Scheduled for health stuff")
+
+//        `when`(pets.findById(555)).thenReturn(Optional.empty())
+
+        assertThrows(DataIntegrityViolationException::class.java) {
+            appointments.save(app)
         }
     }
 
@@ -44,19 +50,18 @@ class AppointmentRepositoryTests {
     @Transactional
     fun `test save and delete`() {
         // Add pet and appointment
-        var tmpPet = Pet(1, "Actually a bunny", 2)
-        var tmpApp = Appointment(-1, Date(), tmpPet, "stuff")
-        tmpPet.appointments.add(tmpApp)
-        val savedPet = pets.save(tmpPet)
+        val fakePet = Pet(0, "Actually a bunny", 2)
+        val fakeApp = Appointment(0, Date(), fakePet, "stuff")
+        fakePet.appointments.add(fakeApp)
+        val savedPet = pets.save(fakePet)
 
         // check
-        val appointment = appointments.findByPetId(savedPet.id).get(0)
-        val savedAppointment = appointments.findById(appointment.id).get()
-        assertEquals(appointment, savedAppointment)
+        val savedAppointment = appointments.findByPetId(savedPet.id).get(0)
+        assertAppointmentEquals(savedAppointment, fakeApp)
 
         // delete
-        savedPet.appointments.remove(appointment)
-        pets.save(savedPet)
+        fakePet.appointments.remove(fakeApp)
+        pets.save(fakePet)
 
         // check
         assertFalse(appointments.existsById(savedAppointment.id))

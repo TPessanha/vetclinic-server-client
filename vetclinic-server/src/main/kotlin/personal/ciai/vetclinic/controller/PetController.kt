@@ -156,7 +156,7 @@ class PetController(
         id: Int,
         @RequestParam("photo")
         photo: MultipartFile
-    ) = ResponseEntity.ok(petService.updatePhoto(id, photo))
+    ) = petService.updatePhoto(id, photo)
 
     @ApiOperation(
         value = "Get photo of a pet",

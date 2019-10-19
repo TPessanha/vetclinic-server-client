@@ -33,7 +33,7 @@ class Pet(
 //    var owner: Client<ClientDTO>, todo link pet to owner
 //    @OneToMany
     @OneToMany(mappedBy = "pet", cascade = [CascadeType.ALL], orphanRemoval = true)
-    var appointments: MutableList<Appointment> = arrayListOf<Appointment>(),
+    var appointments: MutableList<Appointment> = arrayListOf(),
     @Column(nullable = false)
     var notes: String = "",
     @Column(nullable = false)
@@ -42,7 +42,7 @@ class Pet(
     var medicalRecord: String = "",
     @Column(nullable = true)
     var photo: URI? = null
-) : IdentifiedEntity<PetDTO>(id) {
+) : IdentifiedEntity(id) {
 
     override fun toDTO() = PetDTO(
         id = id,

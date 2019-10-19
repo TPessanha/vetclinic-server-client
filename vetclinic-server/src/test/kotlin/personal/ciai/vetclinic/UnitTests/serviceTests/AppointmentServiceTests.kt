@@ -15,8 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import personal.ciai.vetclinic.TestUtils.appointmentExample1
-import personal.ciai.vetclinic.TestUtils.appointmentListDTOs
-import personal.ciai.vetclinic.TestUtils.appointmentListEntities
+import personal.ciai.vetclinic.TestUtils.appointmentList
 import personal.ciai.vetclinic.TestUtils.assertAppointmentEquals
 import personal.ciai.vetclinic.TestUtils.dogExample
 import personal.ciai.vetclinic.dto.AppointmentDTO
@@ -41,9 +40,9 @@ class AppointmentServiceTests {
 
     @Test
     fun `basic test on getAll`() {
-        `when`(repository.findAll()).thenReturn(appointmentListEntities)
+        `when`(repository.findAll()).thenReturn(appointmentList)
 
-        assertEquals(appointmentService.getAllAppointments(), appointmentListDTOs)
+        assertEquals(appointmentService.getAllAppointments(), appointmentList.map { it.toDTO() })
     }
 
     @Test
@@ -89,7 +88,7 @@ class AppointmentServiceTests {
 
         `when`(petRepository.findById(anyInt())).thenReturn(Optional.of(dogExample))
 
-        appointmentService.saveAppointment(appointmentExample1.toDTO())
+        appointmentService.saveAppointment(appointmentExample1.toDTO().copy(id = 0))
     }
 
     @Test

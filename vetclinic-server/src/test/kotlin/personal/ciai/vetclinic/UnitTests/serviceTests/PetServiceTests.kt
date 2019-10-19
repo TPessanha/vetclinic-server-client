@@ -12,9 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import personal.ciai.vetclinic.TestUtils.assertPetEquals
 import personal.ciai.vetclinic.TestUtils.dogExample
-import personal.ciai.vetclinic.TestUtils.petListDTOs
-import personal.ciai.vetclinic.TestUtils.petListEntities
+import personal.ciai.vetclinic.TestUtils.petList
 import personal.ciai.vetclinic.dto.PetDTO
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.model.Pet
@@ -36,9 +36,9 @@ class PetServiceTests {
 
     @Test
     fun `basic test on getAll`() {
-        `when`(repository.findAll()).thenReturn(petListEntities)
+        `when`(repository.findAll()).thenReturn(petList)
 
-        assertEquals(petService.getAllPets(), petListDTOs)
+        assertEquals(petService.getAllPets(), petList.map { it.toDTO() })
     }
 
     @Test
@@ -62,12 +62,11 @@ class PetServiceTests {
         `when`(repository.save(Mockito.any(Pet::class.java)))
             .then {
                 val pet: Pet = it.getArgument(0)
-                assertEquals(pet.id, (dogExample.id))
-                assertEquals(pet.species, (dogExample.species))
+                assertPetEquals(pet, dogExample)
                 pet
             }
 
-        petService.savePet(dogExample.toDTO())
+        petService.savePet(dogExample.toDTO().copy(id = 0))
     }
 
     @Test

@@ -6,4 +6,4 @@ package personal.ciai.vetclinic.model
  * @property id the Employee's id.
  */
 
-abstract class Employee<DTO> (id: Int) : IdentifiedEntity<DTO>(id)
+abstract class Employee(id: Int) : IdentifiedEntity(id)

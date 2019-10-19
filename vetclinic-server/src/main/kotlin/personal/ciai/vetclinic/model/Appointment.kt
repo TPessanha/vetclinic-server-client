@@ -28,7 +28,7 @@ class Appointment(
 //    val client: Pet,
     @Column(nullable = false)
     var description: String
-) : IdentifiedEntity<AppointmentDTO>(id) {
+) : IdentifiedEntity(id) {
 
     override fun toDTO() = AppointmentDTO(
         id = id,

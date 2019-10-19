@@ -14,8 +14,8 @@ class Client(
 //    var appointments: List<Appointment> = emptyList(),
 //    var pets: List<Pet> = emptyList(),
     address: String
-) : User<ClientDTO>(id, email, name, phoneNumber, username, password, address) {
+) : User(id, email, name, phoneNumber, username, password, address) {
     override fun toDTO(): ClientDTO {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates
+        TODO("Not implemented")
     }
 }

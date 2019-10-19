@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import personal.ciai.vetclinic.TestUtils.dogExample
-import personal.ciai.vetclinic.TestUtils.petListDTOs
+import personal.ciai.vetclinic.TestUtils.petList
 import personal.ciai.vetclinic.dto.PetDTO
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.service.PetService
@@ -49,20 +49,23 @@ class PetControllerTests {
 
     @Test
     fun `Test GET all pets`() {
-        `when`(pets.getAllPets()).thenReturn(petListDTOs)
+        val dtoList = petList.map { it.toDTO() }
+        `when`(pets.getAllPets()).thenReturn(dtoList)
 
         val result = mvc.perform(get(petsURL))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize<Any>(petListDTOs.size)))
+            .andExpect(jsonPath("$", hasSize<Any>(petList.size)))
             .andReturn()
 
         val responseString = result.response.contentAsString
         val responseDTO = mapper.readValue<List<PetDTO>>(responseString)
-        assertEquals(responseDTO, petListDTOs)
+        assertEquals(responseDTO, dtoList)
     }
 
     @Test
     fun `Test GET One Pet`() {
+        val dtoList = petList.map { it.toDTO() }
+
         `when`(pets.getPetById(1)).thenReturn(dogExample.toDTO())
 
         val result = mvc.perform(get("$petsURL/1"))
@@ -71,7 +74,7 @@ class PetControllerTests {
 
         val responseString = result.response.contentAsString
         val responseDTO = mapper.readValue<PetDTO>(responseString)
-        assertEquals(responseDTO, petListDTOs[0])
+        assertEquals(responseDTO, dtoList[0])
     }
 
     @Test
@@ -86,10 +89,12 @@ class PetControllerTests {
 
     @Test
     fun `Test POST One Pet`() {
-        val petJSON = mapper.writeValueAsString(petListDTOs[0])
+        val dtoList = petList.map { it.toDTO() }
+
+        val petJSON = mapper.writeValueAsString(dtoList[0])
 
         `when`(pets.savePet(nonNullAny(PetDTO::class.java), anyInt()))
-            .then { assertEquals(petListDTOs[0], it.getArgument(0)) }
+            .then { assertEquals(dtoList[0], it.getArgument(0)) }
 
         mvc.perform(post(petsURL)
             .accept(MediaType.APPLICATION_JSON)

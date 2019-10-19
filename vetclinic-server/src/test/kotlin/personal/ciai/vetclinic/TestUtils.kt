@@ -3,14 +3,12 @@ package personal.ciai.vetclinic
 import java.util.Date
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.assertAll
-import personal.ciai.vetclinic.dto.AppointmentDTO
-import personal.ciai.vetclinic.dto.PetDTO
 import personal.ciai.vetclinic.model.Appointment
 import personal.ciai.vetclinic.model.Pet
 
 object TestUtils {
     val dogExample = Pet(
-        -1,
+        0,
         "Bulldog",
         4,
         notes = "Happy dog",
@@ -19,7 +17,7 @@ object TestUtils {
         photo = null
     )
     val pigExample = Pet(
-        -1,
+        0,
         "Pig",
         1,
         notes = "Cute",
@@ -28,7 +26,7 @@ object TestUtils {
         photo = null
     )
     val iguanaExample = Pet(
-        -1,
+        0,
         "Iguana",
         2,
         notes = "Looks angry",
@@ -36,14 +34,11 @@ object TestUtils {
         medicalRecord = "Medical stuff",
         photo = null
     )
-    val petListDTOs = listOf<PetDTO>(dogExample.toDTO(), pigExample.toDTO(), iguanaExample.toDTO())
-    val petListEntities = listOf<Pet>(dogExample, pigExample, iguanaExample)
+    val petList = listOf<Pet>(dogExample, pigExample, iguanaExample)
 
-    val appointmentExample1 = Appointment(-1, Date(1571414431763), dogExample, "Scheduled for health stuff")
-    val appointmentExample1DTO = appointmentExample1.toDTO()
+    val appointmentExample1 = Appointment(0, Date(1571414431763), dogExample, "Scheduled for health stuff")
 
-    val appointmentListDTOs = listOf<AppointmentDTO>(appointmentExample1DTO)
-    val appointmentListEntities = listOf<Appointment>(appointmentExample1)
+    val appointmentList = listOf<Appointment>(appointmentExample1)
 
     fun assertPetEquals(p1: Pet, p2: Pet) {
         assertAll("Is pet the same?",

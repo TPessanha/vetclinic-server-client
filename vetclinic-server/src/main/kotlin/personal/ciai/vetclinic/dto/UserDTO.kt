@@ -2,6 +2,8 @@ package personal.ciai.vetclinic.dto
 
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
+import java.net.URI
+import personal.ciai.vetclinic.model.User
 
 /**
  * Models a User DTO.
@@ -16,7 +18,14 @@ import io.swagger.annotations.ApiModelProperty
  */
 
 @ApiModel("User DTO model", description = "To model Users")
-data class UserDTO(
+open class UserDTO(
+    @ApiModelProperty(
+        "An unique identifier for the user",
+        required = false,
+        readOnly = false,
+        example = "1"
+    )
+    val id: Int = 0,
     @ApiModelProperty("The User's Name", name = "name", required = true, readOnly = true)
     val name: String,
     @ApiModelProperty("The User's Email", name = "email", required = true)
@@ -28,5 +37,24 @@ data class UserDTO(
     @ApiModelProperty("The User's Password", name = "password", required = true)
     val password: String,
     @ApiModelProperty("The User's Address", name = "address", required = true)
-    val address: String
-) : BaseDTO
+    val address: String,
+    @ApiModelProperty(
+        "The resource identifier for the image",
+        required = false,
+        readOnly = true
+    )
+    val photo: String? = null
+) : BaseDTO {
+    fun toEntity(): User {
+        return User(
+            id = this.id,
+            name = this.name,
+            email = this.email,
+            phoneNumber = this.phoneNumber,
+            username = this.username,
+            password = this.password,
+            address = this.address,
+            photo = if (this.photo == null) null else URI.create(this.photo)
+        )
+    }
+}

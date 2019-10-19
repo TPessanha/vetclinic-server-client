@@ -14,7 +14,7 @@ data class AppointmentDTO(
         readOnly = false,
         example = "1"
     )
-    val id: Int,
+    val id: Int = 0,
     @ApiModelProperty(
         "The date of the appointment",
         required = true,
