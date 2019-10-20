@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import java.util.Date
 import personal.ciai.vetclinic.model.Appointment
+import personal.ciai.vetclinic.model.TimeSlot
 import personal.ciai.vetclinic.service.ClientService
 import personal.ciai.vetclinic.service.PetService
 
@@ -17,12 +18,19 @@ data class AppointmentDTO(
     )
     val id: Int = 0,
     @ApiModelProperty(
-        "The date of the appointment in Long",
+        "The start time of the appointment",
         required = true,
         readOnly = false,
         example = "1539555316323"
     )
-    val date: Long,
+    val startTime: Long,
+    @ApiModelProperty(
+        "The end time of the appointment",
+        required = true,
+        readOnly = false,
+        example = "1539555326323"
+    )
+    val endTime: Long,
     // val veterinarian: String,
     @ApiModelProperty(
         "The pet ID scheduled for the appointment",
@@ -51,7 +59,7 @@ data class AppointmentDTO(
     fun toEntity(newId: Int, petService: PetService, clientService: ClientService) =
         Appointment(
             id = newId,
-            date = Date(this.date),
+            timeSlot = TimeSlot(startTime,endTime),
 //            veterinarian = debugvet,
             description = this.description,
             client = clientService.getClientEntityById(this.client),

@@ -6,8 +6,8 @@ import javax.persistence.Id
 import javax.persistence.MappedSuperclass
 
 @MappedSuperclass
-abstract class IdentifiedEntity(
+abstract class IdentifiedBaseEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int
-) : Entity
+) : BaseEntity

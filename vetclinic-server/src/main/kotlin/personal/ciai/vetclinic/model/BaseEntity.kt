@@ -3,6 +3,6 @@ package personal.ciai.vetclinic.model
 import java.io.Serializable
 import personal.ciai.vetclinic.dto.BaseDTO
 
-interface Entity : Serializable {
+interface BaseEntity : Serializable {
     fun toDTO(): BaseDTO
 }

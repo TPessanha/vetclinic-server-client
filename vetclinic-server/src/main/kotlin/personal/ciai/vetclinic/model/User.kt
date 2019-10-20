@@ -41,7 +41,7 @@ open class User(
     val address: String,
     @Column(nullable = true)
     open var photo: URI? = null
-) : IdentifiedEntity(id) {
+) : IdentifiedBaseEntity(id) {
     override fun toDTO(): BaseDTO =
         UserDTO(
             id = this.id,

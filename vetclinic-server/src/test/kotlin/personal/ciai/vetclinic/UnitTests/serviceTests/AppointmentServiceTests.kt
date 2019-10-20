@@ -100,7 +100,8 @@ class AppointmentServiceTests {
     private fun assertAppointmentDTO(appointment: AppointmentDTO) {
         assertAll("Is appointmentDTO the same?",
             { assertEquals(appointmentExample1.id, appointment.id) },
-            { assertEquals(appointmentExample1.date, Date(appointment.date)) },
+            { assertEquals(appointmentExample1.timeSlot.startDate.time, appointment.startTime) },
+            { assertEquals(appointmentExample1.timeSlot.endDate.time, appointment.endTime) },
             { assertEquals(appointmentExample1.pet.id, appointment.pet) },
             { assertEquals(appointmentExample1.description, appointment.description) }
         )
