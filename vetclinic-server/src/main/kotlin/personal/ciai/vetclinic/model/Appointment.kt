@@ -28,7 +28,7 @@ class Appointment(
     var description: String = "",
     @Enumerated(EnumType.ORDINAL)
     var status: AppointmentStatus = AppointmentStatus.Pending
-) : IdentifiedBaseEntity(id) {
+) : IdentifiedEntity(id) {
 
     override fun toDTO() = AppointmentDTO(
         id = id,

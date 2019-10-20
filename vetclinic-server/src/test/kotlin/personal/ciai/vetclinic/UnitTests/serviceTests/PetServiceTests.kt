@@ -8,6 +8,7 @@ import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.anyInt
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -77,6 +78,15 @@ class PetServiceTests {
         }
         assertThrows(ExpectationFailedException::class.java) {
             petService.addPet(dogExample.toDTO().copy(id = 5))
+        }
+    }
+
+    @Test
+    fun `Test updatePet() (Not Found)`() {
+        `when`(repository.existsById(anyInt())).thenReturn(false)
+
+        assertThrows(NotFoundException::class.java) {
+            petService.updatePet(dogExample.toDTO(), 5)
         }
     }
 

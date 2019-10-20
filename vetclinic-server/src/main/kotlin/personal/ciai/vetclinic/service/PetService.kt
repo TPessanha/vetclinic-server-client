@@ -29,7 +29,7 @@ class PetService(
     }
 
     fun updatePet(petDTO: PetDTO, id: Int) {
-        if (id > 0 && !repository.existsById(petDTO.id))
+        if (id <= 0 || !repository.existsById(id))
             throw NotFoundException("Pet with id ($id) not found")
 
         savePet(petDTO, id)
@@ -37,7 +37,7 @@ class PetService(
 
     fun addPet(petDTO: PetDTO) {
         if (petDTO.id != 0)
-            throw ExpectationFailedException("Pet id must be 0 in insertion or > 0 for update")
+            throw ExpectationFailedException("Pet id must be 0 in insertion")
 
         savePet(petDTO)
     }

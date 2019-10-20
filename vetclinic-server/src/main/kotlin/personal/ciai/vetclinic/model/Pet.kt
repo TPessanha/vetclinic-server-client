@@ -42,7 +42,7 @@ class Pet(
     var medicalRecord: String = "",
     @Column
     var photo: URI? = null
-) : IdentifiedBaseEntity(id) {
+) : IdentifiedEntity(id) {
 
     override fun toDTO() = PetDTO(
         id = id,

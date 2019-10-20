@@ -5,8 +5,10 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -15,6 +17,10 @@ import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
@@ -65,16 +71,14 @@ class PetTests {
         val dogJSON = mapper.writeValueAsString(petExample.toDTO().copy(id = 0, owner = 1))
 
         mvc.perform(
-            MockMvcRequestBuilders
-                .post(petsURL)
+            post(petsURL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(dogJSON)
         )
             .andExpect(status().isOk)
 
         mvc.perform(
-            MockMvcRequestBuilders
-                .get(petsURL)
+            get(petsURL)
                 .accept(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)
@@ -98,11 +102,54 @@ class PetTests {
 
         // clenup
         mvc.perform(
-            MockMvcRequestBuilders
-                .delete("$petsURL/3")
+            delete("$petsURL/3")
         )
             .andExpect(status().isOk)
 
         assertEquals(petService.getAllPets().size, nPets)
+    }
+
+    @Test
+    fun `test updatePet`() {
+        val result = mvc.perform(
+            get("$petsURL/1")
+        )
+            .andExpect(status().isOk)
+            .andReturn()
+
+        val responseString = result.response.contentAsString
+        val persistentPet = mapper.readValue<PetDTO>(responseString)
+
+        assertNotEquals(200, persistentPet.age)
+
+        val newPet = persistentPet.copy(age = 200)
+        val newPetJSON = mapper.writeValueAsString(newPet)
+
+        mvc.perform(
+            put("$petsURL/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(newPetJSON)
+        )
+            .andExpect(status().isOk)
+
+        val newResult = mvc.perform(
+            get("$petsURL/1")
+        )
+            .andExpect(status().isOk)
+            .andReturn()
+
+        val newResponseString = newResult.response.contentAsString
+        val newPersistentPet = mapper.readValue<PetDTO>(newResponseString)
+
+        assertEquals(200, newPersistentPet.age)
+        assertAll("All other values the same",
+            { assertEquals(persistentPet.id, newPersistentPet.id) },
+            { assertEquals(persistentPet.medicalRecord, newPersistentPet.medicalRecord) },
+            { assertEquals(persistentPet.notes, newPersistentPet.notes) },
+            { assertEquals(persistentPet.species, newPersistentPet.species) },
+            { assertEquals(persistentPet.owner, newPersistentPet.owner) },
+            { assertEquals(persistentPet.physicalDescription, newPersistentPet.physicalDescription) },
+            { assertEquals(persistentPet.photo, newPersistentPet.photo) }
+        )
     }
 }

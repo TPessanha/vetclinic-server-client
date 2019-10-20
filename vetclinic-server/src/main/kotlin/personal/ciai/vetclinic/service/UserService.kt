@@ -35,7 +35,7 @@ class UserService(
     }
 
     fun updatePet(userDTO: UserDTO, id: Int) {
-        if (id > 0 && !repository.existsById(userDTO.id))
+        if (id <= 0 || !repository.existsById(userDTO.id))
             throw NotFoundException("User with id ($id) not found")
 
         saveUser(userDTO, id)
@@ -43,7 +43,7 @@ class UserService(
 
     fun addPet(userDTO: UserDTO) {
         if (userDTO.id != 0)
-            throw ExpectationFailedException("User id must be 0 in insertion or > 0 for update")
+            throw ExpectationFailedException("User id must be 0 in insertion")
 
         saveUser(userDTO)
     }

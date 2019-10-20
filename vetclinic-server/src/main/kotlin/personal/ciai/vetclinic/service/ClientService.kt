@@ -47,15 +47,22 @@ class ClientService(
     }
 
     fun saveClient(clientDTO: ClientDTO, id: Int = 0) {
-        if (id > 0 && !repository.existsById(clientDTO.id))
-            throw NotFoundException("Pet with id (${clientDTO.id}) not found")
+        val newClient = clientDTO.toEntity(id)
+        repository.save(newClient)
+    }
 
-        val pet = clientDTO.toEntity(id)
+    fun updateClient(clientDTO: ClientDTO, id: Int) {
+        if (id <= 0 || !repository.existsById(id))
+            throw NotFoundException("Client with id ($id) not found")
 
-        if (pet.id != 0)
-            throw ExpectationFailedException("Id must be 0 in insertion or > 0 for update")
+        saveClient(clientDTO, id)
+    }
 
-        repository.save(pet)
+    fun addClient(clientDTO: ClientDTO) {
+        if (clientDTO.id != 0)
+            throw ExpectationFailedException("Client id must be 0 in insertion")
+
+        saveClient(clientDTO)
     }
 
     fun getPhoto(id: Int): ByteArray {

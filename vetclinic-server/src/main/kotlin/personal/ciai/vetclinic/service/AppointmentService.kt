@@ -30,7 +30,7 @@ class AppointmentService(
     }
 
     fun updateAppointment(appointmentDTO: AppointmentDTO, id: Int) {
-        if (id > 0 && !repository.existsById(appointmentDTO.id))
+        if (id <= 0 || !repository.existsById(id))
             throw NotFoundException("Appointment with id ($id) not found")
 
         // TODO CHECK IF VET IS AVAILABLE

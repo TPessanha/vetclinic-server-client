@@ -6,4 +6,4 @@ package personal.ciai.vetclinic.model
  * @property id the Employee's id.
  */
 
-abstract class Employee(id: Int) : IdentifiedBaseEntity(id)
+abstract class Employee(id: Int) : IdentifiedEntity(id)
