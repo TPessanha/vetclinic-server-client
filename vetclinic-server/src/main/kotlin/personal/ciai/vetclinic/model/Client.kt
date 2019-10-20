@@ -1,7 +1,6 @@
 package personal.ciai.vetclinic.model
 
 import java.net.URI
-import javax.persistence.CascadeType
 import javax.persistence.DiscriminatorValue
 import javax.persistence.Entity
 import javax.persistence.OneToMany
