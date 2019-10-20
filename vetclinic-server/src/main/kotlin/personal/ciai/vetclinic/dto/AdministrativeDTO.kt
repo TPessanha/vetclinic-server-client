@@ -77,17 +77,7 @@ data class AdministrativeDTO(
         readOnly = false,
         example = "R Nossa Senhora Fátima 117, 3400-233, Lisboa"
     )
-    val address: String,
-
-    @ApiModelProperty(
-        "Tell the Administrative status",
-        name = "address",
-        required = true,
-        readOnly = false,
-        example = "R Nossa Senhora Fátima 117, 3400-233, Lisboa"
-    )
-
-    val enabled: Boolean
+    val address: String
 ) : BaseDTO {
 
     fun toEntity() = toEntity(this.id)
@@ -101,8 +91,7 @@ data class AdministrativeDTO(
             username = this.username,
             password = this.password,
             address = this.address,
-            photo = if (this.photo.isNullOrEmpty()) URI.create("default") else URI.create(this.photo),
-            enabled = enabled
+            photo = if (this.photo.isNullOrEmpty()) URI.create("default") else URI.create(this.photo)
         )
 
     fun toEntity(entity: Administrative) =
@@ -114,7 +103,6 @@ data class AdministrativeDTO(
             username = this.username,
             password = entity.password,
             address = this.address,
-            photo = if (this.photo.isNullOrEmpty()) URI.create("default") else URI.create(this.photo),
-            enabled = entity.enabled
+            photo = if (this.photo.isNullOrEmpty()) URI.create("default") else URI.create(this.photo)
         )
 }

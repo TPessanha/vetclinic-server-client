@@ -36,6 +36,7 @@ class VeterinarianService(@Autowired val vetRepository: VeterinarianRepository) 
     fun delete(id: Int) {
         val vet: Veterinarian = getVeterinarianEntity(id)
 
-        vetRepository.delete(vet)
+        vet.enabled = false
+        vetRepository.save(vet)
     }
 }

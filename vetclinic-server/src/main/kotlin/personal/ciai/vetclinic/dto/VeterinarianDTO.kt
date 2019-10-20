@@ -85,16 +85,21 @@ data class VeterinarianDTO(
         required = false,
         readOnly = true
     )
-    val appointments: List<AppointmentDTO>?,
+    val appointments: MutableList<AppointmentDTO>?,
+
+    @ApiModelProperty(
+        "A list of Veterinarian schedule",
+        required = false,
+        readOnly = true
+    )
+    val schedules: MutableList<ScheduleDTO>?,
 
     @ApiModelProperty(
         "Tell the Veterinarian status",
         name = "address",
         required = true,
-        readOnly = false,
-        example = "R Nossa Senhora Fátima 117, 3400-233, Lisboa"
+        readOnly = false
     )
-
     val enabled: Boolean
 
 ) : BaseDTO {
@@ -111,7 +116,9 @@ data class VeterinarianDTO(
             password = this.password,
             address = this.address,
             photo = if (this.photo.isNullOrEmpty()) URI.create("default") else URI.create(this.photo),
-            enabled = enabled
+            enabled = enabled,
+            appointments = arrayListOf(),
+            schedules = arrayListOf()
         )
 
     fun toEntity(entity: Veterinarian) =
@@ -124,6 +131,8 @@ data class VeterinarianDTO(
             password = entity.password,
             address = this.address,
             photo = if (this.photo.isNullOrEmpty()) URI.create("default") else URI.create(this.photo),
-            enabled = entity.enabled
+            enabled = entity.enabled,
+            appointments = entity.appointments,
+            schedules = entity.schedules
         )
 }

@@ -15,9 +15,8 @@ class Administrative(
     username: String,
     password: String,
     address: String,
-    photo: URI,
-    enabled: Boolean
-) : Employee(id, email, name, phoneNumber, username, password, address, photo, enabled) {
+    photo: URI
+) : Employee(id, email, name, phoneNumber, username, password, address, photo) {
 
     override fun toDTO() = AdministrativeDTO(
         id = id,
@@ -27,7 +26,6 @@ class Administrative(
         password = "",
         phoneNumber = phoneNumber,
         address = address,
-        photo = photo.toString(),
-        enabled = enabled
+        photo = photo.toString()
     )
 }

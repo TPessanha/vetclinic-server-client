@@ -4,13 +4,12 @@ import java.util.Date
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import personal.ciai.vetclinic.dto.ScheduleDTO
-import personal.ciai.vetclinic.model.Schedules
 import personal.ciai.vetclinic.repository.ScheduleRepository
 
 @Service
 class ScheduleService(@Autowired private val scheduleRepository: ScheduleRepository) {
 
-    fun getOneSchedule(scheduleId: Int): Schedules = scheduleRepository.getOne(scheduleId)
+    fun getOneSchedule(scheduleId: Int): ScheduleDTO = scheduleRepository.getOne(scheduleId).toDTO()
 
     fun geVeterinarianSchedules(vetId: Int): List<ScheduleDTO> {
 

@@ -1,7 +1,6 @@
 package personal.ciai.vetclinic.dto
 
 import io.swagger.annotations.ApiModelProperty
-import java.sql.Time
 import java.util.Date
 import personal.ciai.vetclinic.model.ScheduleStatus
 import personal.ciai.vetclinic.model.Schedules
@@ -35,20 +34,20 @@ data class ScheduleDTO(
     )
     var date: Date,
 
-    @ApiModelProperty(
-        "The time that start schedule start",
-        required = true,
-        readOnly = false,
-        example = "1"
-    )
-    val from: Time,
-    @ApiModelProperty(
-        "The time that the schedule ends",
-        required = true,
-        readOnly = false,
-        example = "1"
-    )
-    val to: Time,
+//    @ApiModelProperty(
+//        "The time that start schedule start",
+//        required = true,
+//        readOnly = false,
+//        example = "1"
+//    )
+//    val from: Date,
+//    @ApiModelProperty(
+//        "The time that the schedule ends",
+//        required = true,
+//        readOnly = false,
+//        example = "1"
+//    )
+//    val to: Date
     @ApiModelProperty(
         "The veterinarian",
         required = true,
@@ -72,8 +71,8 @@ data class ScheduleDTO(
         Schedules(
             id = newId,
             date = this.date,
-            from = from,
-            to = to,
+//            from = from,
+//            to = to
             status = status,
             veterinarian = veterinarian
         )

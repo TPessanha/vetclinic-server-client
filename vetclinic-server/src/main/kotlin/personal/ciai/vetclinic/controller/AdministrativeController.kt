@@ -150,7 +150,6 @@ class AdministrativeController(
     @ApiResponses(
         value = [
             ApiResponse(code = 200, message = "Successfully delete the administrative"),
-            ApiResponse(code = 401, message = "You are not authorized to access the resource"),
             ApiResponse(code = 404, message = "The resource not found"),
             ApiResponse(
                 code = 403, message = "Accessing the resource you were tyring to reach is forbidden"

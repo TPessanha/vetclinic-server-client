@@ -19,8 +19,7 @@ abstract class Employee(
     username: String,
     password: String,
     address: String,
-    photo: URI?,
-    var enabled: Boolean = true
+    photo: URI?
 ) : User(id, email, name, phoneNumber, username, password, address, photo) {
 
     override fun toDTO(): BaseDTO = EmployeeDTO(

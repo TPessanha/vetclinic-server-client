@@ -10,19 +10,15 @@ import personal.ciai.vetclinic.repository.EmployeeRepository
 @Service
 class EmployeeService(@Autowired private val employeeRepository: EmployeeRepository) {
 
-    fun getAllEnabledEmployee(): List<Employee> = employeeRepository.findAllByEnabled(true)
+    fun getAllEnabledEmployee(): List<Employee> {
+        return emptyList()
+    }
 
     fun existEmployeeById(employeeId: Int): Boolean {
         if (employeeRepository.existsById(employeeId).not()) {
             throw AccessForbiddenException()
         }
         return true
-    }
-
-    fun deactivateEmployee(employeeId: Int) {
-        val employee: Employee = getOneEmployeeEntity(employeeId)
-        employee.enabled = false
-        employeeRepository.save(employee)
     }
 
     private fun getOneEmployeeEntity(id: Int): Employee = employeeRepository.findById(id)

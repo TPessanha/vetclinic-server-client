@@ -168,7 +168,7 @@ class VeterinarianController(
         @PathVariable(value = "vetId", required = true) vetId: Int
     ) {
         if (administrativeService.existsById(employeeId)) {
-            employeeService.deactivateEmployee(vetId)
+            veterinarianService.delete(vetId)
         }
     }
 

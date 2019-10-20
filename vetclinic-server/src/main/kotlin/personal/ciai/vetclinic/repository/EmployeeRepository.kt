@@ -5,7 +5,4 @@ import org.springframework.stereotype.Repository
 import personal.ciai.vetclinic.model.Employee
 
 @Repository
-interface EmployeeRepository : JpaRepository<Employee, Int> {
-
-    fun findAllByEnabled(enabled: Boolean): List<Employee>
-}
+interface EmployeeRepository : JpaRepository<Employee, Int>

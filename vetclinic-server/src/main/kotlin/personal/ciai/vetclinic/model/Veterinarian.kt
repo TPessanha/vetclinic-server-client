@@ -18,10 +18,18 @@ class Veterinarian(
     password: String,
     address: String,
     photo: URI,
-    enabled: Boolean,
-    @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
-    var appointments: MutableList<Appointment> = emptyList<Appointment>().toMutableList()
-) : Employee(id, email, name, phoneNumber, username, password, address, photo, enabled) {
+    var enabled: Boolean,
+
+    @OneToMany(targetEntity = Appointment::class, cascade = [CascadeType.ALL], orphanRemoval = true)
+    var appointments: MutableList<Appointment> = arrayListOf(),
+
+    @OneToMany(
+        targetEntity = Schedules::class, mappedBy = "veterinarian", cascade = [CascadeType.ALL],
+        orphanRemoval = true
+    )
+    val schedules: MutableList<Schedules> = arrayListOf()
+
+) : Employee(id, email, name, phoneNumber, username, password, address, photo) {
 
     override fun toDTO() = VeterinarianDTO(
         id = id,
@@ -32,7 +40,8 @@ class Veterinarian(
         phoneNumber = phoneNumber,
         address = address,
         photo = photo.toString(),
-        appointments = appointments.map { it.toDTO() },
-        enabled = enabled
+        appointments = arrayListOf(),
+        enabled = enabled,
+        schedules = arrayListOf()
     )
 }

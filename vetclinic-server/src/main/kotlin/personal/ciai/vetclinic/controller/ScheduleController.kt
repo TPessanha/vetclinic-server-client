@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import personal.ciai.vetclinic.dto.ScheduleDTO
 import personal.ciai.vetclinic.service.ScheduleService
@@ -70,14 +69,14 @@ class ScheduleController(
             ))
         ]
     )
-    @GetMapping("/date")
+    @GetMapping("{date}")
     fun getVeterinarianSchedulesDate(
         @ApiParam(value = "The ID of the employee", required = true) @PathVariable
         employeeId: Int,
         @ApiParam(value = "The ID of the Veterinarian", required = true) @PathVariable
         veterinarianId: Int,
-        @ApiParam(value = "The date for the schedule", required = true)
-        @RequestParam @DateTimeFormat(iso = DATE) date: Date
+        @ApiParam(value = "The date for the schedule. (dd.mm.yyy)", required = true)
+        @PathVariable(value = "date") @DateTimeFormat(iso = DATE) date: Date
 
     ) = scheduleService.geVeterinarianSchedules(veterinarianId, date)
 
