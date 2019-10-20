@@ -2,6 +2,8 @@ package personal.ciai.vetclinic.dto
 
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
+import java.net.URI
+import personal.ciai.vetclinic.model.Administrative
 
 /**
  * Models a Administrative DTO.
@@ -35,8 +37,8 @@ data class AdministrativeDTO(
     )
     val name: String,
 
-    @ApiModelProperty("The Administrative photo URI", name = "photo", required = true, readOnly = false)
-    val photo: String,
+    @ApiModelProperty("The Administrative photo URI", name = "photo", required = false, readOnly = false)
+    val photo: String?,
 
     @ApiModelProperty(
         "The Administrative user name",
@@ -75,6 +77,44 @@ data class AdministrativeDTO(
         readOnly = false,
         example = "R Nossa Senhora Fátima 117, 3400-233, Lisboa"
     )
-    val address: String
+    val address: String,
 
-) : BaseDTO
+    @ApiModelProperty(
+        "Tell the Administrative status",
+        name = "address",
+        required = true,
+        readOnly = false,
+        example = "R Nossa Senhora Fátima 117, 3400-233, Lisboa"
+    )
+
+    val enabled: Boolean
+) : BaseDTO {
+
+    fun toEntity() = toEntity(this.id)
+
+    fun toEntity(newId: Int) =
+        Administrative(
+            id = newId,
+            name = this.name,
+            email = this.email,
+            phoneNumber = this.phoneNumber,
+            username = this.username,
+            password = this.password,
+            address = this.address,
+            photo = if (this.photo.isNullOrEmpty()) URI.create("default") else URI.create(this.photo),
+            enabled = enabled
+        )
+
+    fun toEntity(entity: Administrative) =
+        Administrative(
+            id = entity.id,
+            name = this.name,
+            email = this.email,
+            phoneNumber = this.phoneNumber,
+            username = this.username,
+            password = entity.password,
+            address = this.address,
+            photo = if (this.photo.isNullOrEmpty()) URI.create("default") else URI.create(this.photo),
+            enabled = entity.enabled
+        )
+}

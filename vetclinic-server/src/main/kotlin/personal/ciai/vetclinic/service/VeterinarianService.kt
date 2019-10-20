@@ -23,14 +23,14 @@ class VeterinarianService(@Autowired val vetRepository: VeterinarianRepository) 
 
     fun save(vetDTO: VeterinarianDTO) {
         if (existsById(vetDTO.id).not()) {
-            vetRepository.save(Veterinarian.fromDto(vetDTO))
+            vetRepository.save(vetDTO.toEntity())
         } else throw ConflictException("Veterinarian account with Id ${vetDTO.id} already exist")
     }
 
     fun update(vetDTO: VeterinarianDTO, id: Int) {
         val vet: Veterinarian = getVeterinarianEntity(id)
 
-        vetRepository.save(Veterinarian.fromDto(vetDTO, vet))
+        vetRepository.save(vetDTO.toEntity(vet))
     }
 
     fun delete(id: Int) {

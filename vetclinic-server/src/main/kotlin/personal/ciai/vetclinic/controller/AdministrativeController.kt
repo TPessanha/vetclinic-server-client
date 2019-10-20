@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiParam
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import personal.ciai.vetclinic.dto.AdministrativeDTO
 import personal.ciai.vetclinic.service.AdministrativeService
+import personal.ciai.vetclinic.service.EmployeeService
 
 @Api(
     value = "VetClinic Management System - Administrative API",
@@ -23,8 +25,11 @@ import personal.ciai.vetclinic.service.AdministrativeService
 )
 
 @RestController
-@RequestMapping("/administrative")
-class AdministrativeController(@Autowired val administrativeService: AdministrativeService) {
+@RequestMapping("employees/{employeeId:[0-9]+}/administratives")
+class AdministrativeController(
+    @Autowired val administrativeService: AdministrativeService,
+    @Autowired private val employeeService: EmployeeService
+) {
 
     @ApiOperation(
         value = "Get details of a single  Administrative",
@@ -41,11 +46,26 @@ class AdministrativeController(@Autowired val administrativeService: Administrat
                 code = 403, message = "Accessing the resource you were tyring to reach is forbidden"
             )]
     )
-    @GetMapping("/{id}")
+    @GetMapping("/{adminId:[0-9]+}", produces = [APPLICATION_JSON_VALUE])
     fun getAdministrative(
-        @ApiParam(name = "id", required = true, value = "(Required) Administrative identificator (id)")
-        @PathVariable(value = "id", required = true) id: Int
-    ) = administrativeService.getAdministrativeById(id)
+        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
+            value = "employeeId",
+            required = true
+        )
+        employeeId: Int,
+        @ApiParam(
+            name = "adminId",
+            required = true,
+            value = "(Required) Administrative identificator (id)"
+        ) @PathVariable(
+            value = "adminId",
+            required = true
+        ) adminId: Int
+    ) {
+        if (administrativeService.existsById(employeeId)) {
+            administrativeService.getAdministrativeById(adminId)
+        }
+    }
 
     @ApiOperation(
         value = "View a list of Administratives details",
@@ -61,8 +81,18 @@ class AdministrativeController(@Autowired val administrativeService: Administrat
                 code = 403, message = "Accessing the resource you were tyring to reach is forbidden"
             )]
     )
-    @GetMapping("")
-    fun getAllAdministrative() = administrativeService.getAllAdministrative()
+    @GetMapping("", produces = [APPLICATION_JSON_VALUE])
+    fun getAllAdministrative(
+        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
+            value = "employeeId",
+            required = true
+        )
+        employeeId: Int
+    ) {
+        if (administrativeService.existsById(employeeId)) {
+            administrativeService.getAllAdministrative()
+        }
+    }
 
     @ApiOperation(value = "Add a new Administrative account")
     @ApiResponses(
@@ -73,11 +103,20 @@ class AdministrativeController(@Autowired val administrativeService: Administrat
                 code = 403, message = "Accessing the resource you were tyring to reach is forbidden"
             )]
     )
-    @PostMapping("")
+    @PostMapping("", consumes = [APPLICATION_JSON_VALUE])
     fun addAdministrative(
+        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
+            value = "employeeId",
+            required = true
+        )
+        employeeId: Int,
         @ApiParam(required = true, value = "(Required) Administrative info necessary to created a new account")
         @RequestBody admin: AdministrativeDTO
-    ) = administrativeService.save(admin)
+    ) {
+        if (administrativeService.existsById(employeeId)) {
+            administrativeService.save(admin)
+        }
+    }
 
     @ApiOperation(value = "Edit Administrative information", consumes = "application/json")
     @ApiResponses(
@@ -89,13 +128,23 @@ class AdministrativeController(@Autowired val administrativeService: Administrat
                 code = 403, message = "Accessing the resource you were tyring to reach is forbidden"
             )]
     )
-    @PutMapping("/{id}")
+    @PutMapping("/{adminId:[0-9]+}", consumes = [APPLICATION_JSON_VALUE])
     fun updateAdministrative(
-        @ApiParam(name = "id", required = true, value = "(Required) Admin identificator (id)")
-        @PathVariable(value = "id", required = true) id: Int,
+        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
+            value = "employeeId",
+            required = true
+        )
+        employeeId: Int,
+        @ApiParam(name = "adminId", required = true, value = "(Required) Admin identificator (id)") @PathVariable(
+            value = "adminId", required = true
+        ) adminId: Int,
         @ApiParam(required = true, value = "(Required) Admin information to be changed")
         @RequestBody admin: AdministrativeDTO
-    ) = administrativeService.update(admin, id)
+    ) {
+        if (administrativeService.existsById(employeeId)) {
+            administrativeService.update(admin, adminId)
+        }
+    }
 
     @ApiOperation(value = "Delete a Administrative account")
     @ApiResponses(
@@ -107,9 +156,19 @@ class AdministrativeController(@Autowired val administrativeService: Administrat
                 code = 403, message = "Accessing the resource you were tyring to reach is forbidden"
             )]
     )
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{adminId:[0-9]+}")
     fun deleteAdministrative(
-        @ApiParam(name = "id", required = true, value = "(Required) Admin identificator (id)")
-        @PathVariable(value = "id", required = true) id: Int
-    ) = administrativeService.delete(id)
+        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
+            value = "employeeId",
+            required = true
+        )
+        employeeId: Int,
+        @ApiParam(name = "adminId", required = true, value = "(Required) Admin identificator (id)") @PathVariable(
+            value = "adminId", required = true
+        ) adminId: Int
+    ) {
+        if (administrativeService.existsById(employeeId)) {
+            administrativeService.delete(adminId)
+        }
+    }
 }

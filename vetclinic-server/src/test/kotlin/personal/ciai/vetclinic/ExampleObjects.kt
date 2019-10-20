@@ -5,6 +5,7 @@ import personal.ciai.vetclinic.dto.AdministrativeDTO
 import personal.ciai.vetclinic.dto.PetDTO
 import personal.ciai.vetclinic.dto.VeterinarianDTO
 import personal.ciai.vetclinic.model.Administrative
+import personal.ciai.vetclinic.model.Appointment
 import personal.ciai.vetclinic.model.Pet
 import personal.ciai.vetclinic.model.Veterinarian
 
@@ -50,7 +51,9 @@ class ExampleObjects {
             "Vet1",
             "1234",
             "Rua de Cima 44, 4243-432, Lisboa",
-            URI.create("vets/1")
+            URI.create("vets/1"),
+            true,
+            emptyList<Appointment>()
         )
         val vet2 = Veterinarian(
             -1,
@@ -60,7 +63,9 @@ class ExampleObjects {
             "AshK",
             "1234",
             "Rua da Linha 3, Lisboa",
-            URI.create("vets2/2")
+            URI.create("vets2/2"),
+            true,
+            emptyList<Appointment>()
         )
 
         val vetList = listOf<Veterinarian>(vet1, vet2)
@@ -76,7 +81,8 @@ class ExampleObjects {
             "Admin1",
             "1234",
             "Rua de Pina 23, 2341-323, Lisboa",
-            URI.create("admin/1")
+            URI.create("admin/1"),
+            true
         )
         val admin2 = Administrative(
             -1,
@@ -86,7 +92,8 @@ class ExampleObjects {
             "LufyD",
             "1234",
             "Grand Line 3, Lisboa",
-            URI.create("admin/2")
+            URI.create("admin/2"),
+            true
         )
         val admin3 = Administrative(
             -1,
@@ -96,7 +103,8 @@ class ExampleObjects {
             "Admin3",
             "1234",
             "Rua da Esqurda 4, 4323-543, Lisboa",
-            URI.create("admin/3")
+            URI.create("admin/3"),
+            true
         )
 
         val listAdmin = listOf<Administrative>(admin1, admin2, admin3)

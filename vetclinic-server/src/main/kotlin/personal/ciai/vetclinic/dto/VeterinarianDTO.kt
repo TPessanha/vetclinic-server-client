@@ -2,6 +2,8 @@ package personal.ciai.vetclinic.dto
 
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
+import java.net.URI
+import personal.ciai.vetclinic.model.Veterinarian
 
 /**
  * Models a Veterinarian DTO.
@@ -83,6 +85,45 @@ data class VeterinarianDTO(
         required = false,
         readOnly = true
     )
-    val appointments: List<Int>?
+    val appointments: List<AppointmentDTO>?,
 
-) : BaseDTO
+    @ApiModelProperty(
+        "Tell the Veterinarian status",
+        name = "address",
+        required = true,
+        readOnly = false,
+        example = "R Nossa Senhora Fátima 117, 3400-233, Lisboa"
+    )
+
+    val enabled: Boolean
+
+) : BaseDTO {
+
+    fun toEntity() = toEntity(this.id)
+
+    fun toEntity(newId: Int) =
+        Veterinarian(
+            id = newId,
+            name = this.name,
+            email = this.email,
+            phoneNumber = this.phoneNumber,
+            username = this.username,
+            password = this.password,
+            address = this.address,
+            photo = if (this.photo.isNullOrEmpty()) URI.create("default") else URI.create(this.photo),
+            enabled = enabled
+        )
+
+    fun toEntity(entity: Veterinarian) =
+        Veterinarian(
+            id = entity.id,
+            name = this.name,
+            email = this.email,
+            phoneNumber = this.phoneNumber,
+            username = this.username,
+            password = entity.password,
+            address = this.address,
+            photo = if (this.photo.isNullOrEmpty()) URI.create("default") else URI.create(this.photo),
+            enabled = entity.enabled
+        )
+}

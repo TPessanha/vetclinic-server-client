@@ -15,8 +15,9 @@ class Administrative(
     username: String,
     password: String,
     address: String,
-    photo: URI
-) : Employee<AdministrativeDTO>(id, email, name, phoneNumber, username, password, address, photo) {
+    photo: URI,
+    enabled: Boolean
+) : Employee(id, email, name, phoneNumber, username, password, address, photo, enabled) {
 
     override fun toDTO() = AdministrativeDTO(
         id = id,
@@ -26,31 +27,7 @@ class Administrative(
         password = "",
         phoneNumber = phoneNumber,
         address = address,
-        photo = photo.toString()
+        photo = photo.toString(),
+        enabled = enabled
     )
-
-    companion object {
-
-        fun fromDto(dto: AdministrativeDTO) = Administrative(
-            id = dto.id,
-            name = dto.name,
-            username = dto.username,
-            email = dto.email,
-            password = dto.password, // TODO This dont seen very safe
-            phoneNumber = dto.phoneNumber,
-            address = dto.address,
-            photo = URI.create(dto.photo)
-        )
-
-        fun fromDto(dto: AdministrativeDTO, dao: Administrative) = Administrative(
-            id = dto.id,
-            name = dto.name,
-            username = dto.username,
-            email = dto.email,
-            password = dao.password, // TODO This dont seen very safe
-            phoneNumber = dto.phoneNumber,
-            address = dto.address,
-            photo = URI.create(dto.photo)
-        )
-    }
 }

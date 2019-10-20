@@ -1,13 +1,14 @@
 package personal.ciai.vetclinic.model
 
 import java.net.URI
+import javax.persistence.CascadeType
 import javax.persistence.Entity
 import javax.persistence.OneToMany
 import javax.persistence.Table
 import personal.ciai.vetclinic.dto.VeterinarianDTO
 
 @Entity
-@Table(name = "veterinarian")
+@Table(name = "veterinarians")
 class Veterinarian(
     id: Int,
     email: String,
@@ -17,44 +18,21 @@ class Veterinarian(
     password: String,
     address: String,
     photo: URI,
-    @OneToMany()
-    var appointments: List<Appointment> = emptyList()
-) : Employee<VeterinarianDTO>(id, email, name, phoneNumber, username, password, address, photo) {
+    enabled: Boolean,
+    @OneToMany(mappedBy = "veterinarian", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var appointments: MutableList<Appointment> = emptyList<Appointment>().toMutableList()
+) : Employee(id, email, name, phoneNumber, username, password, address, photo, enabled) {
 
     override fun toDTO() = VeterinarianDTO(
         id = id,
-        email = email,
         name = name,
         username = username,
+        email = email,
         password = "",
         phoneNumber = phoneNumber,
         address = address,
         photo = photo.toString(),
-        appointments = appointments.map { it.id }
+        appointments = appointments.map { it.toDTO() },
+        enabled = enabled
     )
-
-    companion object {
-
-        fun fromDto(dto: VeterinarianDTO) = Veterinarian(
-            id = dto.id,
-            name = dto.name,
-            username = dto.username,
-            email = dto.email,
-            password = dto.password, // TODO This dont seen very safe
-            phoneNumber = dto.phoneNumber,
-            address = dto.address,
-            photo = URI.create(dto.photo)
-        )
-
-        fun fromDto(dto: VeterinarianDTO, dao: Veterinarian) = Veterinarian(
-            id = dto.id,
-            name = dto.name,
-            username = dto.username,
-            email = dto.email,
-            password = dao.password, // TODO This dont seen very safe
-            phoneNumber = dto.phoneNumber,
-            address = dto.address,
-            photo = URI.create(dto.photo)
-        )
-    }
 }

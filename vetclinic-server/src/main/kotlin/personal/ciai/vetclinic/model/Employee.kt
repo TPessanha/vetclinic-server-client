@@ -1,30 +1,33 @@
 package personal.ciai.vetclinic.model
 
 import java.net.URI
-import javax.persistence.Column
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.MappedSuperclass
+import javax.persistence.Entity
+import javax.persistence.Inheritance
+import javax.persistence.InheritanceType
+import javax.persistence.Table
+import personal.ciai.vetclinic.dto.BaseDTO
+import personal.ciai.vetclinic.dto.EmployeeDTO
 
-/**
- * Models an Employee.
- *
- * @property id the Employee's id.
- */
-@MappedSuperclass
-abstract class Employee<DTO>(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Int,
+@Entity
+@Table(name = "employee")
+@Inheritance(strategy = InheritanceType.JOINED)
+abstract class Employee(
+    id: Int,
     email: String,
     name: String,
     phoneNumber: Int,
     username: String,
     password: String,
     address: String,
-    @Column(nullable = false)
-    var photo: URI
-) : User(email, name, phoneNumber, username, password, address), Entity<DTO>
+    photo: URI?,
+    var enabled: Boolean = true
+) : User(id, email, name, phoneNumber, username, password, address, photo) {
 
-abstract class Employee(id: Int) : IdentifiedEntity(id)
+    override fun toDTO(): BaseDTO = EmployeeDTO(
+        email = this.email,
+        name = this.name,
+        phoneNumber = this.phoneNumber,
+        address = this.address,
+        photo = photo?.toString()
+    )
+}

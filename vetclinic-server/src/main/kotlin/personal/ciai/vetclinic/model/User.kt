@@ -18,7 +18,7 @@ import personal.ciai.vetclinic.dto.UserDTO
  * @property username the username of the User.
  * @property password the username of the User.
  * @property address the adress of the User.
- * @constructor Creates a User DTO.
+ * @constructor Creates a User DAO
  */
 @Entity
 @Table(name = "users")
