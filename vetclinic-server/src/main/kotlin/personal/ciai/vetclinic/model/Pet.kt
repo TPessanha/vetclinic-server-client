@@ -40,7 +40,7 @@ class Pet(
     var physicalDescription: String = "",
     @Column(nullable = false)
     var medicalRecord: String = "",
-    @Column(nullable = true)
+    @Column
     var photo: URI? = null
 ) : IdentifiedBaseEntity(id) {
 

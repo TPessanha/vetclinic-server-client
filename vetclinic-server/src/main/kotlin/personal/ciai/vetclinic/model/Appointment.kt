@@ -3,6 +3,8 @@ package personal.ciai.vetclinic.model
 import javax.persistence.Column
 import javax.persistence.Embedded
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.Table
@@ -23,7 +25,9 @@ class Appointment(
     @JoinColumn(name = "client_id")
     var client: Client,
     @Column(nullable = false)
-    var description: String = ""
+    var description: String = "",
+    @Enumerated(EnumType.ORDINAL)
+    var status: AppointmentStatus = AppointmentStatus.Pending
 ) : IdentifiedBaseEntity(id) {
 
     override fun toDTO() = AppointmentDTO(
@@ -33,6 +37,7 @@ class Appointment(
 //        veterinarian = veterinarian.id.toString(),
         pet = pet.id,
         client = client.id,
-        description = description
+        description = description,
+        status = status.ordinal
     )
 }

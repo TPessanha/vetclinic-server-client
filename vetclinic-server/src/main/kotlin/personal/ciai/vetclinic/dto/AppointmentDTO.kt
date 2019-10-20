@@ -3,6 +3,7 @@ package personal.ciai.vetclinic.dto
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import personal.ciai.vetclinic.model.Appointment
+import personal.ciai.vetclinic.model.AppointmentStatus
 import personal.ciai.vetclinic.model.TimeSlot
 import personal.ciai.vetclinic.service.ClientService
 import personal.ciai.vetclinic.service.PetService
@@ -51,7 +52,15 @@ data class AppointmentDTO(
         readOnly = false,
         example = "Cured the animal"
     )
-    val description: String
+    val description: String,
+    @ApiModelProperty(
+        "The status of the appointment in Integer",
+        required = true,
+        readOnly = true,
+        example = "1"
+
+    )
+    val status: Int
 ) : BaseDTO {
     fun toEntity(petService: PetService, clientService: ClientService) = toEntity(this.id, petService, clientService)
 
@@ -62,6 +71,7 @@ data class AppointmentDTO(
 //            veterinarian = debugvet,
             description = this.description,
             client = clientService.getClientEntityById(this.client),
-            pet = petService.getPetEntityById(this.pet)
+            pet = petService.getPetEntityById(this.pet),
+            status = AppointmentStatus.values()[status]
         )
 }

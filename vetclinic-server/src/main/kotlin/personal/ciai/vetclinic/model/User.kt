@@ -7,6 +7,7 @@ import javax.persistence.Entity
 import javax.persistence.Inheritance
 import javax.persistence.InheritanceType
 import javax.persistence.Table
+import org.hibernate.annotations.NaturalId
 import personal.ciai.vetclinic.dto.BaseDTO
 import personal.ciai.vetclinic.dto.UserDTO
 
@@ -27,13 +28,14 @@ import personal.ciai.vetclinic.dto.UserDTO
 @Inheritance(strategy = InheritanceType.JOINED)
 open class User(
     id: Int,
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     val email: String,
     @Column(nullable = false)
     val name: String,
     @Column(nullable = false)
     val phoneNumber: Int,
-    @Column(nullable = false)
+    @NaturalId
+    @Column(nullable = false, unique = true)
     val username: String,
     @Column(nullable = false)
     val password: String,

@@ -65,7 +65,7 @@ class PetRepositoryTests {
             "sdg@gmail.com",
             "Rui",
             41235,
-            "Rui123",
+            "Rui1234",
             "password",
             "Rua asdasd asdasd"
         )
