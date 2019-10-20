@@ -33,6 +33,9 @@ class AppointmentService(
         if (id > 0 && !repository.existsById(appointmentDTO.id))
             throw NotFoundException("Appointment with id ($id) not found")
 
+        // TODO CHECK IF VET IS AVAILABLE
+        // SOmething like vetService.CheckAvailability(AppointmentDTO)
+
         saveAppointment(appointmentDTO, id)
     }
 
@@ -40,9 +43,13 @@ class AppointmentService(
         if (appointmentDTO.id != 0)
             throw ExpectationFailedException("Appointment id must be 0 in insertion or > 0 for update")
 
+        // TODO CHECK IF VET IS AVAILABLE
+        // SOmething like vetService.CheckAvailability(AppointmentDTO)
+
         saveAppointment(appointmentDTO)
     }
 
+    // TODO Spring security check if is the right client
     fun getPetAppointments(petId: Int) =
         petService.getPetWithAppointments(petId).appointments.map { it.toDTO() }
 }

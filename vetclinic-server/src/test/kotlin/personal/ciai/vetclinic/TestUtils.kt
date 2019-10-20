@@ -1,13 +1,11 @@
 package personal.ciai.vetclinic
 
-import java.util.Date
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.assertAll
 import personal.ciai.vetclinic.model.Appointment
 import personal.ciai.vetclinic.model.Client
 import personal.ciai.vetclinic.model.Pet
 import personal.ciai.vetclinic.model.TimeSlot
-import java.sql.Time
 
 object TestUtils {
     val clientExample1 = Client(0, "gaer@gmail.com", "Pedro", 412532, "Pedro123", "password", "Rua Pedro da cenas")
@@ -44,7 +42,7 @@ object TestUtils {
     )
     val petList = listOf<Pet>(dogExample, pigExample, iguanaExample)
 
-    val appointmentExample1 = Appointment(0, TimeSlot(1571414431763,1571414531763), dogExample, clientExample1)
+    val appointmentExample1 = Appointment(0, TimeSlot(1571414431763, 1571414531763), dogExample, clientExample1)
 
     val appointmentList = listOf<Appointment>(appointmentExample1)
 

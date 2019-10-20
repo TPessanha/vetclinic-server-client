@@ -1,13 +1,12 @@
 package personal.ciai.vetclinic.model
 
 import javax.persistence.Column
+import javax.persistence.Embedded
 import javax.persistence.Entity
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.Table
 import personal.ciai.vetclinic.dto.AppointmentDTO
-import javax.persistence.Embedded
-import javax.persistence.OneToOne
 
 @Entity
 @Table(name = "appointments")

@@ -21,6 +21,7 @@ class ClientService(
 ) {
 
     companion object MediaTypes {
+
         val imageTypes = listOf(
             MediaType.IMAGE_JPEG.toString(),
             MediaType.IMAGE_PNG.toString()
@@ -67,4 +68,8 @@ class ClientService(
         val newClient = imageService.updateClientPhoto(client, photo)
         saveClient(newClient.toDTO(), newClient.id)
     }
+
+    fun getClientWithPets(id: Int): Client =
+        repository.findByIdWithPets(id)
+            .orElseThrow { NotFoundException("Client with id ($id) not found") }
 }

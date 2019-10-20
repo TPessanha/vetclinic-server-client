@@ -90,7 +90,7 @@ class AppointmentControllerTests {
         val appointmentJSON = mapper.writeValueAsString(dto)
 
         `when`(appointmentService.addAppointment(nonNullAny(AppointmentDTO::class.java)))
-            .then { assertEquals(dto.copy(pet = 1), it.getArgument(0)) }
+            .then { assertEquals(dto.copy(pet = 1, client = 1), it.getArgument(0)) }
 
         mvc.perform(
             post(requestURL)

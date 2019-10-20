@@ -1,6 +1,5 @@
 package personal.ciai.vetclinic.UnitTests.serviceTests
 
-import java.util.Date
 import java.util.Optional
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows

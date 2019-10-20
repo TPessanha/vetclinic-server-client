@@ -44,6 +44,11 @@ class PetService(
 
     fun getAllPets() = repository.findAll().map { it.toDTO() }
 
+    fun getClientPets(clientId: Int): List<PetDTO> {
+        val client = clientService.getClientWithPets(clientId)
+        return client.pets.map { it.toDTO() }
+    }
+
     fun deletePet(id: Int) = repository.deleteById(id)
 
     fun deletePet(pet: Pet) = repository.delete(pet)

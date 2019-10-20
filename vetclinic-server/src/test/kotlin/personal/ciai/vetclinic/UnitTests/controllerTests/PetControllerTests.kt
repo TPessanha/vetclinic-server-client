@@ -7,8 +7,10 @@ import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.any
+import org.mockito.Mockito.anyInt
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -47,9 +49,9 @@ class PetControllerTests {
     }
 
     @Test
-    fun `Test GET all pets`() {
+    fun `Test GET client pets`() {
         val dtoList = petList.map { it.toDTO() }
-        `when`(pets.getAllPets()).thenReturn(dtoList)
+        `when`(pets.getClientPets(anyInt())).thenReturn(dtoList)
 
         val result = mvc.perform(get(petsURL))
             .andExpect(status().isOk())
@@ -93,7 +95,7 @@ class PetControllerTests {
         val petJSON = mapper.writeValueAsString(dtoList[0])
 
         `when`(pets.addPet(nonNullAny(PetDTO::class.java)))
-            .then { assertEquals(dtoList[0], it.getArgument(0)) }
+            .then { assertEquals(dtoList[0].copy(owner = 1), it.getArgument(0)) }
 
         mvc.perform(
             post(petsURL)

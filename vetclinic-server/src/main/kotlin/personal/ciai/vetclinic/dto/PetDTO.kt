@@ -46,7 +46,7 @@ data class PetDTO(
     @ApiModelProperty(
         "The owner of the pet",
         required = true,
-        readOnly = false,
+        readOnly = true,
         example = "1"
     )
     val owner: Int,

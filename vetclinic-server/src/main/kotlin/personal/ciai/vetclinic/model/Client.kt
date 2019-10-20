@@ -20,9 +20,9 @@ class Client(
     password: String,
     address: String,
     photo: URI? = null,
-    @OneToMany(mappedBy = "client", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "client")
     var appointments: MutableList<Appointment> = arrayListOf(),
-    @OneToMany(mappedBy = "owner", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "owner")
     var pets: MutableList<Pet> = arrayListOf()
 ) : User(id, email, name, phoneNumber, username, password, address, photo) {
     override fun toDTO(): ClientDTO =

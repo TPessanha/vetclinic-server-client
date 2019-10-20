@@ -2,7 +2,6 @@ package personal.ciai.vetclinic.dto
 
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
-import java.util.Date
 import personal.ciai.vetclinic.model.Appointment
 import personal.ciai.vetclinic.model.TimeSlot
 import personal.ciai.vetclinic.service.ClientService
@@ -59,7 +58,7 @@ data class AppointmentDTO(
     fun toEntity(newId: Int, petService: PetService, clientService: ClientService) =
         Appointment(
             id = newId,
-            timeSlot = TimeSlot(startTime,endTime),
+            timeSlot = TimeSlot(startTime, endTime),
 //            veterinarian = debugvet,
             description = this.description,
             client = clientService.getClientEntityById(this.client),

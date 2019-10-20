@@ -1,6 +1,5 @@
 package personal.ciai.vetclinic.UnitTests.repositoryTests
 
-import java.util.Date
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertThrows
@@ -45,7 +44,7 @@ class AppointmentRepositoryTests {
         val fakeClient = Client(0, "gaer@gmail.com", "Pedro", 412532, "Pedro123", "password", "Rua Pedro da cenas")
         val fakePet = Pet(555, "moon dog", 2, owner = fakeClient)
 
-        val app = Appointment(0, TimeSlot(1571414431763,1571414631763), fakePet, fakeClient, "Serious description")
+        val app = Appointment(0, TimeSlot(1571414431763, 1571414631763), fakePet, fakeClient, "Serious description")
 
 //        `when`(pets.findById(555)).thenReturn(Optional.empty())
 
@@ -60,7 +59,7 @@ class AppointmentRepositoryTests {
         // Add pet and appointment
         val fakeClient = Client(0, "gaer@gmail.com", "Pedro", 412532, "Pedro123", "password", "Rua Pedro da cenas")
         val fakePet = Pet(0, "Actually a bunny", 2, owner = fakeClient)
-        val fakeApp = Appointment(0, TimeSlot(1571414431763,1571414631763), pet = fakePet, client = fakeClient)
+        val fakeApp = Appointment(0, TimeSlot(1571414431763, 1571414631763), pet = fakePet, client = fakeClient)
 
         fakeClient.appointments.add(fakeApp)
         clientRepository.save(fakeClient)
