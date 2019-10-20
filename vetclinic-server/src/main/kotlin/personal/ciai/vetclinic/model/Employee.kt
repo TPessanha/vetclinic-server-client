@@ -9,7 +9,7 @@ import personal.ciai.vetclinic.dto.BaseDTO
 import personal.ciai.vetclinic.dto.EmployeeDTO
 
 @Entity
-@Table(name = "employee")
+@Table(name = "employees")
 @Inheritance(strategy = InheritanceType.JOINED)
 abstract class Employee(
     id: Int,

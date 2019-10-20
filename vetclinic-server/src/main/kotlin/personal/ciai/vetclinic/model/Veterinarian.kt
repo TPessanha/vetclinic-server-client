@@ -19,7 +19,7 @@ class Veterinarian(
     address: String,
     photo: URI,
     enabled: Boolean,
-    @OneToMany(mappedBy = "veterinarian", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
     var appointments: MutableList<Appointment> = emptyList<Appointment>().toMutableList()
 ) : Employee(id, email, name, phoneNumber, username, password, address, photo, enabled) {
 

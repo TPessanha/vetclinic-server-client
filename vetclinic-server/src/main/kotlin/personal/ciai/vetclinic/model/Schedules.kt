@@ -12,8 +12,8 @@ import org.springframework.format.annotation.DateTimeFormat
 import personal.ciai.vetclinic.dto.ScheduleDTO
 
 @Entity
-@Table(name = "schedule")
-class Schedule(
+@Table(name = "schedules")
+class Schedules(
     id: Int,
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)

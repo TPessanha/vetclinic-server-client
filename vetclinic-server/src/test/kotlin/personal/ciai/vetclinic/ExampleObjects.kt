@@ -53,7 +53,7 @@ class ExampleObjects {
             "Rua de Cima 44, 4243-432, Lisboa",
             URI.create("vets/1"),
             true,
-            emptyList<Appointment>()
+            emptyList<Appointment>().toMutableList()
         )
         val vet2 = Veterinarian(
             -1,
@@ -65,7 +65,7 @@ class ExampleObjects {
             "Rua da Linha 3, Lisboa",
             URI.create("vets2/2"),
             true,
-            emptyList<Appointment>()
+            emptyList<Appointment>().toMutableList()
         )
 
         val vetList = listOf<Veterinarian>(vet1, vet2)

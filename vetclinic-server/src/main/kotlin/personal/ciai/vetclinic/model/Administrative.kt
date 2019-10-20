@@ -6,7 +6,7 @@ import javax.persistence.Table
 import personal.ciai.vetclinic.dto.AdministrativeDTO
 
 @Entity
-@Table(name = "administrative")
+@Table(name = "administratives")
 class Administrative(
     id: Int,
     email: String,

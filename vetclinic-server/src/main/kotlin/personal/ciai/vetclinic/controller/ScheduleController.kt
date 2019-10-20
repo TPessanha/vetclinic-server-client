@@ -11,7 +11,10 @@ import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.format.annotation.DateTimeFormat.ISO.DATE
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import personal.ciai.vetclinic.dto.ScheduleDTO
 import personal.ciai.vetclinic.service.ScheduleService
@@ -67,65 +70,66 @@ class ScheduleController(
             ))
         ]
     )
-    @GetMapping("{date}")
+    @GetMapping("/date")
     fun getVeterinarianSchedulesDate(
         @ApiParam(value = "The ID of the employee", required = true) @PathVariable
         employeeId: Int,
         @ApiParam(value = "The ID of the Veterinarian", required = true) @PathVariable
         veterinarianId: Int,
         @ApiParam(value = "The date for the schedule", required = true)
-        @PathVariable @DateTimeFormat(iso = DATE) date: Date
+        @RequestParam @DateTimeFormat(iso = DATE) date: Date
 
     ) = scheduleService.geVeterinarianSchedules(veterinarianId, date)
 
-//    @ApiOperation(
-//        value = "Get details of an appointment",
-//        produces = "application/json",
-//        response = AppointmentDTO::class
-//    )
-//    @ApiResponses(
-//        value = [
-//            (ApiResponse(code = 200, message = "Successfully retrieved the appointment details")),
-//            (ApiResponse(code = 401, message = "You are not authorized to view the resource")),
-//            (ApiResponse(
-//                code = 403,
-//                message = "Accessing the resource you were tyring to reach is forbidden"
-//            )),
-//            (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
-//        ]
-//    )
-//    @GetMapping("/{id:[0-9]+}")
-//    fun getOneAppointment(
-//        @ApiParam(value = "The ID of the client", required = true) @PathVariable
-//        employeeId: Int,
-//        @ApiParam(value = "The ID of the Veterinarian", required = true) @PathVariable
-//        VeterinarianId: Int,
-//        @ApiParam(value = "The ID of the appointment", required = true) @PathVariable
-//        id: Int
-//    )
-//
-//    @ApiResponses(
-//        value = [
-//            (ApiResponse(code = 200, message = "Successfully added the appointment")),
-//            (ApiResponse(code = 201, message = "Successfully created the appointment")),
-//            (ApiResponse(code = 401, message = "You are not authorized to create the resource")),
-//            (ApiResponse(
-//                code = 403,
-//                message = "Accessing the resource you were tyring to reach is forbidden"
-//            )),
-//            (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
-//        ]
-//    )
-//    @PostMapping("")
-//    fun addAppointment(
-//        @ApiParam(value = "The ID of the client", required = true) @PathVariable
-//        employeeId: Int,
-//        @ApiParam(value = "The ID of the Veterinarian", required = true) @PathVariable
-//        VeterinarianId: Int,
-//        @ApiParam(
-//            value = "Details of an appointment to be created",
-//            required = true
-//        ) @RequestBody
-//        appointment: AppointmentDTO
-//    )
+    @ApiOperation(
+        value = "Get details of an Schedule",
+        produces = "application/json",
+        response = ScheduleDTO::class
+    )
+    @ApiResponses(
+        value = [
+            (ApiResponse(code = 200, message = "Successfully retrieved the Schedule details")),
+            (ApiResponse(code = 401, message = "You are not authorized to view the resource")),
+            (ApiResponse(
+                code = 403,
+                message = "Accessing the resource you were tyring to reach is forbidden"
+            )),
+            (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
+        ]
+    )
+    @GetMapping("/{scheduleId:[0-9]+}")
+    fun getOneSchedule(
+        @ApiParam(value = "The ID of the employee", required = true) @PathVariable
+        employeeId: Int,
+        @ApiParam(value = "The ID of the Veterinarian", required = true) @PathVariable
+        vetId: Int,
+        @ApiParam(value = "The ID of the Schedule", required = true) @PathVariable
+        scheduleId: Int
+    ) = scheduleService.getOneSchedule(scheduleId)
+
+    @ApiResponses(
+        value = [
+            (ApiResponse(code = 200, message = "Successfully added the Schedule")),
+            (ApiResponse(code = 201, message = "Successfully created the Schedule")),
+            (ApiResponse(code = 401, message = "You are not authorized to create the resource")),
+            (ApiResponse(
+                code = 403,
+                message = "Accessing the resource you were tyring to reach is forbidden"
+            )),
+            (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
+        ]
+    )
+    @PostMapping("")
+    fun addSchedule(
+        @ApiParam(value = "The ID of the employee", required = true) @PathVariable
+        employeeId: Int,
+        @ApiParam(value = "The ID of the Veterinarian", required = true) @PathVariable
+        vetId: Int,
+        @ApiParam(
+            value = "Details of an Schedule to be created",
+            required = true
+        ) @RequestBody schedule: ScheduleDTO
+    ) {
+        scheduleService.saveSchedule(schedule, vetId)
+    }
 }

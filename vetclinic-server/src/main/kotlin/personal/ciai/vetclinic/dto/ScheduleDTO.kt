@@ -3,8 +3,8 @@ package personal.ciai.vetclinic.dto
 import io.swagger.annotations.ApiModelProperty
 import java.sql.Time
 import java.util.Date
-import personal.ciai.vetclinic.model.Schedule
 import personal.ciai.vetclinic.model.ScheduleStatus
+import personal.ciai.vetclinic.model.Schedules
 import personal.ciai.vetclinic.model.Veterinarian
 
 /**
@@ -69,7 +69,7 @@ data class ScheduleDTO(
     fun toEntity() = toEntity(this.id)
 
     fun toEntity(newId: Int) =
-        Schedule(
+        Schedules(
             id = newId,
             date = this.date,
             from = from,
