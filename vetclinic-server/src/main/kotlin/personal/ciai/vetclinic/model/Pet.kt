@@ -4,6 +4,7 @@ import java.net.URI
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.ManyToOne
 import javax.persistence.OneToMany
 import javax.persistence.Table
 import personal.ciai.vetclinic.dto.PetDTO
@@ -30,8 +31,8 @@ class Pet(
     val species: String,
     @Column(nullable = false)
     var age: Int,
-//    var owner: Client<ClientDTO>, todo link pet to owner
-//    @OneToMany
+    @ManyToOne
+    var owner: Client,
     @OneToMany(mappedBy = "pet", cascade = [CascadeType.ALL], orphanRemoval = true)
     var appointments: MutableList<Appointment> = arrayListOf(),
     @Column(nullable = false)
@@ -48,7 +49,7 @@ class Pet(
         id = id,
         species = species,
         age = age,
-        owner = "NOT IMPLEMENTED",
+        owner = owner.id,
 //        appointments = appointments.map { it.toDTO() },
         notes = notes,
         physicalDescription = physicalDescription,

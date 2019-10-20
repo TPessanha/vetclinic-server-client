@@ -33,8 +33,6 @@ class ImageService(
         val path = Paths.get(
             configurationProperties.fullPathToPetPhotos, "${pet.id}.jpg"
         )
-        println("PATH: $path")
-        println("Uri: ${path.toUri()}")
 
         val directory = File(configurationProperties.fullPathToPetPhotos)
         if (!directory.exists())
@@ -63,8 +61,6 @@ class ImageService(
         val path = Paths.get(
             configurationProperties.fullPathToUserPhotos, "${user.id}.jpg"
         )
-        println("PATH: $path")
-        println("Uri: ${path.toUri()}")
 
         val directory = File(configurationProperties.fullPathToUserPhotos)
         if (!directory.exists())

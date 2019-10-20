@@ -2,6 +2,7 @@ package personal.ciai.vetclinic.model
 
 import java.net.URI
 import javax.persistence.Column
+import javax.persistence.DiscriminatorColumn
 import javax.persistence.Entity
 import javax.persistence.Inheritance
 import javax.persistence.InheritanceType
@@ -22,6 +23,7 @@ import personal.ciai.vetclinic.dto.UserDTO
  */
 @Entity
 @Table(name = "users")
+@DiscriminatorColumn(name = "User_Type")
 @Inheritance(strategy = InheritanceType.JOINED)
 open class User(
     id: Int,
@@ -38,7 +40,7 @@ open class User(
     @Column(nullable = false)
     val address: String,
     @Column(nullable = true)
-    var photo: URI? = null
+    open var photo: URI? = null
 ) : IdentifiedEntity(id) {
     override fun toDTO(): BaseDTO =
         UserDTO(

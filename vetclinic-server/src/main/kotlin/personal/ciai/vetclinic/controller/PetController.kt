@@ -103,7 +103,7 @@ class PetController(
         @ApiParam(value = "Details of a pet to be created", required = true) @RequestBody
         pet: PetDTO
     ) {
-        return petService.savePet(pet)
+        return petService.addPet(pet)
     }
 
     @ApiOperation(
@@ -132,7 +132,7 @@ class PetController(
         id: Int,
         @ApiParam(value = "Details of a pet to be updated", required = true) @RequestBody
         pet: PetDTO
-    ) = petService.savePet(pet, id = id)
+    ) = petService.updatePet(pet, id = id)
 
     @ApiOperation(value = "Update photo of a pet")
     @ApiResponses(

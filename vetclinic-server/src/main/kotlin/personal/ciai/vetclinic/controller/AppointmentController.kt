@@ -104,5 +104,5 @@ class AppointmentController(
 //        clientId: Int,
 //        @ApiParam(value = "The ID of the vet", required = true) @PathVariable(value = "vetId")
 //        vetId: Int
-    ) = appointmentService.saveAppointment(appointment.copy(pet = petId))
+    ) = appointmentService.addAppointment(appointment.copy(pet = petId))
 }

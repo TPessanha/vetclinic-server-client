@@ -24,10 +24,11 @@ class Appointment(
     @ManyToOne
     @JoinColumn(name = "pet_id")
     var pet: Pet,
-//    @Column(nullable = false)
-//    val client: Pet,
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    var client: Client,
     @Column(nullable = false)
-    var description: String
+    var description: String = ""
 ) : IdentifiedEntity(id) {
 
     override fun toDTO() = AppointmentDTO(
@@ -35,7 +36,7 @@ class Appointment(
         date = date.time,
 //        veterinarian = veterinarian.id.toString(),
         pet = pet.id,
-//        client = client.id.toString(),
+        client = client.id,
         description = description
     )
 }

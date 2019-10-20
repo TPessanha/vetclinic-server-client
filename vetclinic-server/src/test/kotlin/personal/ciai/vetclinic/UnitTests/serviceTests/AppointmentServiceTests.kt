@@ -62,7 +62,7 @@ class AppointmentServiceTests {
     }
 
     @Test
-    fun `test on saveAppointment() (Pet Not Found)`() {
+    fun `test on addAppointment() (Pet Not Found)`() {
         `when`(repository.save(any(Appointment::class.java)))
             .then {
                 val appointment: Appointment = it.getArgument(0)
@@ -73,12 +73,12 @@ class AppointmentServiceTests {
         `when`(petRepository.findById(anyInt())).thenReturn(Optional.empty())
 
         assertThrows(NotFoundException::class.java) {
-            appointmentService.saveAppointment(appointmentExample1.toDTO())
+            appointmentService.addAppointment(appointmentExample1.toDTO())
         }
     }
 
     @Test
-    fun `test on saveAppointment()`() {
+    fun `test on addAppointment()`() {
         `when`(repository.save(any(Appointment::class.java)))
             .then {
                 val appointment: Appointment = it.getArgument(0)
@@ -88,7 +88,7 @@ class AppointmentServiceTests {
 
         `when`(petRepository.findById(anyInt())).thenReturn(Optional.of(dogExample))
 
-        appointmentService.saveAppointment(appointmentExample1.toDTO().copy(id = 0))
+        appointmentService.addAppointment(appointmentExample1.toDTO().copy(id = 0, client = 1))
     }
 
     @Test

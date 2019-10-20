@@ -13,7 +13,9 @@ class AppointmentService(
     @Autowired
     val repository: AppointmentRepository,
     @Autowired
-    val petService: PetService
+    val petService: PetService,
+    @Autowired
+    val clientService: ClientService
 ) {
     fun getAllAppointments() = repository.findAll().map { it.toDTO() }
 
@@ -22,18 +24,25 @@ class AppointmentService(
     fun getAppointmentEntityById(id: Int): Appointment =
         repository.findById(id).orElseThrow { NotFoundException("Appointment with id ($id) not found") }
 
-    fun saveAppointment(appointmentDTO: AppointmentDTO, id: Int = 0) {
+    private fun saveAppointment(appointmentDTO: AppointmentDTO, id: Int = 0) {
+        val newAppointment = appointmentDTO.toEntity(id, petService, clientService)
+        repository.save(newAppointment)
+    }
+
+    fun updateAppointment(appointmentDTO: AppointmentDTO, id: Int) {
         if (id > 0 && !repository.existsById(appointmentDTO.id))
-            throw NotFoundException("Appointment with id (${appointmentDTO.id}) not found")
+            throw NotFoundException("Appointment with id ($id) not found")
 
-        val appointment = appointmentDTO.toEntity(id, petService)
+        saveAppointment(appointmentDTO, id)
+    }
 
-        if (appointment.id != 0)
-            throw ExpectationFailedException("Id must be 0 in insertion or > 0 for update")
+    fun addAppointment(appointmentDTO: AppointmentDTO) {
+        if (appointmentDTO.id != 0)
+            throw ExpectationFailedException("Appointment id must be 0 in insertion or > 0 for update")
 
-        repository.save(appointment)
+        saveAppointment(appointmentDTO)
     }
 
     fun getPetAppointments(petId: Int) =
-        petService.getPetAppointments(petId).map { it.toDTO() }
+        petService.getPetWithAppointments(petId).appointments.map { it.toDTO() }
 }

@@ -16,6 +16,7 @@ import personal.ciai.vetclinic.TestUtils.assertPetEquals
 import personal.ciai.vetclinic.TestUtils.dogExample
 import personal.ciai.vetclinic.TestUtils.petList
 import personal.ciai.vetclinic.dto.PetDTO
+import personal.ciai.vetclinic.exception.ExpectationFailedException
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.model.Pet
 import personal.ciai.vetclinic.repository.PetRepository
@@ -66,7 +67,17 @@ class PetServiceTests {
                 pet
             }
 
-        petService.savePet(dogExample.toDTO().copy(id = 0))
+        petService.addPet(dogExample.toDTO().copy(owner = 1))
+    }
+
+    @Test
+    fun `test on updatePet() (Expectation Failed)`() {
+        assertThrows(ExpectationFailedException::class.java) {
+            petService.addPet(dogExample.toDTO().copy(id = -1))
+        }
+        assertThrows(ExpectationFailedException::class.java) {
+            petService.addPet(dogExample.toDTO().copy(id = 5))
+        }
     }
 
     @Test

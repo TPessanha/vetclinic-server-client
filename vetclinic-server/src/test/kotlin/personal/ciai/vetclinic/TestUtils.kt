@@ -4,14 +4,18 @@ import java.util.Date
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.assertAll
 import personal.ciai.vetclinic.model.Appointment
+import personal.ciai.vetclinic.model.Client
 import personal.ciai.vetclinic.model.Pet
 
 object TestUtils {
+    val clientExample1 = Client(0, "gaer@gmail.com", "Pedro", 412532, "Pedro123", "password", "Rua Pedro da cenas")
+
     val dogExample = Pet(
         0,
         "Bulldog",
         4,
         notes = "Happy dog",
+        owner = clientExample1,
         physicalDescription = "Big Dog",
         medicalRecord = "Medical stuff",
         photo = null
@@ -21,6 +25,7 @@ object TestUtils {
         "Pig",
         1,
         notes = "Cute",
+        owner = clientExample1,
         physicalDescription = "Fluffy",
         medicalRecord = "Medical stuff",
         photo = null
@@ -30,13 +35,14 @@ object TestUtils {
         "Iguana",
         2,
         notes = "Looks angry",
+        owner = clientExample1,
         physicalDescription = "Green",
         medicalRecord = "Medical stuff",
         photo = null
     )
     val petList = listOf<Pet>(dogExample, pigExample, iguanaExample)
 
-    val appointmentExample1 = Appointment(0, Date(1571414431763), dogExample, "Scheduled for health stuff")
+    val appointmentExample1 = Appointment(0, Date(1571414431763), dogExample, clientExample1)
 
     val appointmentList = listOf<Appointment>(appointmentExample1)
 
