@@ -9,6 +9,6 @@ import personal.ciai.vetclinic.model.Pet
 
 @Repository
 interface PetRepository : CrudRepository<Pet, Int> {
-    @Query("select p from Pet p left join fetch p.appointments where p.id = :id")
+    @Query("select p from Pet p left join fetch p.appointments left join fetch p.owner where p.id = :id")
     fun findByIdWithAppointments(@Param("id") id: Int): Optional<Pet>
 }

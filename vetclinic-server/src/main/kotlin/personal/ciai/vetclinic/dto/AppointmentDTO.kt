@@ -14,7 +14,7 @@ data class AppointmentDTO(
         "An unique identifier for the appointment",
         required = true,
         readOnly = false,
-        example = "1"
+        example = "0"
     )
     val id: Int = 0,
     @ApiModelProperty(
