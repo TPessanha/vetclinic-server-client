@@ -2,13 +2,17 @@ package personal.ciai.vetclinic.dto
 
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
+import java.net.URI
+import personal.ciai.vetclinic.model.Administrative
 
 /**
  * Models a Administrative DTO.
  *
- * @property fullName the user name of the Administrative.
- * @property picture the picture belonging to the Administrative.
+ * @property name the name of the Administrative.
+ * @property username the user name of the Administrative account.
+ * @property photo the photo belonging to the Administrative.
  * @property email the email of the Administrative.
+ * @property password the password of the Administrative.
  * @property phoneNumber the phone number belonging to the Administrative.
  * @property address the address of the Administrative.
  * @constructor Creates a Administrative DTO.
@@ -17,16 +21,33 @@ import io.swagger.annotations.ApiModelProperty
 data class AdministrativeDTO(
 
     @ApiModelProperty(
-        "The Administrative  user name",
+        "An unique identifier for the Administrative",
+        required = true,
+        readOnly = false,
+        example = "34"
+    )
+    val id: Int,
+
+    @ApiModelProperty(
+        "The Administrative  full name",
         name = "fullName",
         required = true,
         readOnly = true,
         example = "Wilford A Flanders"
     )
-    val fullName: String,
+    val name: String,
 
-    @ApiModelProperty("The Administrative picture", name = "picture", required = false, readOnly = false)
-    val picture: String?,
+    @ApiModelProperty("The Administrative photo URI", name = "photo", required = false, readOnly = false)
+    val photo: String?,
+
+    @ApiModelProperty(
+        "The Administrative user name",
+        name = "username",
+        required = true,
+        readOnly = false,
+        example = "AdminExemplo"
+    )
+    val username: String,
 
     @ApiModelProperty(
         "The Administrative email",
@@ -36,6 +57,9 @@ data class AdministrativeDTO(
         example = "email@exemplo.pt"
     )
     val email: String,
+
+    @ApiModelProperty("The Administrative Password", name = "password", required = true)
+    val password: String,
 
     @ApiModelProperty(
         "The Administrative phone number",
@@ -49,10 +73,36 @@ data class AdministrativeDTO(
     @ApiModelProperty(
         "The Administrative address",
         name = "address",
-        required = false,
+        required = true,
         readOnly = false,
         example = "R Nossa Senhora Fátima 117, 3400-233, Lisboa"
     )
-    val address: String?
+    val address: String
+) : Transferable {
 
-)
+    fun toEntity() = toEntity(this.id)
+
+    fun toEntity(newId: Int) =
+        Administrative(
+            id = newId,
+            name = this.name,
+            email = this.email,
+            phoneNumber = this.phoneNumber,
+            username = this.username,
+            password = this.password,
+            address = this.address,
+            photo = if (this.photo.isNullOrEmpty()) URI.create("default") else URI.create(this.photo)
+        )
+
+    fun toEntity(entity: Administrative) =
+        Administrative(
+            id = entity.id,
+            name = this.name,
+            email = this.email,
+            phoneNumber = this.phoneNumber,
+            username = this.username,
+            password = entity.password,
+            address = this.address,
+            photo = if (this.photo.isNullOrEmpty()) URI.create("default") else URI.create(this.photo)
+        )
+}

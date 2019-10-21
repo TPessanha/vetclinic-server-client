@@ -1,9 +1,32 @@
 package personal.ciai.vetclinic.model
 
-/**
- * Models an Employee.
- *
- * @property id the Employee's id.
- */
+import java.net.URI
+import javax.persistence.Entity
+import javax.persistence.Inheritance
+import javax.persistence.InheritanceType
+import javax.persistence.Table
+import personal.ciai.vetclinic.dto.EmployeeDTO
+import personal.ciai.vetclinic.dto.Transferable
 
-abstract class Employee(id: Int) : IdentifiedEntity(id)
+@Entity
+@Table(name = "employees")
+@Inheritance(strategy = InheritanceType.JOINED)
+abstract class Employee(
+    id: Int,
+    email: String,
+    name: String,
+    phoneNumber: Int,
+    username: String,
+    password: String,
+    address: String,
+    photo: URI?
+) : User(id, email, name, phoneNumber, username, password, address, photo) {
+
+    override fun toDTO(): Transferable = EmployeeDTO(
+        email = this.email,
+        name = this.name,
+        phoneNumber = this.phoneNumber,
+        address = this.address,
+        photo = photo?.toString()
+    )
+}
