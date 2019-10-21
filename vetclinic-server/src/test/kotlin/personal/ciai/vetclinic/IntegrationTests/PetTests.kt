@@ -33,7 +33,6 @@ import personal.ciai.vetclinic.service.PetService
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
 class PetTests {
     @Autowired
     lateinit var petService: PetService
@@ -64,6 +63,7 @@ class PetTests {
 //    }
 
     @Test
+    @Transactional
     fun `Client add a new pet`() {
         val nPets = petService.getAllPets().size
         assertTrue(petService.getAllPets().size == 2)
@@ -110,6 +110,7 @@ class PetTests {
     }
 
     @Test
+    @Transactional
     fun `test updatePet`() {
         val result = mvc.perform(
             get("$petsURL/1")

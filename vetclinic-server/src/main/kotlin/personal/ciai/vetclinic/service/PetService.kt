@@ -1,6 +1,8 @@
 package personal.ciai.vetclinic.service
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.dto.PetDTO
@@ -53,15 +55,15 @@ class PetService(
 
     fun deletePet(pet: Pet) = repository.delete(pet)
 
+    @CacheEvict("PetPicture", key = "#id")
     fun updatePhoto(id: Int, photo: MultipartFile) {
-        val pet = getPetEntityById(id)
-        val newPet = imageService.updatePetPhoto(pet, photo)
-        updatePet(newPet.toDTO(), newPet.id)
+        val newPet = imageService.updatePetPhoto(getPetEntityById(id), photo)
+        repository.save(newPet)
     }
 
+    @Cacheable("PetPicture",key = "#id")
     fun getPhoto(id: Int): ByteArray {
-        val pet = getPetEntityById(id)
-        return imageService.getPetPhoto(pet)
+        return imageService.getPetPhoto(getPetEntityById(id))
     }
 
     fun getPetWithAppointments(id: Int): Pet =

@@ -4,6 +4,7 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.CacheManager
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.MediaType
@@ -19,7 +20,9 @@ import personal.ciai.vetclinic.model.User
 @Service
 class ImageService(
     @Autowired
-    private val configurationProperties: ConfigurationProperties
+    private val configurationProperties: ConfigurationProperties,
+    @Autowired
+    val cacheManager: CacheManager
 ) {
     companion object MediaTypes {
         val imageTypes = listOf(
@@ -28,7 +31,6 @@ class ImageService(
         )
     }
 
-    @CacheEvict("PetPicture", key = "#pet")
     fun updatePetPhoto(pet: Pet, photo: MultipartFile): Pet {
         if (photo.contentType !in imageTypes)
             throw UnsupportedMediaTypeException("Photos can only be of type (jpg/png)")
@@ -44,10 +46,13 @@ class ImageService(
 
         pet.photo = path.toUri()
 
+        // Delete cache
+        val test = cacheManager.getCache("PetPicture")
+
         return pet
     }
 
-    @Cacheable("PetPicture")
+
     fun getPetPhoto(pet: Pet): ByteArray {
         val photoURI = pet.photo
         if (photoURI == null)

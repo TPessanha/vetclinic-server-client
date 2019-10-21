@@ -25,19 +25,19 @@ open class UserDTO(
         readOnly = false,
         example = "1"
     )
-    open val id: Int = 0,
+    val id: Int = 0,
     @ApiModelProperty("The User's Name", name = "name", required = true, readOnly = true)
-    open val name: String,
+    val name: String,
     @ApiModelProperty("The User's Email", name = "email", required = true)
-    open val email: String,
+    val email: String,
     @ApiModelProperty("The User's Phone Number", name = "phoneNumber", required = true)
-    open val phoneNumber: Int,
+    val phoneNumber: Int,
     @ApiModelProperty("The User's Username", name = "username", required = true)
-    open val username: String,
+    val username: String,
     @ApiModelProperty("The User's Password", name = "password", required = true)
-    open val password: String,
+    val password: String,
     @ApiModelProperty("The User's Address", name = "address", required = true)
-    open val address: String,
+    val address: String,
     @ApiModelProperty(
         "The resource identifier for the image",
         required = false,
