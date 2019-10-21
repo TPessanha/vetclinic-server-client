@@ -9,6 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.times
+import org.mockito.Mockito.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -16,13 +18,17 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import personal.ciai.vetclinic.TestUtils.appointmentExample1
 import personal.ciai.vetclinic.TestUtils.appointmentList
 import personal.ciai.vetclinic.TestUtils.assertAppointmentEquals
+import personal.ciai.vetclinic.TestUtils.clientExample
 import personal.ciai.vetclinic.TestUtils.dogExample
 import personal.ciai.vetclinic.dto.AppointmentDTO
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.model.Appointment
+import personal.ciai.vetclinic.model.Pet
+import personal.ciai.vetclinic.model.TimeSlot
 import personal.ciai.vetclinic.repository.AppointmentRepository
 import personal.ciai.vetclinic.repository.PetRepository
 import personal.ciai.vetclinic.service.AppointmentService
+import personal.ciai.vetclinic.service.PetService
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
@@ -30,6 +36,9 @@ class AppointmentServiceTests {
 
     @Autowired
     lateinit var appointmentService: AppointmentService
+
+    @Autowired
+    lateinit var petService: PetService
 
     @MockBean
     lateinit var repository: AppointmentRepository
@@ -88,6 +97,24 @@ class AppointmentServiceTests {
         `when`(petRepository.findById(anyInt())).thenReturn(Optional.of(dogExample))
 
         appointmentService.addAppointment(appointmentExample1.toDTO().copy(id = 0, client = 1))
+    }
+
+    @Test
+    fun `test cache on getPetAppointments()`() {
+        val fakePet = Pet(1, "cat", 3, clientExample)
+        val fakeApp = Appointment(1, TimeSlot(532, 3253), fakePet, clientExample)
+
+        fakePet.appointments.add(fakeApp)
+
+        `when`(petRepository.findByIdWithAppointments(anyInt())).thenReturn(Optional.of(fakePet))
+
+        val result1 = appointmentService.getPetAppointments(1)
+        verify(petRepository, times(1)).findByIdWithAppointments(1)
+
+        val result2 = appointmentService.getPetAppointments(1)
+        verify(petRepository, times(1)).findByIdWithAppointments(1)
+
+        assertEquals(result1, result2)
     }
 
     @Test

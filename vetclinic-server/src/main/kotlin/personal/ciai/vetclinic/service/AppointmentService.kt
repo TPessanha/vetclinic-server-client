@@ -1,6 +1,8 @@
 package personal.ciai.vetclinic.service
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.CacheManager
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import personal.ciai.vetclinic.dto.AppointmentDTO
 import personal.ciai.vetclinic.exception.ExpectationFailedException
@@ -15,7 +17,9 @@ class AppointmentService(
     @Autowired
     val petService: PetService,
     @Autowired
-    val clientService: ClientService
+    val clientService: ClientService,
+    @Autowired
+    val cacheManager: CacheManager
 ) {
     fun getAllAppointments() = repository.findAll().map { it.toDTO() }
 
@@ -27,6 +31,9 @@ class AppointmentService(
     private fun saveAppointment(appointmentDTO: AppointmentDTO, id: Int = 0) {
         val newAppointment = appointmentDTO.toEntity(id, petService, clientService)
         repository.save(newAppointment)
+
+        // Delete cache
+        cacheManager.getCache("PetAppointments")?.evict(newAppointment.pet.id)
     }
 
     fun updateAppointment(appointmentDTO: AppointmentDTO, id: Int) {
@@ -37,6 +44,9 @@ class AppointmentService(
         // SOmething like vetService.CheckAvailability(AppointmentDTO)
 
         saveAppointment(appointmentDTO, id)
+
+        // Delete cache
+        cacheManager.getCache("PetAppointments")?.evict(appointmentDTO.pet)
     }
 
     fun addAppointment(appointmentDTO: AppointmentDTO) {
@@ -50,6 +60,7 @@ class AppointmentService(
     }
 
     // TODO Spring security check if is the right client
+    @Cacheable("PetAppointments")
     fun getPetAppointments(petId: Int) =
         petService.getPetWithAppointments(petId).appointments.map { it.toDTO() }
 }

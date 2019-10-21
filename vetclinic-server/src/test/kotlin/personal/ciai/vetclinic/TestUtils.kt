@@ -46,6 +46,8 @@ object TestUtils {
 
     val appointmentList = listOf<Appointment>(appointmentExample1)
 
+    val clientExample = Client(1, "diogo@gmail.com", "Diogo", 9143235, "Trisks", "345", "Rua das pedras")
+
     fun assertPetEquals(p1: Pet, p2: Pet) {
         assertAll("Is pet the same?",
 //            { assertNotEquals(p1.id, p2.id) }, //ID changes because its auto-generated
