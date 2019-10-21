@@ -6,7 +6,8 @@ import javax.persistence.Entity
 import javax.persistence.Inheritance
 import javax.persistence.InheritanceType
 import javax.persistence.Table
-import personal.ciai.vetclinic.dto.BaseDTO
+import org.hibernate.annotations.NaturalId
+import personal.ciai.vetclinic.dto.Transferable
 import personal.ciai.vetclinic.dto.UserDTO
 
 /**
@@ -22,19 +23,27 @@ import personal.ciai.vetclinic.dto.UserDTO
  */
 @Entity
 @Table(name = "users")
+// @DiscriminatorColumn(name = "User_Type")
 @Inheritance(strategy = InheritanceType.JOINED)
 open class User(
     id: Int,
+    @Column(nullable = false, unique = true)
     val email: String,
+    @Column(nullable = false)
     val name: String,
+    @Column(nullable = false)
     val phoneNumber: Int,
+    @NaturalId
+    @Column(nullable = false, unique = true)
     val username: String,
+    @Column(nullable = false)
     val password: String,
+    @Column(nullable = false)
     val address: String,
     @Column(nullable = true)
-    var photo: URI? = null
+    open var photo: URI? = null
 ) : IdentifiedEntity(id) {
-    override fun toDTO(): BaseDTO =
+    override fun toDTO(): Transferable =
         UserDTO(
             id = this.id,
             email = this.email,

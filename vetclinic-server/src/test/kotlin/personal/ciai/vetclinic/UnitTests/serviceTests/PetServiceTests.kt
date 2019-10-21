@@ -8,6 +8,7 @@ import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.anyInt
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -16,6 +17,7 @@ import personal.ciai.vetclinic.TestUtils.assertPetEquals
 import personal.ciai.vetclinic.TestUtils.dogExample
 import personal.ciai.vetclinic.TestUtils.petList
 import personal.ciai.vetclinic.dto.PetDTO
+import personal.ciai.vetclinic.exception.ExpectationFailedException
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.model.Pet
 import personal.ciai.vetclinic.repository.PetRepository
@@ -66,7 +68,26 @@ class PetServiceTests {
                 pet
             }
 
-        petService.savePet(dogExample.toDTO().copy(id = 0))
+        petService.addPet(dogExample.toDTO().copy(owner = 1))
+    }
+
+    @Test
+    fun `test on updatePet() (Expectation Failed)`() {
+        assertThrows(ExpectationFailedException::class.java) {
+            petService.addPet(dogExample.toDTO().copy(id = -1))
+        }
+        assertThrows(ExpectationFailedException::class.java) {
+            petService.addPet(dogExample.toDTO().copy(id = 5))
+        }
+    }
+
+    @Test
+    fun `Test updatePet() (Not Found)`() {
+        `when`(repository.existsById(anyInt())).thenReturn(false)
+
+        assertThrows(NotFoundException::class.java) {
+            petService.updatePet(dogExample.toDTO(), 5)
+        }
     }
 
     @Test

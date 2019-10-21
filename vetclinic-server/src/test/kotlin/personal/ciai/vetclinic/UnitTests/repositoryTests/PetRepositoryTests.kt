@@ -10,9 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.transaction.annotation.Transactional
 import personal.ciai.vetclinic.TestUtils.assertPetEquals
-import personal.ciai.vetclinic.TestUtils.dogExample
-import personal.ciai.vetclinic.TestUtils.pigExample
+import personal.ciai.vetclinic.model.Client
 import personal.ciai.vetclinic.model.Pet
+import personal.ciai.vetclinic.repository.ClientRepository
 import personal.ciai.vetclinic.repository.PetRepository
 
 @ExtendWith(SpringExtension::class)
@@ -21,16 +21,28 @@ class PetRepositoryTests {
     @Autowired
     lateinit var pets: PetRepository
 
+    @Autowired
+    lateinit var clientRepository: ClientRepository
+
     @Test
     @Transactional
     fun `basic test on findAll`() {
-        assertEquals(pets.findAll().toList(), emptyList<Pet>())
+        assertEquals(pets.findAll().toList().size, 2)
     }
 
     @Test
     @Transactional
     fun `test save and delete`() {
-        val fakePet = Pet(0, "Actually a cat", 3)
+        val fakeClient = Client(
+            0,
+            "sdg@gmail.com",
+            "Rui",
+            41235,
+            "Rui123",
+            "password",
+            "Rua asdasd asdasd"
+        )
+        val fakePet = Pet(0, "Actually a cat", 3, owner = fakeClient)
 
         val pet = pets.save(fakePet)
 
@@ -48,22 +60,39 @@ class PetRepositoryTests {
     @Test
     @Transactional
     fun `test on save and delete 2`() {
-        val pet0 = pets.save(dogExample)
-        assertPetEquals(pet0, dogExample)
+        val fakeClient = Client(
+            0,
+            "sdg@gmail.com",
+            "Rui",
+            41235,
+            "Rui1234",
+            "password",
+            "Rua asdasd asdasd"
+        )
+        clientRepository.save(fakeClient)
 
-        assertEquals(pets.findAll().toList(), listOf(pet0))
+        val previousList = pets.findAll().toMutableList()
 
-        val pet1 = pets.save(pigExample)
-        assertPetEquals(pet1, pigExample)
+        val fakePet = Pet(0, "Actually a cat", 3, owner = fakeClient)
+        val pet0 = pets.save(fakePet)
+        assertPetEquals(pet0, fakePet)
 
-        assertEquals(pets.findAll().toList(), listOf(pet0, pet1))
+        previousList.add(pet0)
+        assertEquals(pets.findAll().toList(), previousList)
+
+        val fakePet2 = Pet(0, "Actually a pig", 2, owner = fakeClient)
+        val pet1 = pets.save(fakePet2)
+        assertPetEquals(pet1, fakePet2)
+
+        previousList.add(pet1)
+        assertEquals(pets.findAll().toList(), previousList)
 
         pets.delete(pet0)
 
-        assertTrue(pets.findAll().toList().size == 1)
+        assertTrue(pets.findAll().toList().size == 3)
 
         pets.delete(pet1)
 
-        assertTrue(pets.findAll().toList().isEmpty())
+        assertTrue(pets.findAll().toList().size == 2)
     }
 }

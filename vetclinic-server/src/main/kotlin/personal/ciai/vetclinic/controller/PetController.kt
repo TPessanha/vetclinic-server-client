@@ -34,7 +34,7 @@ class PetController(
 ) {
 
     @ApiOperation(
-        value = "View a list of registered pets",
+        value = "View a list of the client pets",
         produces = "application/json",
         responseContainer = "List",
         response = PetDTO::class
@@ -53,7 +53,7 @@ class PetController(
     fun getAllPets(
         @ApiParam(value = "The ID of the client", required = false, defaultValue = "1") @PathVariable
         clientId: Int
-    ) = petService.getAllPets()
+    ) = petService.getClientPets(clientId)
 
     @ApiOperation(
         value = "Get details of a pet",
@@ -103,7 +103,7 @@ class PetController(
         @ApiParam(value = "Details of a pet to be created", required = true) @RequestBody
         pet: PetDTO
     ) {
-        return petService.savePet(pet)
+        return petService.addPet(pet.copy(owner = clientId))
     }
 
     @ApiOperation(
@@ -132,7 +132,7 @@ class PetController(
         id: Int,
         @ApiParam(value = "Details of a pet to be updated", required = true) @RequestBody
         pet: PetDTO
-    ) = petService.savePet(pet, id = id)
+    ) = petService.updatePet(pet, id = id)
 
     @ApiOperation(value = "Update photo of a pet")
     @ApiResponses(

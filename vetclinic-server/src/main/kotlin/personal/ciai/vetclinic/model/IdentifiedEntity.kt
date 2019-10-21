@@ -10,4 +10,4 @@ abstract class IdentifiedEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int
-) : Entity
+) : Entity()

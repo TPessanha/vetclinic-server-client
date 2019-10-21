@@ -2,6 +2,7 @@ package personal.ciai.vetclinic.dto
 
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
+import java.net.URI
 import personal.ciai.vetclinic.model.Client
 
 @ApiModel("Client DTO model", description = "Used to transport client data")
@@ -54,17 +55,24 @@ data class ClientDTO(
         readOnly = false,
         example = "rua abc"
     )
-    val address: String
-) : BaseDTO {
-    fun toEntity(newId: Int): Client {
-        return Client(
-            id = this.id,
-            name = this.name,
-            email = this.email,
-            phoneNumber = this.phoneNumber,
-            username = this.username,
-            password = this.password,
-            address = this.address
-        )
-    }
+    val address: String,
+    @ApiModelProperty(
+        "The resource identifier for the image",
+        required = false,
+        readOnly = true
+    )
+    val photo: String? = null
+) : Transferable {
+    fun toEntity() = toEntity(this.id)
+
+    fun toEntity(newId: Int) = Client(
+        id = newId,
+        name = this.name,
+        email = this.email,
+        phoneNumber = this.phoneNumber,
+        username = this.username,
+        password = this.password,
+        address = this.address,
+        photo = if (this.photo == null) null else URI.create(this.photo)
+    )
 }

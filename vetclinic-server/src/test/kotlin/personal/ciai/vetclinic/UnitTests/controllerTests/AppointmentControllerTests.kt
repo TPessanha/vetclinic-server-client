@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.any
-import org.mockito.Mockito.anyInt
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -90,8 +89,8 @@ class AppointmentControllerTests {
 
         val appointmentJSON = mapper.writeValueAsString(dto)
 
-        `when`(appointmentService.saveAppointment(nonNullAny(AppointmentDTO::class.java), anyInt()))
-            .then { assertEquals(dto.copy(pet = 1), it.getArgument(0)) }
+        `when`(appointmentService.addAppointment(nonNullAny(AppointmentDTO::class.java)))
+            .then { assertEquals(dto.copy(pet = 1, client = 1), it.getArgument(0)) }
 
         mvc.perform(
             post(requestURL)

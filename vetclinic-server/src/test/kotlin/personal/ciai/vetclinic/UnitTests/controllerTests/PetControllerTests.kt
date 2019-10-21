@@ -48,9 +48,9 @@ class PetControllerTests {
     }
 
     @Test
-    fun `Test GET all pets`() {
+    fun `Test GET client pets`() {
         val dtoList = petList.map { it.toDTO() }
-        `when`(pets.getAllPets()).thenReturn(dtoList)
+        `when`(pets.getClientPets(anyInt())).thenReturn(dtoList)
 
         val result = mvc.perform(get(petsURL))
             .andExpect(status().isOk)
@@ -93,8 +93,8 @@ class PetControllerTests {
 
         val petJSON = mapper.writeValueAsString(dtoList[0])
 
-        `when`(pets.savePet(nonNullAny(PetDTO::class.java), anyInt()))
-            .then { assertEquals(dtoList[0], it.getArgument(0)) }
+        `when`(pets.addPet(nonNullAny(PetDTO::class.java)))
+            .then { assertEquals(dtoList[0].copy(owner = 1), it.getArgument(0)) }
 
         mvc.perform(
             post(petsURL)

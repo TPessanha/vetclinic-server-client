@@ -44,7 +44,7 @@ class AppointmentController(
     )
     @GetMapping("")
     fun getPetAppointments(
-        @ApiParam(value = "The ID of the client", required = true)@PathVariable
+        @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
         @ApiParam(value = "The ID of the pet", required = true) @PathVariable
         petId: Int
@@ -68,9 +68,9 @@ class AppointmentController(
     )
     @GetMapping("/{id:[0-9]+}")
     fun getOneAppointment(
-        @ApiParam(value = "The ID of the client", required = true)@PathVariable
+        @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
-        @ApiParam(value = "The ID of the pet", required = true)@PathVariable
+        @ApiParam(value = "The ID of the pet", required = true) @PathVariable
         petId: Int,
         @ApiParam(value = "The ID of the appointment", required = true) @PathVariable
         id: Int
@@ -90,7 +90,7 @@ class AppointmentController(
     )
     @PostMapping("")
     fun addAppointment(
-        @ApiParam(value = "The ID of the client", required = true)@PathVariable
+        @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
         @ApiParam(value = "The ID of the pet", required = true) @PathVariable
         petId: Int,
@@ -104,5 +104,5 @@ class AppointmentController(
 //        clientId: Int,
 //        @ApiParam(value = "The ID of the vet", required = true) @PathVariable(value = "vetId")
 //        vetId: Int
-    ) = appointmentService.saveAppointment(appointment.copy(pet = petId))
+    ) = appointmentService.addAppointment(appointment.copy(pet = petId, client = clientId))
 }

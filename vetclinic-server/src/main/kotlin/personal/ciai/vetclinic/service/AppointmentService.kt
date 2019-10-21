@@ -1,6 +1,8 @@
 package personal.ciai.vetclinic.service
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.CacheManager
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import personal.ciai.vetclinic.dto.AppointmentDTO
 import personal.ciai.vetclinic.exception.ExpectationFailedException
@@ -13,7 +15,11 @@ class AppointmentService(
     @Autowired
     val repository: AppointmentRepository,
     @Autowired
-    val petService: PetService
+    val petService: PetService,
+    @Autowired
+    val clientService: ClientService,
+    @Autowired
+    val cacheManager: CacheManager
 ) {
     fun getAllAppointments() = repository.findAll().map { it.toDTO() }
 
@@ -22,18 +28,39 @@ class AppointmentService(
     fun getAppointmentEntityById(id: Int): Appointment =
         repository.findById(id).orElseThrow { NotFoundException("Appointment with id ($id) not found") }
 
-    fun saveAppointment(appointmentDTO: AppointmentDTO, id: Int = 0) {
-        if (id > 0 && !repository.existsById(appointmentDTO.id))
-            throw NotFoundException("Appointment with id (${appointmentDTO.id}) not found")
+    private fun saveAppointment(appointmentDTO: AppointmentDTO, id: Int = 0) {
+        val newAppointment = appointmentDTO.toEntity(id, petService, clientService)
+        repository.save(newAppointment)
 
-        val appointment = appointmentDTO.toEntity(id, petService)
-
-        if (appointment.id != 0)
-            throw ExpectationFailedException("Id must be 0 in insertion or > 0 for update")
-
-        repository.save(appointment)
+        // Delete cache
+        cacheManager.getCache("PetAppointments")?.evict(newAppointment.pet.id)
     }
 
+    fun updateAppointment(appointmentDTO: AppointmentDTO, id: Int) {
+        if (id <= 0 || !repository.existsById(id))
+            throw NotFoundException("Appointment with id ($id) not found")
+
+        // TODO CHECK IF VET IS AVAILABLE
+        // SOmething like vetService.CheckAvailability(AppointmentDTO)
+
+        saveAppointment(appointmentDTO, id)
+
+        // Delete cache
+        cacheManager.getCache("PetAppointments")?.evict(appointmentDTO.pet)
+    }
+
+    fun addAppointment(appointmentDTO: AppointmentDTO) {
+        if (appointmentDTO.id != 0)
+            throw ExpectationFailedException("Appointment id must be 0 in insertion or > 0 for update")
+
+        // TODO CHECK IF VET IS AVAILABLE
+        // SOmething like vetService.CheckAvailability(AppointmentDTO)
+
+        saveAppointment(appointmentDTO)
+    }
+
+    // TODO Spring security check if is the right client
+    @Cacheable("PetAppointments")
     fun getPetAppointments(petId: Int) =
-        petService.getPetAppointments(petId).map { it.toDTO() }
+        petService.getPetWithAppointments(petId).appointments.map { it.toDTO() }
 }

@@ -29,15 +29,22 @@ class UserService(
     fun getUserEntityById(id: Int): User =
         repository.findById(id).orElseThrow { NotFoundException("User with id ($id) not found") }
 
-    fun saveUser(userDTO: UserDTO, id: Int = 0) {
-        if (id > 0 && !repository.existsById(userDTO.id))
-            throw NotFoundException("User with id ($userDTO) not found")
+    private fun saveUser(userDTO: UserDTO, id: Int = 0) {
+        val newUser = userDTO.toEntity(id)
+        repository.save(newUser)
+    }
 
-        val user = userDTO.toEntity(id)
+    fun updatePet(userDTO: UserDTO, id: Int) {
+        if (id <= 0 || !repository.existsById(userDTO.id))
+            throw NotFoundException("User with id ($id) not found")
 
-        if (id < 0 || (id == 0 && userDTO.id != 0))
-            throw ExpectationFailedException("Id must be 0 in insertion or > 0 for update")
+        saveUser(userDTO, id)
+    }
 
-        repository.save(userDTO.toEntity())
+    fun addPet(userDTO: UserDTO) {
+        if (userDTO.id != 0)
+            throw ExpectationFailedException("User id must be 0 in insertion")
+
+        saveUser(userDTO)
     }
 }
