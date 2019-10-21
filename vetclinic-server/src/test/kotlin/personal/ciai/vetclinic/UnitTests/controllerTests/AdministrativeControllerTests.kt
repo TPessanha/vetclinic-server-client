@@ -16,12 +16,14 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.admin2
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.listAdminDTO
+import personal.ciai.vetclinic.IntegrationTests.AdministrativeTests
 import personal.ciai.vetclinic.dto.AdministrativeDTO
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.service.AdministrativeService
@@ -40,7 +42,7 @@ class AdministrativeControllerTests {
     companion object {
         val mapper = ObjectMapper().registerModule(KotlinModule())
 
-        val adminURL = "/administrative"
+        val adminURL = "/employees/1/administratives"
     }
 
     @Test
@@ -48,7 +50,7 @@ class AdministrativeControllerTests {
         `when`(admin.getAllAdministrative()).thenReturn(listAdminDTO)
 
         val result = mvc.perform(get(adminURL))
-            .andExpect(status().isOk())
+            .andExpect(status().isOk)
             .andExpect(jsonPath("$", hasSize<Any>(listAdminDTO.size)))
             .andReturn()
 
@@ -67,7 +69,7 @@ class AdministrativeControllerTests {
 
         val responseString = result.response.contentAsString
         val responseDTO = mapper.readValue<AdministrativeDTO>(responseString)
-        assertEquals(responseDTO, listAdminDTO[2])
+        assertEquals(responseDTO, admin2.toDTO())
     }
 
     @Test
@@ -83,16 +85,22 @@ class AdministrativeControllerTests {
     @Test
     fun `Test POST One Administrative`() {
 
-        val adminJSON = mapper.writeValueAsString(admin2)
+        val adminJSON = mapper.writeValueAsString(admin2.toDTO())
 
         `when`(admin.save(nonNullAny(AdministrativeDTO::class.java)))
-            .then { assertEquals(admin2, it.getArgument(0)) }
+            .then { assertEquals(admin2.toDTO(), it.getArgument(0)) }
 
         mvc.perform(
             post(adminURL)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(adminJSON)
+        )
+            .andExpect(status().isOk)
+
+        mvc.perform(
+            MockMvcRequestBuilders
+                .delete("${AdministrativeTests.adminsURL}/1")
         )
             .andExpect(status().isOk)
     }

@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.context.WebApplicationContext
-import personal.ciai.vetclinic.ExampleObjects.exampleObjects.vet1
+import personal.ciai.vetclinic.ExampleObjects.exampleObjects.vet2
 import personal.ciai.vetclinic.dto.VeterinarianDTO
 import personal.ciai.vetclinic.service.VeterinarianService
 
@@ -44,13 +44,13 @@ class VeterinarianTests {
         // see: https://discuss.kotlinlang.org/t/data-class-and-jackson-annotation-conflict/397/6
         val mapper = ObjectMapper().registerModule(KotlinModule())
 
-        val veterinarianURL = "/veterinarian"
+        val veterinarianURL = "/employees/1/veterinarians"
     }
 
     @Test
     fun `Add a new Veterinarian`() {
         assertTrue(vetService.getAllVeterinarian().size == 0)
-        val dogJSON = mapper.writeValueAsString(vet1.toDTO())
+        val dogJSON = mapper.writeValueAsString(vet2.toDTO())
 
         mvc.perform(
             MockMvcRequestBuilders
@@ -78,11 +78,11 @@ class VeterinarianTests {
         val responseString = result.response.contentAsString
         val persistentVet = mapper.readValue<VeterinarianDTO>(responseString)
 
-        assertNotEquals(vet1.id, persistentVet.id)
-        assertEquals(vet1.name, persistentVet.name)
-        assertEquals(vet1.username, persistentVet.username)
-        assertEquals(vet1.email, persistentVet.email)
-        assertEquals(vet1.address, persistentVet.address)
+        assertNotEquals(vet2.id, persistentVet.id)
+        assertEquals(vet2.name, persistentVet.name)
+        assertEquals(vet2.username, persistentVet.username)
+        assertEquals(vet2.email, persistentVet.email)
+        assertEquals(vet2.address, persistentVet.address)
 
         mvc.perform(
             MockMvcRequestBuilders
@@ -90,6 +90,6 @@ class VeterinarianTests {
         )
             .andExpect(status().isOk)
 
-        assertTrue(vetService.getAllVeterinarian().size == 0)
+        assertTrue(vetService.getAllVeterinarian().size == 1)
     }
 }

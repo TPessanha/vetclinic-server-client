@@ -36,7 +36,7 @@ class AdministrativeServiceTests {
     fun `basic test on get All`() {
         `when`(repository.findAll()).thenReturn(listAdmin)
 
-        assertEquals(adminService.getAllAdministrative().map { it.copy(id = -1) }, listAdmin)
+        assertEquals(adminService.getAllAdministrative(), listAdmin.map { it.toDTO() })
     }
 
     @Test

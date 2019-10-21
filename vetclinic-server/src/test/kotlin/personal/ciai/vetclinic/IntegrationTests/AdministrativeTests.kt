@@ -44,7 +44,7 @@ class AdministrativeTests {
         // see: https://discuss.kotlinlang.org/t/data-class-and-jackson-annotation-conflict/397/6
         val mapper = ObjectMapper().registerModule(KotlinModule())
 
-        val adminsURL = "/admin"
+        val adminsURL = "/employees/1/administratives"
     }
 
     @Test
@@ -60,17 +60,21 @@ class AdministrativeTests {
         )
             .andExpect(status().isOk)
 
-        mvc.perform(
+        val resultList = mvc.perform(
             MockMvcRequestBuilders
                 .get(adminsURL)
                 .accept(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$", hasSize<Any>(1)))
+            .andReturn()
+
+        val res = resultList.response.contentAsString
+        val allAdmin = mapper.readValue<List<AdministrativeDTO>>(res)
 
         val result = mvc.perform(
             MockMvcRequestBuilders
-                .get("$adminsURL/1")
+                .get("$adminsURL/" + allAdmin[0].id)
         )
             .andExpect(status().isOk)
             .andReturn()
@@ -86,7 +90,7 @@ class AdministrativeTests {
 
         mvc.perform(
             MockMvcRequestBuilders
-                .delete("$adminsURL/1")
+                .delete("$adminsURL/" + allAdmin[0].id)
         )
             .andExpect(status().isOk)
 

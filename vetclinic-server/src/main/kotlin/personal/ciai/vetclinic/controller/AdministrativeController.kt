@@ -61,11 +61,7 @@ class AdministrativeController(
             value = "adminId",
             required = true
         ) adminId: Int
-    ) {
-        if (administrativeService.existsById(employeeId)) {
-            administrativeService.getAdministrativeById(adminId)
-        }
-    }
+    ) = administrativeService.getAdministrativeById(adminId)
 
     @ApiOperation(
         value = "View a list of Administratives details",
@@ -88,11 +84,7 @@ class AdministrativeController(
             required = true
         )
         employeeId: Int
-    ) {
-        if (administrativeService.existsById(employeeId)) {
-            administrativeService.getAllAdministrative()
-        }
-    }
+    ) = administrativeService.getAllAdministrative()
 
     @ApiOperation(value = "Add a new Administrative account")
     @ApiResponses(
@@ -112,11 +104,7 @@ class AdministrativeController(
         employeeId: Int,
         @ApiParam(required = true, value = "(Required) Administrative info necessary to created a new account")
         @RequestBody admin: AdministrativeDTO
-    ) {
-        if (administrativeService.existsById(employeeId)) {
-            administrativeService.save(admin)
-        }
-    }
+    ) = administrativeService.save(admin)
 
     @ApiOperation(value = "Edit Administrative information", consumes = "application/json")
     @ApiResponses(
@@ -140,11 +128,7 @@ class AdministrativeController(
         ) adminId: Int,
         @ApiParam(required = true, value = "(Required) Admin information to be changed")
         @RequestBody admin: AdministrativeDTO
-    ) {
-        if (administrativeService.existsById(employeeId)) {
-            administrativeService.update(admin, adminId)
-        }
-    }
+    ) = administrativeService.update(admin, adminId)
 
     @ApiOperation(value = "Delete a Administrative account")
     @ApiResponses(
@@ -165,9 +149,5 @@ class AdministrativeController(
         @ApiParam(name = "adminId", required = true, value = "(Required) Admin identificator (id)") @PathVariable(
             value = "adminId", required = true
         ) adminId: Int
-    ) {
-        if (administrativeService.existsById(employeeId)) {
-            administrativeService.delete(adminId)
-        }
-    }
+    ) = administrativeService.delete(adminId)
 }

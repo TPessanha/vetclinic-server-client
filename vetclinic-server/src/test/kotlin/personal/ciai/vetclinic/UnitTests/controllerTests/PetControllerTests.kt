@@ -53,7 +53,7 @@ class PetControllerTests {
         `when`(pets.getAllPets()).thenReturn(dtoList)
 
         val result = mvc.perform(get(petsURL))
-            .andExpect(status().isOk())
+            .andExpect(status().isOk)
             .andExpect(jsonPath("$", hasSize<Any>(petList.size)))
             .andReturn()
 
@@ -96,10 +96,12 @@ class PetControllerTests {
         `when`(pets.savePet(nonNullAny(PetDTO::class.java), anyInt()))
             .then { assertEquals(dtoList[0], it.getArgument(0)) }
 
-        mvc.perform(post(petsURL)
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(petJSON))
+        mvc.perform(
+            post(petsURL)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(petJSON)
+        )
             .andExpect(status().isOk)
     }
 }

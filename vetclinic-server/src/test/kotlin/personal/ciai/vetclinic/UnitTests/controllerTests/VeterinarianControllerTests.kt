@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import personal.ciai.vetclinic.ExampleObjects.exampleObjects.listAdminDTO
+import personal.ciai.vetclinic.ExampleObjects.exampleObjects.vet1
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.vet2
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.vetDTOList
 import personal.ciai.vetclinic.dto.VeterinarianDTO
@@ -41,7 +41,7 @@ class VeterinarianControllerTests {
     companion object {
         val mapper = ObjectMapper().registerModule(KotlinModule())
 
-        val vetsURL = "/veterinarian"
+        val vetsURL = "/employees/1/veterinarians"
     }
 
     @Test
@@ -49,7 +49,7 @@ class VeterinarianControllerTests {
         `when`(vets.getAllVeterinarian()).thenReturn(vetDTOList)
 
         val result = mvc.perform(get(vetsURL))
-            .andExpect(status().isOk())
+            .andExpect(status().isOk)
             .andExpect(jsonPath("$", hasSize<Any>(vetDTOList.size)))
             .andReturn()
 
@@ -60,7 +60,7 @@ class VeterinarianControllerTests {
 
     @Test
     fun `Test GET One Veterinarian`() {
-        `when`(vets.getVeterinarianById(1)).thenReturn(vet2.toDTO())
+        `when`(vets.getVeterinarianById(1)).thenReturn(vet1.toDTO())
 
         val result = mvc.perform(get("$vetsURL/1"))
             .andExpect(status().isOk)
@@ -68,7 +68,7 @@ class VeterinarianControllerTests {
 
         val responseString = result.response.contentAsString
         val responseDTO = mapper.readValue<VeterinarianDTO>(responseString)
-        assertEquals(responseDTO, listAdminDTO[2])
+        assertEquals(responseDTO, vetDTOList[0])
     }
 
     @Test
@@ -84,10 +84,10 @@ class VeterinarianControllerTests {
     @Test
     fun `Test POST One Veterinarian`() {
 
-        val vetsJSON = mapper.writeValueAsString(vet2)
+        val vetsJSON = mapper.writeValueAsString(vet2.toDTO())
 
         `when`(vets.save(nonNullAny(VeterinarianDTO::class.java)))
-            .then { assertEquals(vet2, it.getArgument(0)) }
+            .then { assertEquals(vet2.toDTO(), it.getArgument(0)) }
 
         mvc.perform(
             post(vetsURL)

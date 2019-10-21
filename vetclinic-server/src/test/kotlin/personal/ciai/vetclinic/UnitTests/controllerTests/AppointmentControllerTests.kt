@@ -93,10 +93,12 @@ class AppointmentControllerTests {
         `when`(appointmentService.saveAppointment(nonNullAny(AppointmentDTO::class.java), anyInt()))
             .then { assertEquals(dto.copy(pet = 1), it.getArgument(0)) }
 
-        mvc.perform(post(requestURL)
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(appointmentJSON))
+        mvc.perform(
+            post(requestURL)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(appointmentJSON)
+        )
             .andExpect(status().isOk)
     }
 }

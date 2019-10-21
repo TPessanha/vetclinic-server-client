@@ -28,7 +28,7 @@ class AdministrativeService(
     fun getAdministrativeById(id: Int): AdministrativeDTO = getAdministrativeEntity(id).toDTO()
 
     fun save(adminDTO: AdministrativeDTO) {
-        if (existsById(adminDTO.id).not())
+        if (existsAdministrativeById(adminDTO.id).not())
             adminRepository.save(adminDTO.toEntity())
         else throw ConflictException("Administrative account with Id ${adminDTO.id} already exist")
     }
@@ -44,6 +44,8 @@ class AdministrativeService(
 
         adminRepository.delete(admin)
     }
+
+    private fun existsAdministrativeById(id: Int): Boolean = adminRepository.existsById(id)
 
     private fun getAdministrativeEntity(id: Int): Administrative = adminRepository.findById(id)
         .orElseThrow { NotFoundException("Administrative account with Id $id not found") }

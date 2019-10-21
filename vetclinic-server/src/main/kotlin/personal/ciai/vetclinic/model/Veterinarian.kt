@@ -27,7 +27,7 @@ class Veterinarian(
         targetEntity = Schedules::class, mappedBy = "veterinarian", cascade = [CascadeType.ALL],
         orphanRemoval = true
     )
-    val schedules: MutableList<Schedules> = arrayListOf()
+    var schedules: MutableList<Schedules> = arrayListOf()
 
 ) : Employee(id, email, name, phoneNumber, username, password, address, photo) {
 

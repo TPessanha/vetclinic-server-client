@@ -36,7 +36,7 @@ class VeterinarianServiceTests {
     fun `basic test on get All`() {
         `when`(repository.findAll()).thenReturn(vetList)
 
-        assertEquals(vetsService.getAllVeterinarian().map { it.copy(id = -1) }, vetList)
+        assertEquals(vetsService.getAllVeterinarian(), vetList.map { it.toDTO() })
     }
 
     @Test

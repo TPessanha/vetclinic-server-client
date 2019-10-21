@@ -43,7 +43,7 @@ class ExampleObjects {
         // Veterinarian
 
         val vet1 = Veterinarian(
-            -1,
+            1,
             "vet1@vetclinic.pt",
             "Joao Han",
             954223134,
