@@ -25,29 +25,29 @@ open class UserDTO(
         readOnly = false,
         example = "1"
     )
-    val id: Int = 0,
+    open val id: Int = 0,
     @ApiModelProperty("The User's Name", name = "name", required = true, readOnly = true)
-    val name: String,
+    open val name: String,
     @ApiModelProperty("The User's Email", name = "email", required = true)
-    val email: String,
+    open val email: String,
     @ApiModelProperty("The User's Phone Number", name = "phoneNumber", required = true)
-    val phoneNumber: Int,
+    open val phoneNumber: Int,
     @ApiModelProperty("The User's Username", name = "username", required = true)
-    val username: String,
+    open val username: String,
     @ApiModelProperty("The User's Password", name = "password", required = true)
-    val password: String,
+    open val password: String,
     @ApiModelProperty("The User's Address", name = "address", required = true)
-    val address: String,
+    open val address: String,
     @ApiModelProperty(
         "The resource identifier for the image",
         required = false,
         readOnly = true
     )
-    val photo: String? = null
-) : BaseDTO {
-    fun toEntity() = toEntity(this.id)
+    open val photo: String? = null
+) : Transferable {
+    open fun toEntity() = toEntity(this.id)
 
-    fun toEntity(newId: Int) =
+    open fun toEntity(newId: Int) =
         User(
             id = newId,
             name = this.name,

@@ -1,6 +1,6 @@
-insert into users (user_type,id, email, name,phone_number,username,password,address,photo) values
-('c',1, 'fancyEmail@gmail.com', 'Rui',961234567,'Rui123','password','Rua Da Esquerda',null),
-('c',2, 'uglyEmail@gmail.com', 'Pedro',960425362,'Pedrocas','password','Rua Da Direita',null);
+insert into users (id, email, name,phone_number,username,password,address,photo) values
+(1, 'fancyEmail@gmail.com', 'Rui',961234567,'Rui123','password','Rua Da Esquerda',null),
+(2, 'uglyEmail@gmail.com', 'Pedro',960425362,'Pedrocas','password','Rua Da Direita',null);
 
 insert into clients (id) values
 (1),

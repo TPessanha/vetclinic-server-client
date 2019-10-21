@@ -85,7 +85,7 @@ data class PetDTO(
         readOnly = true
     )
     val photo: String? = null
-) : BaseDTO {
+) : Transferable {
 
     fun toEntity(clientService: ClientService): Pet {
         return toEntity(this.id, clientService)

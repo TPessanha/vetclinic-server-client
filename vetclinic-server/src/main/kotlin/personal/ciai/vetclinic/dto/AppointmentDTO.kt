@@ -61,7 +61,7 @@ data class AppointmentDTO(
 
     )
     val status: Int
-) : BaseDTO {
+) : Transferable {
     fun toEntity(petService: PetService, clientService: ClientService) = toEntity(this.id, petService, clientService)
 
     fun toEntity(newId: Int, petService: PetService, clientService: ClientService) =

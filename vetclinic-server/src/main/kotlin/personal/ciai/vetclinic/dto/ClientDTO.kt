@@ -62,7 +62,7 @@ data class ClientDTO(
         readOnly = true
     )
     val photo: String? = null
-) : BaseDTO {
+) : Transferable {
     fun toEntity() = toEntity(this.id)
 
     fun toEntity(newId: Int) = Client(

@@ -1,7 +1,6 @@
 package personal.ciai.vetclinic.model
 
 import java.net.URI
-import javax.persistence.DiscriminatorValue
 import javax.persistence.Entity
 import javax.persistence.OneToMany
 import javax.persistence.Table
@@ -9,7 +8,7 @@ import personal.ciai.vetclinic.dto.ClientDTO
 
 @Entity
 @Table(name = "clients")
-@DiscriminatorValue("C")
+// @DiscriminatorValue("C")
 class Client(
     id: Int,
     email: String,
