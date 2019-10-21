@@ -8,6 +8,6 @@ import javax.persistence.MappedSuperclass
 @MappedSuperclass
 abstract class IdentifiedEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int
 ) : Entity()

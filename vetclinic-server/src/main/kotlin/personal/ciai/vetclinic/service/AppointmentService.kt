@@ -1,7 +1,6 @@
 package personal.ciai.vetclinic.service
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.cache.CacheManager
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
@@ -27,7 +26,7 @@ class AppointmentService(
     fun getAppointmentEntityById(id: Int): Appointment =
         repository.findById(id).orElseThrow { NotFoundException("Appointment with id ($id) not found") }
 
-    @CacheEvict("PetAppointments",key = "#appointmentDTO.pet.id")
+    @CacheEvict("PetAppointments", key = "#appointmentDTO.pet.id")
     private fun saveAppointment(appointmentDTO: AppointmentDTO, id: Int = 0) {
         val newAppointment = appointmentDTO.toEntity(id, petService, clientService)
         repository.save(newAppointment)

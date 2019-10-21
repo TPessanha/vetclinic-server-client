@@ -102,9 +102,8 @@ class PetController(
         clientId: Int,
         @ApiParam(value = "Details of a pet to be created", required = true) @RequestBody
         pet: PetDTO
-    ) {
-        return petService.addPet(pet.copy(owner = clientId))
-    }
+    ) = petService.addPet(pet.copy(owner = clientId))
+
 
     @ApiOperation(
         value = "Edit pet information",

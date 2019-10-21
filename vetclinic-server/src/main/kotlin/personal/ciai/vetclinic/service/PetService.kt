@@ -61,7 +61,7 @@ class PetService(
         repository.save(newPet)
     }
 
-    @Cacheable("PetPicture",key = "#id")
+    @Cacheable("PetPicture", key = "#id")
     fun getPhoto(id: Int): ByteArray {
         return imageService.getPetPhoto(getPetEntityById(id))
     }
