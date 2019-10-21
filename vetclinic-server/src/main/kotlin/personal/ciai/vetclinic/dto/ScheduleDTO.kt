@@ -64,7 +64,7 @@ data class ScheduleDTO(
     )
     val status: ScheduleStatus
 
-) : BaseDTO {
+) : Transferable {
     fun toEntity() = toEntity(this.id)
 
     fun toEntity(newId: Int) =

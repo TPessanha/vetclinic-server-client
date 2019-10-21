@@ -16,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
@@ -23,6 +24,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.vet1
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.vet2
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.vetDTOList
+import personal.ciai.vetclinic.IntegrationTests.VeterinarianTests
 import personal.ciai.vetclinic.dto.VeterinarianDTO
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.service.VeterinarianService
@@ -94,6 +96,12 @@ class VeterinarianControllerTests {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(vetsJSON)
+        )
+            .andExpect(status().isOk)
+
+        mvc.perform(
+            MockMvcRequestBuilders
+                .delete("${VeterinarianTests.veterinarianURL}/1")
         )
             .andExpect(status().isOk)
     }

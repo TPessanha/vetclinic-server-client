@@ -60,17 +60,20 @@ class VeterinarianTests {
         )
             .andExpect(status().isOk)
 
-        mvc.perform(
+        val resultList = mvc.perform(
             MockMvcRequestBuilders
                 .get(veterinarianURL)
                 .accept(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$", hasSize<Any>(1)))
+            .andReturn()
 
+        val res = resultList.response.contentAsString
+        val allVet = mapper.readValue<List<VeterinarianDTO>>(res)
         val result = mvc.perform(
             MockMvcRequestBuilders
-                .get("$veterinarianURL/1")
+                .get("$veterinarianURL/" + allVet[0].id)
         )
             .andExpect(status().isOk)
             .andReturn()
@@ -86,7 +89,7 @@ class VeterinarianTests {
 
         mvc.perform(
             MockMvcRequestBuilders
-                .delete("$veterinarianURL/1")
+                .delete("$veterinarianURL/" + allVet[0].id)
         )
             .andExpect(status().isOk)
 

@@ -78,7 +78,7 @@ data class AdministrativeDTO(
         example = "R Nossa Senhora Fátima 117, 3400-233, Lisboa"
     )
     val address: String
-) : BaseDTO {
+) : Transferable {
 
     fun toEntity() = toEntity(this.id)
 

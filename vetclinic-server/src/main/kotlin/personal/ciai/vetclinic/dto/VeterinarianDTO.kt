@@ -102,7 +102,7 @@ data class VeterinarianDTO(
     )
     val enabled: Boolean
 
-) : BaseDTO {
+) : Transferable {
 
     fun toEntity() = toEntity(this.id)
 

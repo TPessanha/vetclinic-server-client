@@ -5,8 +5,8 @@ import javax.persistence.Entity
 import javax.persistence.Inheritance
 import javax.persistence.InheritanceType
 import javax.persistence.Table
-import personal.ciai.vetclinic.dto.BaseDTO
 import personal.ciai.vetclinic.dto.EmployeeDTO
+import personal.ciai.vetclinic.dto.Transferable
 
 @Entity
 @Table(name = "employees")
@@ -22,7 +22,7 @@ abstract class Employee(
     photo: URI?
 ) : User(id, email, name, phoneNumber, username, password, address, photo) {
 
-    override fun toDTO(): BaseDTO = EmployeeDTO(
+    override fun toDTO(): Transferable = EmployeeDTO(
         email = this.email,
         name = this.name,
         phoneNumber = this.phoneNumber,

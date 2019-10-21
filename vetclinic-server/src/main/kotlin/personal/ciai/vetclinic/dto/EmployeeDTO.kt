@@ -53,4 +53,4 @@ data class EmployeeDTO(
     )
     val address: String
 
-) : BaseDTO
+) : Transferable
