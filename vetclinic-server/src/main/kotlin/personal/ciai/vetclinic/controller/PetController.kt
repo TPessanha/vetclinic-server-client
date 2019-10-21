@@ -104,7 +104,6 @@ class PetController(
         pet: PetDTO
     ) = petService.addPet(pet.copy(owner = clientId))
 
-
     @ApiOperation(
         value = "Edit pet information",
         consumes = "application/json",

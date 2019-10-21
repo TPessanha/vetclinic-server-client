@@ -11,8 +11,7 @@ import personal.ciai.vetclinic.repository.VeterinarianRepository
 
 @Service
 class VeterinarianService(
-    @Autowired val vetRepository: VeterinarianRepository,
-    @Autowired private val appointmentService: AppointmentService
+    @Autowired val vetRepository: VeterinarianRepository
 ) {
 
     fun existsById(id: Int): Boolean = vetRepository.existsById(id)
@@ -24,7 +23,7 @@ class VeterinarianService(
         return getVeterinarianEntity(vetId).toDTO()
     }
 
-    private fun getVeterinarianEntity(id: Int): Veterinarian = vetRepository.findById(id)
+    fun getVeterinarianEntity(id: Int): Veterinarian = vetRepository.findById(id)
         .orElseThrow { NotFoundException("Veterinarian account with Id $id not found") }
 
     fun save(vetDTO: VeterinarianDTO) {
@@ -50,11 +49,11 @@ class VeterinarianService(
         return getVeterinarianEntity(vetId).appointments.map { it.toDTO() }
     }
 
-    fun getOneVeterinarianAppointment(vetId: Int, appointId: Int): AppointmentDTO {
-        val appoint = appointmentService.getAppointmentById(appointId)
-//        if(appoint.vet.equals(vetId)){
-            return appoint // TODO ( Wait for vet id in appointments)
-//        }
-//        throw ExpectationFailedException()
-    }
+//    fun getOneVeterinarianAppointment(vetId: Int, appointId: Int): AppointmentDTO {
+//        val appoint = appointmentService.getAppointmentById(appointId)
+// //        if(appoint.vet.equals(vetId)){
+//            return appoint // TODO ( Wait for vet id in appointments)
+// //        }
+// //        throw ExpectationFailedException()
+//    }
 }

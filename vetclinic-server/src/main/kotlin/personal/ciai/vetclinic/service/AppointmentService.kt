@@ -17,7 +17,9 @@ class AppointmentService(
     @Autowired
     val petService: PetService,
     @Autowired
-    val clientService: ClientService
+    val clientService: ClientService,
+    @Autowired
+    val veterinarianService: VeterinarianService
 ) {
     fun getAllAppointments() = repository.findAll().map { it.toDTO() }
 
@@ -28,7 +30,7 @@ class AppointmentService(
 
     @CacheEvict("PetAppointments", key = "#appointmentDTO.pet.id")
     private fun saveAppointment(appointmentDTO: AppointmentDTO, id: Int = 0) {
-        val newAppointment = appointmentDTO.toEntity(id, petService, clientService)
+        val newAppointment = appointmentDTO.toEntity(id, petService, clientService, veterinarianService)
         repository.save(newAppointment)
     }
 

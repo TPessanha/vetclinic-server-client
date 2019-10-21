@@ -49,7 +49,7 @@ class VeterinarianTests {
 
     @Test
     fun `Add a new Veterinarian`() {
-        assertTrue(vetService.getAllVeterinarian().size == 0)
+        val nVets = vetService.getAllVeterinarian().size
         val dogJSON = mapper.writeValueAsString(vet2.toDTO())
 
         mvc.perform(
@@ -66,14 +66,14 @@ class VeterinarianTests {
                 .accept(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$", hasSize<Any>(1)))
+            .andExpect(jsonPath("$", hasSize<Any>(nVets + 1)))
             .andReturn()
 
         val res = resultList.response.contentAsString
         val allVet = mapper.readValue<List<VeterinarianDTO>>(res)
         val result = mvc.perform(
             MockMvcRequestBuilders
-                .get("$veterinarianURL/" + allVet[0].id)
+                .get("$veterinarianURL/" + allVet[nVets].id)
         )
             .andExpect(status().isOk)
             .andReturn()
@@ -89,10 +89,10 @@ class VeterinarianTests {
 
         mvc.perform(
             MockMvcRequestBuilders
-                .delete("$veterinarianURL/" + allVet[0].id)
+                .delete("$veterinarianURL/" + allVet[nVets].id)
         )
             .andExpect(status().isOk)
 
-        assertTrue(vetService.getAllVeterinarian().size == 1)
+        assertTrue(vetService.getAllVeterinarian().size == nVets + 1)
     }
 }

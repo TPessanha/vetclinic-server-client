@@ -1,11 +1,13 @@
 package personal.ciai.vetclinic.model
 
 import java.net.URI
+import javax.persistence.DiscriminatorValue
 import javax.persistence.Entity
 import javax.persistence.Table
 import personal.ciai.vetclinic.dto.AdministrativeDTO
 
 @Entity
+@DiscriminatorValue("Admin")
 @Table(name = "administratives")
 class Administrative(
     id: Int,

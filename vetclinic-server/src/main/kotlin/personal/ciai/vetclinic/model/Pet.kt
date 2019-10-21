@@ -32,8 +32,10 @@ class Pet(
     var age: Int,
     @ManyToOne
     var owner: Client,
+
     @OneToMany(mappedBy = "pet")
     var appointments: MutableList<Appointment> = arrayListOf(),
+
     @Column(nullable = false)
     var notes: String = "",
     @Column(nullable = false)

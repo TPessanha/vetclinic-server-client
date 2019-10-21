@@ -1,5 +1,6 @@
 package personal.ciai.vetclinic.UnitTests.serviceTests
 
+import java.net.URI
 import java.util.Optional
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
@@ -25,6 +26,7 @@ import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.model.Appointment
 import personal.ciai.vetclinic.model.Pet
 import personal.ciai.vetclinic.model.TimeSlot
+import personal.ciai.vetclinic.model.Veterinarian
 import personal.ciai.vetclinic.repository.AppointmentRepository
 import personal.ciai.vetclinic.repository.PetRepository
 import personal.ciai.vetclinic.service.AppointmentService
@@ -96,13 +98,15 @@ class AppointmentServiceTests {
 
         `when`(petRepository.findById(anyInt())).thenReturn(Optional.of(dogExample))
 
-        appointmentService.addAppointment(appointmentExample1.toDTO().copy(id = 0, client = 1))
+        appointmentService.addAppointment(appointmentExample1.toDTO().copy(id = 0, client = 1, veterinarian = 2))
     }
 
     @Test
     fun `test cache on getPetAppointments()`() {
         val fakePet = Pet(1, "cat", 3, clientExample)
-        val fakeApp = Appointment(1, TimeSlot(532, 3253), fakePet, clientExample)
+        val fakeVet =
+            Veterinarian(0, "vetmail@das", "veterio", 52345235, "vet123", "secret", "Rua dos vets", URI("asdf"), true)
+        val fakeApp = Appointment(1, TimeSlot(532, 3253), fakeVet, fakePet, clientExample)
 
         fakePet.appointments.add(fakeApp)
 

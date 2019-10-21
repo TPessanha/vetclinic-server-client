@@ -7,6 +7,7 @@ import personal.ciai.vetclinic.model.AppointmentStatus
 import personal.ciai.vetclinic.model.TimeSlot
 import personal.ciai.vetclinic.service.ClientService
 import personal.ciai.vetclinic.service.PetService
+import personal.ciai.vetclinic.service.VeterinarianService
 
 @ApiModel("Appointment DTO model", description = "Used to model appointments")
 data class AppointmentDTO(
@@ -31,7 +32,13 @@ data class AppointmentDTO(
         example = "1539555326323"
     )
     val endTime: Long,
-    // val veterinarian: String,
+    @ApiModelProperty(
+        "The veterinarian ID for the appointment",
+        required = true,
+        readOnly = false,
+        example = "1"
+    )
+    val veterinarian: Int,
     @ApiModelProperty(
         "The pet ID scheduled for the appointment",
         required = true,
@@ -62,13 +69,19 @@ data class AppointmentDTO(
     )
     val status: Int
 ) : Transferable {
-    fun toEntity(petService: PetService, clientService: ClientService) = toEntity(this.id, petService, clientService)
+    fun toEntity(petService: PetService, clientService: ClientService, veterinarianService: VeterinarianService) =
+        toEntity(this.id, petService, clientService, veterinarianService)
 
-    fun toEntity(newId: Int, petService: PetService, clientService: ClientService) =
+    fun toEntity(
+        newId: Int,
+        petService: PetService,
+        clientService: ClientService,
+        veterinarianService: VeterinarianService
+    ) =
         Appointment(
             id = newId,
             timeSlot = TimeSlot(startTime, endTime),
-//            veterinarian = debugvet,
+            veterinarian = veterinarianService.getVeterinarianEntity(this.veterinarian),
             description = this.description,
             client = clientService.getClientEntityById(this.client),
             pet = petService.getPetEntityById(this.pet),

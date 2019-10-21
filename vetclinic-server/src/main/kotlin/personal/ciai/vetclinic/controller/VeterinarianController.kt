@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import personal.ciai.vetclinic.dto.AppointmentDTO
 import personal.ciai.vetclinic.dto.VeterinarianDTO
+import personal.ciai.vetclinic.service.AppointmentService
 import personal.ciai.vetclinic.service.EmployeeService
 import personal.ciai.vetclinic.service.VeterinarianService
 
@@ -28,7 +29,8 @@ import personal.ciai.vetclinic.service.VeterinarianService
 @RequestMapping("employees/{employeeId:[0-9]+}/veterinarians")
 class VeterinarianController(
     @Autowired private val employeeService: EmployeeService,
-    @Autowired private val veterinarianService: VeterinarianService
+    @Autowired private val veterinarianService: VeterinarianService,
+    @Autowired private val appointmentService: AppointmentService
 ) {
 
     @ApiOperation(
@@ -169,7 +171,7 @@ class VeterinarianController(
         @PathVariable(value = "vetId", required = true) vetId: Int,
         @ApiParam(name = "appointmentId", required = true, value = "(Required) Appointment identificator (id)")
         @PathVariable(value = "appointmentId", required = true) appointmentId: Int
-    ) = veterinarianService.getOneVeterinarianAppointment(vetId, appointmentId)
+    ) = appointmentService.getAppointmentById(appointmentId)
 
     @ApiOperation(
         value = "Get a List Veterinarian Appointmets",

@@ -16,8 +16,9 @@ class Appointment(
     id: Int,
     @Embedded
     var timeSlot: TimeSlot,
-//    @Column(nullable = false)
-//    val veterinarian: Pet,
+    @ManyToOne
+    @JoinColumn(name = "vet_id")
+    val veterinarian: Veterinarian,
     @ManyToOne
     @JoinColumn(name = "pet_id")
     var pet: Pet,
@@ -34,7 +35,7 @@ class Appointment(
         id = id,
         startTime = this.timeSlot.startDate.time,
         endTime = this.timeSlot.endDate.time,
-//        veterinarian = veterinarian.id.toString(),
+        veterinarian = veterinarian.id,
         pet = pet.id,
         client = client.id,
         description = description,
