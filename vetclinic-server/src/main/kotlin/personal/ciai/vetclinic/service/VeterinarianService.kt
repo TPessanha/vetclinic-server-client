@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service
 import personal.ciai.vetclinic.dto.AppointmentDTO
 import personal.ciai.vetclinic.dto.VeterinarianDTO
 import personal.ciai.vetclinic.exception.ConflictException
-import personal.ciai.vetclinic.exception.ExpectationFailedException
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.model.Veterinarian
 import personal.ciai.vetclinic.repository.VeterinarianRepository
@@ -54,8 +53,8 @@ class VeterinarianService(
     fun getOneVeterinarianAppointment(vetId: Int, appointId: Int): AppointmentDTO {
         val appoint = appointmentService.getAppointmentById(appointId)
 //        if(appoint.vet.equals(vetId)){
-//            return appoint  TODO ( Wait for vet id in appointments)
+            return appoint // TODO ( Wait for vet id in appointments)
 //        }
-        throw ExpectationFailedException()
+//        throw ExpectationFailedException()
     }
 }
