@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.any
-import org.mockito.Mockito.anyInt
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -17,90 +16,91 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import personal.ciai.vetclinic.TestUtils.dogExample
-import personal.ciai.vetclinic.TestUtils.petList
-import personal.ciai.vetclinic.dto.PetDTO
+import personal.ciai.vetclinic.ExampleObjects.exampleObjects.admin2
+import personal.ciai.vetclinic.ExampleObjects.exampleObjects.listAdminDTO
+import personal.ciai.vetclinic.IntegrationTests.AdministrativeTests
+import personal.ciai.vetclinic.dto.AdministrativeDTO
 import personal.ciai.vetclinic.exception.NotFoundException
-import personal.ciai.vetclinic.service.PetService
+import personal.ciai.vetclinic.service.AdministrativeService
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
 @AutoConfigureMockMvc
-class PetControllerTests {
+class AdministrativeControllerTests {
 
     @Autowired
     lateinit var mvc: MockMvc
 
     @MockBean
-    lateinit var pets: PetService
+    lateinit var admin: AdministrativeService
 
     companion object {
-        // To avoid all annotations JsonProperties in data classes
-        // see: https://github.com/FasterXML/jackson-module-kotlin
-        // see: https://discuss.kotlinlang.org/t/data-class-and-jackson-annotation-conflict/397/6
         val mapper = ObjectMapper().registerModule(KotlinModule())
 
-        val petsURL = "/clients/1/pets"
+        val adminURL = "/employees/1/administratives"
     }
 
     @Test
-    fun `Test GET client pets`() {
-        val dtoList = petList.map { it.toDTO() }
-        `when`(pets.getClientPets(anyInt())).thenReturn(dtoList)
+    fun `Test GET all Administrative`() {
+        `when`(admin.getAllAdministrative()).thenReturn(listAdminDTO)
 
-        val result = mvc.perform(get(petsURL))
+        val result = mvc.perform(get(adminURL))
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$", hasSize<Any>(petList.size)))
+            .andExpect(jsonPath("$", hasSize<Any>(listAdminDTO.size)))
             .andReturn()
 
         val responseString = result.response.contentAsString
-        val responseDTO = mapper.readValue<List<PetDTO>>(responseString)
-        assertEquals(responseDTO, dtoList)
+        val responseDTO = mapper.readValue<List<AdministrativeDTO>>(responseString)
+        assertEquals(responseDTO, listAdminDTO)
     }
 
     @Test
-    fun `Test GET One Pet`() {
-        val dtoList = petList.map { it.toDTO() }
+    fun `Test GET One Administrative`() {
+        `when`(admin.getAdministrativeById(1)).thenReturn(admin2.toDTO())
 
-        `when`(pets.getPetById(1)).thenReturn(dogExample.toDTO())
-
-        val result = mvc.perform(get("$petsURL/1"))
+        val result = mvc.perform(get("$adminURL/1"))
             .andExpect(status().isOk)
             .andReturn()
 
         val responseString = result.response.contentAsString
-        val responseDTO = mapper.readValue<PetDTO>(responseString)
-        assertEquals(responseDTO, dtoList[0])
+        val responseDTO = mapper.readValue<AdministrativeDTO>(responseString)
+        assertEquals(responseDTO, admin2.toDTO())
     }
 
     @Test
-    fun `Test GET One Pet (Not Found)`() {
-        `when`(pets.getPetById(2)).thenThrow(NotFoundException("not found"))
+    fun `Test GET One Administrative (Not Found)`() {
+        `when`(admin.getAdministrativeById(2)).thenThrow(NotFoundException("not found"))
 
-        mvc.perform(get("$petsURL/2"))
+        mvc.perform(get("$adminURL/2"))
             .andExpect(status().is4xxClientError)
     }
 
     fun <T> nonNullAny(t: Class<T>): T = any(t)
 
     @Test
-    fun `Test POST One Pet`() {
-        val dtoList = petList.map { it.toDTO() }
+    fun `Test POST One Administrative`() {
 
-        val petJSON = mapper.writeValueAsString(dtoList[0])
+        val adminJSON = mapper.writeValueAsString(admin2.toDTO())
 
-        `when`(pets.addPet(nonNullAny(PetDTO::class.java)))
-            .then { assertEquals(dtoList[0].copy(owner = 1), it.getArgument(0)) }
+        `when`(admin.save(nonNullAny(AdministrativeDTO::class.java)))
+            .then { assertEquals(admin2.toDTO(), it.getArgument(0)) }
 
         mvc.perform(
-            post(petsURL)
+            post(adminURL)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(petJSON)
+                .content(adminJSON)
+        )
+            .andExpect(status().isOk)
+
+        mvc.perform(
+            MockMvcRequestBuilders
+                .delete("${AdministrativeTests.adminsURL}/1")
         )
             .andExpect(status().isOk)
     }

@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.any
-import org.mockito.Mockito.anyInt
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -17,90 +16,92 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import personal.ciai.vetclinic.TestUtils.dogExample
-import personal.ciai.vetclinic.TestUtils.petList
-import personal.ciai.vetclinic.dto.PetDTO
+import personal.ciai.vetclinic.ExampleObjects.exampleObjects.vet1
+import personal.ciai.vetclinic.ExampleObjects.exampleObjects.vet2
+import personal.ciai.vetclinic.ExampleObjects.exampleObjects.vetDTOList
+import personal.ciai.vetclinic.IntegrationTests.VeterinarianTests
+import personal.ciai.vetclinic.dto.VeterinarianDTO
 import personal.ciai.vetclinic.exception.NotFoundException
-import personal.ciai.vetclinic.service.PetService
+import personal.ciai.vetclinic.service.VeterinarianService
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
 @AutoConfigureMockMvc
-class PetControllerTests {
+class VeterinarianControllerTests {
 
     @Autowired
     lateinit var mvc: MockMvc
 
     @MockBean
-    lateinit var pets: PetService
+    lateinit var vets: VeterinarianService
 
     companion object {
-        // To avoid all annotations JsonProperties in data classes
-        // see: https://github.com/FasterXML/jackson-module-kotlin
-        // see: https://discuss.kotlinlang.org/t/data-class-and-jackson-annotation-conflict/397/6
         val mapper = ObjectMapper().registerModule(KotlinModule())
 
-        val petsURL = "/clients/1/pets"
+        val vetsURL = "/employees/1/veterinarians"
     }
 
     @Test
-    fun `Test GET client pets`() {
-        val dtoList = petList.map { it.toDTO() }
-        `when`(pets.getClientPets(anyInt())).thenReturn(dtoList)
+    fun `Test GET all Veterinarian`() {
+        `when`(vets.getAllVeterinarian()).thenReturn(vetDTOList)
 
-        val result = mvc.perform(get(petsURL))
+        val result = mvc.perform(get(vetsURL))
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$", hasSize<Any>(petList.size)))
+            .andExpect(jsonPath("$", hasSize<Any>(vetDTOList.size)))
             .andReturn()
 
         val responseString = result.response.contentAsString
-        val responseDTO = mapper.readValue<List<PetDTO>>(responseString)
-        assertEquals(responseDTO, dtoList)
+        val responseDTO = mapper.readValue<List<VeterinarianDTO>>(responseString)
+        assertEquals(responseDTO, vetDTOList)
     }
 
     @Test
-    fun `Test GET One Pet`() {
-        val dtoList = petList.map { it.toDTO() }
+    fun `Test GET One Veterinarian`() {
+        `when`(vets.getVeterinarianById(1)).thenReturn(vet1.toDTO())
 
-        `when`(pets.getPetById(1)).thenReturn(dogExample.toDTO())
-
-        val result = mvc.perform(get("$petsURL/1"))
+        val result = mvc.perform(get("$vetsURL/1"))
             .andExpect(status().isOk)
             .andReturn()
 
         val responseString = result.response.contentAsString
-        val responseDTO = mapper.readValue<PetDTO>(responseString)
-        assertEquals(responseDTO, dtoList[0])
+        val responseDTO = mapper.readValue<VeterinarianDTO>(responseString)
+        assertEquals(responseDTO, vetDTOList[0])
     }
 
     @Test
-    fun `Test GET One Pet (Not Found)`() {
-        `when`(pets.getPetById(2)).thenThrow(NotFoundException("not found"))
+    fun `Test GET One Veterinarian (Not Found)`() {
+        `when`(vets.getVeterinarianById(2)).thenThrow(NotFoundException("not found"))
 
-        mvc.perform(get("$petsURL/2"))
+        mvc.perform(get("$vetsURL/2"))
             .andExpect(status().is4xxClientError)
     }
 
     fun <T> nonNullAny(t: Class<T>): T = any(t)
 
     @Test
-    fun `Test POST One Pet`() {
-        val dtoList = petList.map { it.toDTO() }
+    fun `Test POST One Veterinarian`() {
 
-        val petJSON = mapper.writeValueAsString(dtoList[0])
+        val vetsJSON = mapper.writeValueAsString(vet2.toDTO())
 
-        `when`(pets.addPet(nonNullAny(PetDTO::class.java)))
-            .then { assertEquals(dtoList[0].copy(owner = 1), it.getArgument(0)) }
+        `when`(vets.save(nonNullAny(VeterinarianDTO::class.java)))
+            .then { assertEquals(vet2.toDTO(), it.getArgument(0)) }
 
         mvc.perform(
-            post(petsURL)
+            post(vetsURL)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(petJSON)
+                .content(vetsJSON)
+        )
+            .andExpect(status().isOk)
+
+        mvc.perform(
+            MockMvcRequestBuilders
+                .delete("${VeterinarianTests.veterinarianURL}/1")
         )
             .andExpect(status().isOk)
     }
