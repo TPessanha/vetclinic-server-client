@@ -29,6 +29,15 @@ data class AdministrativeDTO(
     val id: Int,
 
     @ApiModelProperty(
+        "The Administrative  unique employee Id",
+        name = "fullName",
+        required = true,
+        readOnly = true,
+        example = "Dunia Das Flores"
+    )
+    val employeeId: Int,
+
+    @ApiModelProperty(
         "The Administrative  full name",
         name = "fullName",
         required = true,
@@ -85,6 +94,7 @@ data class AdministrativeDTO(
     fun toEntity(newId: Int) =
         Administrative(
             id = newId,
+            employeeId = employeeId,
             name = this.name,
             email = this.email,
             phoneNumber = this.phoneNumber,
@@ -97,6 +107,7 @@ data class AdministrativeDTO(
     fun toEntity(entity: Administrative) =
         Administrative(
             id = entity.id,
+            employeeId = employeeId,
             name = this.name,
             email = this.email,
             phoneNumber = this.phoneNumber,

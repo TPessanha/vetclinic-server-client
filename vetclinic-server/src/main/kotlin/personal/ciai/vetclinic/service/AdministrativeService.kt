@@ -49,4 +49,7 @@ class AdministrativeService(
 
     private fun getAdministrativeEntity(id: Int): Administrative = adminRepository.findById(id)
         .orElseThrow { NotFoundException("Administrative account with Id $id not found") }
+
+    fun administrativeEntityByEmployeeId(id: Int): Administrative = adminRepository.getAdministrativeByEmployeeId(id)
+        .orElseThrow { NotFoundException("Administrative account with Id $id not found") }
 }

@@ -3,6 +3,7 @@ package personal.ciai.vetclinic.model
 import java.util.Date
 import javax.persistence.CascadeType
 import javax.persistence.Column
+import javax.persistence.Embedded
 import javax.persistence.Entity
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
@@ -21,17 +22,9 @@ class Schedules(
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     var date: Date,
-//
-//    @Column(nullable = false)
-//    @Temporal(TemporalType.TIME)
-//    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
-//    var from: Date,
-//
-//    @Column(nullable = false)
-//    @Temporal(TemporalType.TIME)
-//    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
-//    var to: Date
-//
+
+    @Embedded
+    var timeSlot: TimeSlot,
 
     @ManyToOne(cascade = [(CascadeType.ALL)])
     @JoinColumn(name = "veterinarian_id")
@@ -43,10 +36,10 @@ class Schedules(
 
     override fun toDTO() = ScheduleDTO(
         id = id,
-        veterinarian = veterinarian,
+        vetId = veterinarian.id,
         date = date,
-//        from = from,
-//        to = to
+        startTime = timeSlot.endDate.time,
+        endTime = timeSlot.endDate.time,
         status = ScheduleStatus.Available
     )
 }

@@ -23,9 +23,11 @@ class Veterinarian(
     var appointments: MutableList<Appointment> = arrayListOf(),
 
     @OneToMany(mappedBy = "veterinarian")
-    var schedules: MutableList<Schedules> = arrayListOf()
+    var schedules: MutableList<Schedules> = arrayListOf(),
 
-) : Employee(id, email, name, phoneNumber, username, password, address, photo) {
+    employeeId: Int
+
+) : Employee(id, employeeId, email, name, phoneNumber, username, password, address, photo) {
 
     override fun toDTO() = VeterinarianDTO(
         id = id,
@@ -35,9 +37,9 @@ class Veterinarian(
         password = "", // TODO n sei muito bem como tratar isto mas vou ver na aula de terca se o stor diz alguma coisa
         phoneNumber = phoneNumber,
         address = address,
+        employeeId = employeeId,
         photo = photo.toString(),
-        appointments = arrayListOf(), // TODO se isto é sempre assim mais vale remover
-        enabled = enabled,
-        schedules = arrayListOf() // TODO mesma coisa
+        enabled = enabled
+
     )
 }

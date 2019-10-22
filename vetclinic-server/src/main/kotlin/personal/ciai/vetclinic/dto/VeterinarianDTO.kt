@@ -29,6 +29,15 @@ data class VeterinarianDTO(
     val id: Int,
 
     @ApiModelProperty(
+        "The Veterinarian  unique Id",
+        name = "fullName",
+        required = true,
+        readOnly = true,
+        example = "Dunia Das Flores"
+    )
+    val employeeId: Int,
+
+    @ApiModelProperty(
         "The Veterinarian  user name",
         name = "name",
         required = true,
@@ -81,20 +90,6 @@ data class VeterinarianDTO(
     val address: String,
 
     @ApiModelProperty(
-        "A list of Veterinarian scheduled appointments",
-        required = false,
-        readOnly = true
-    )
-    val appointments: MutableList<AppointmentDTO>?,
-
-    @ApiModelProperty(
-        "A list of Veterinarian schedule",
-        required = false,
-        readOnly = true
-    )
-    val schedules: MutableList<ScheduleDTO>?,
-
-    @ApiModelProperty(
         "Tell the Veterinarian status",
         name = "address",
         required = true,
@@ -109,6 +104,7 @@ data class VeterinarianDTO(
     fun toEntity(newId: Int) =
         Veterinarian(
             id = newId,
+            employeeId = employeeId,
             name = this.name,
             email = this.email,
             phoneNumber = this.phoneNumber,
@@ -124,6 +120,7 @@ data class VeterinarianDTO(
     fun toEntity(entity: Veterinarian) =
         Veterinarian(
             id = entity.id,
+            employeeId = employeeId,
             name = this.name,
             email = this.email,
             phoneNumber = this.phoneNumber,
@@ -132,7 +129,9 @@ data class VeterinarianDTO(
             address = this.address,
             photo = if (this.photo.isNullOrEmpty()) URI.create("default") else URI.create(this.photo),
             enabled = entity.enabled,
-            appointments = entity.appointments,
-            schedules = entity.schedules
+//            appointments = entity.appointments,
+//            schedules = entity.schedules,
+            appointments = arrayListOf(),
+            schedules = arrayListOf()
         )
 }

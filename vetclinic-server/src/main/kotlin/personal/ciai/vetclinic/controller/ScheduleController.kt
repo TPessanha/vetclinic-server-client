@@ -12,6 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat.ISO.DATE
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -106,6 +107,10 @@ class ScheduleController(
         scheduleId: Int
     ) = scheduleService.getOneSchedule(scheduleId)
 
+    @ApiOperation(
+        value = "Add a new Schedule for Veterinarian",
+        consumes = "application/json"
+    )
     @ApiResponses(
         value = [
             (ApiResponse(code = 200, message = "Successfully added the Schedule")),
@@ -128,7 +133,32 @@ class ScheduleController(
             value = "Details of an Schedule to be created",
             required = true
         ) @RequestBody schedule: ScheduleDTO
-    ) {
-        scheduleService.saveSchedule(schedule, vetId)
-    }
+    ) = scheduleService.saveSchedule(schedule, vetId)
+
+    @ApiOperation(
+        value = "Update the Schedule of Veterinarian",
+        consumes = "application/json"
+    )
+    @ApiResponses(
+        value = [
+            (ApiResponse(code = 200, message = "Successfully upade the Schedule")),
+            (ApiResponse(code = 401, message = "You are not authorized to create the resource")),
+            (ApiResponse(
+                code = 403,
+                message = "Accessing the resource you were tyring to reach is forbidden"
+            )),
+            (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
+        ]
+    )
+    @PutMapping("")
+    fun updateSchedule(
+        @ApiParam(value = "The ID of the employee", required = true) @PathVariable
+        employeeId: Int,
+        @ApiParam(value = "The ID of the Veterinarian", required = true) @PathVariable
+        vetId: Int,
+        @ApiParam(
+            value = "Details of an Schedule to be created",
+            required = true
+        ) @RequestBody schedule: ScheduleDTO
+    ) = scheduleService.updateSchedule(schedule, vetId)
 }

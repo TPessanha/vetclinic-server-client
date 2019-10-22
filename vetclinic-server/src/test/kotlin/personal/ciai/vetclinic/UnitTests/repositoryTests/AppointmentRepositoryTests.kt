@@ -49,7 +49,20 @@ class AppointmentRepositoryTests {
     fun `test save Appointment with no Pet (Data Integrity Violation)`() {
         val fakeClient = Client(0, "gaer@gmail.com", "Pedro", 412532, "Pedro123", "password", "Rua Pedro da cenas")
         val fakeVet =
-            Veterinarian(0, "vetmail@das", "veterio", 52345235, "vet123", "secret", "Rua dos vets", URI("asdf"), true)
+            Veterinarian(
+                0,
+                "vetmail@das",
+                "veterio",
+                52345235,
+                "vet123",
+                "secret",
+                "Rua dos vets",
+                URI("asdf"),
+                true,
+                arrayListOf(),
+                arrayListOf(),
+                12
+            )
         val fakePet = Pet(555, "moon dog", 2, owner = fakeClient)
 
         val app =
@@ -68,7 +81,20 @@ class AppointmentRepositoryTests {
         // Add pet and appointment
         val fakeClient = Client(0, "gaer@gmail.com", "Pedro", 412532, "Pedro123", "password", "Rua Pedro da cenas")
         val fakeVet =
-            Veterinarian(0, "vetmail@das", "veterio", 52345235, "vet123", "secret", "Rua dos vets", URI("asdf"), true)
+            Veterinarian(
+                0,
+                "vetmail@das",
+                "veterio",
+                52345235,
+                "vet123",
+                "secret",
+                "Rua dos vets",
+                URI("asdf"),
+                true,
+                arrayListOf(),
+                arrayListOf(),
+                12
+            )
         val fakePet = Pet(0, "Actually a bunny", 2, owner = fakeClient)
         val fakeApp =
             Appointment(0, TimeSlot(1571414431763, 1571414631763), fakeVet, pet = fakePet, client = fakeClient)

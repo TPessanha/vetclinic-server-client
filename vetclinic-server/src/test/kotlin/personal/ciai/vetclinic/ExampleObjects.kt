@@ -13,6 +13,7 @@ class ExampleObjects {
 
         val vet1 = Veterinarian(
             1,
+
             "vet1@vetclinic.pt",
             "Joao Han",
             954223134,
@@ -21,7 +22,9 @@ class ExampleObjects {
             "Rua de Cima 44, 4243-432, Lisboa",
             URI.create("vets/1"),
             true,
-            arrayListOf()
+            arrayListOf(),
+            arrayListOf(),
+            2
         )
         val vet2 = Veterinarian(
             -1,
@@ -33,7 +36,9 @@ class ExampleObjects {
             "Rua da Linha 3, Lisboa",
             URI.create("vets2/2"),
             true,
-            arrayListOf()
+            arrayListOf(),
+            arrayListOf(),
+            2
         )
 
         val vetList = listOf<Veterinarian>(vet1, vet2)
@@ -42,34 +47,37 @@ class ExampleObjects {
         // Administrative
 
         val admin1 = Administrative(
-            -1,
-            "admin1@vetclinic.pt",
-            "Simmons Gon",
-            932521643,
-            "Admin1",
-            "1234",
-            "Rua de Pina 23, 2341-323, Lisboa",
-            URI.create("admin/1")
+            id = -1,
+            email = "admin1@vetclinic.pt",
+            name = "Simmons Gon",
+            phoneNumber = 932521643,
+            username = "Admin1",
+            password = "1234",
+            address = "Rua de Pina 23, 2341-323, Lisboa",
+            photo = URI.create("admin/1"),
+            employeeId = 12
         )
         val admin2 = Administrative(
-            -1,
-            "admin2@vetclinic.pt",
-            "Lufy D Monkey",
-            925653938,
-            "LufyD",
-            "1234",
-            "Grand Line 3, Lisboa",
-            URI.create("admin/2")
+            id = -1,
+            email = "admin2@vetclinic.pt",
+            name = "Lufy D Monkey",
+            phoneNumber = 925653938,
+            username = "LufyD",
+            password = "1234",
+            address = "Grand Line 3, Lisboa",
+            photo = URI.create("admin/2"),
+            employeeId = 12
         )
         val admin3 = Administrative(
-            -1,
-            "admin2@vetclinic.pt",
-            "Homer Simpson",
-            936925673,
-            "Admin3",
-            "1234",
-            "Rua da Esqurda 4, 4323-543, Lisboa",
-            URI.create("admin/3")
+            id = -1,
+            email = "admin2@vetclinic.pt",
+            name = "Homer Simpson",
+            phoneNumber = 936925673,
+            username = "Admin3",
+            password = "1234",
+            address = "Rua da Esqurda 4, 4323-543, Lisboa",
+            photo = URI.create("admin/3"),
+            employeeId = 12
         )
 
         val listAdmin = listOf<Administrative>(admin1, admin2, admin3)
