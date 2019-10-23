@@ -1,9 +1,16 @@
 package personal.ciai.vetclinic.controller
 
 import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.ApiParam
+import io.swagger.annotations.ApiResponse
+import io.swagger.annotations.ApiResponses
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import personal.ciai.vetclinic.dto.AppointmentDTO
 import personal.ciai.vetclinic.service.ClientService
 
 @Api(
@@ -15,7 +22,6 @@ import personal.ciai.vetclinic.service.ClientService
 @RequestMapping("/clients")
 class ClientController(@Autowired val clientService: ClientService) {
 
-    /*
     @ApiOperation(
         value = "View the list of client appointments",
         produces = "application/json",
@@ -37,5 +43,4 @@ class ClientController(@Autowired val clientService: ClientService) {
         @ApiParam(value = "The ID of the client", required = false, defaultValue = "1") @PathVariable
         clientId: Int
     ) = clientService.checkAppointments(clientId)
-    */
 }
