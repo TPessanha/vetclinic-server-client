@@ -1,8 +1,11 @@
 package personal.ciai.vetclinic.repository
 
-import org.springframework.data.jpa.repository.JpaRepository
+import java.util.Optional
+import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 import personal.ciai.vetclinic.model.User
 
 @Repository
-interface UserRepository : JpaRepository<User, Int>
+interface UserRepository : CrudRepository<User, Int> {
+    fun findByUsername(username: String): Optional<User>
+}

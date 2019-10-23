@@ -1,6 +1,8 @@
 package personal.ciai.vetclinic.service
 
+import java.util.Optional
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import personal.ciai.vetclinic.dto.UserDTO
 import personal.ciai.vetclinic.exception.ExpectationFailedException
@@ -11,31 +13,33 @@ import personal.ciai.vetclinic.repository.UserRepository
 @Service
 class UserService(
     @Autowired
-    val repository: UserRepository
+    var users: UserRepository
 ) {
-    // fun login()
 
-    // fun logout()
+    fun findUser(username: String): Optional<User> = users.findByUsername(username)
 
-    // fun accessInfo()
+    fun addUser(user: User): Optional<User> {
+        val aUser = users.findByUsername(user.username)
 
-    // fun uploadPhoto()
-
-    // fun changeInfo()
-
-    // fun changePassword
+        return if (aUser.isPresent)
+            Optional.empty()
+        else {
+            user.password = BCryptPasswordEncoder().encode(user.password)
+            Optional.of(users.save(user))
+        }
+    }
     fun getUserById(id: Int) = getUserEntityById(id).toDTO()
 
     fun getUserEntityById(id: Int): User =
-        repository.findById(id).orElseThrow { NotFoundException("User with id ($id) not found") }
+        users.findById(id).orElseThrow { NotFoundException("User with id ($id) not found") }
 
     private fun saveUser(userDTO: UserDTO, id: Int = 0) {
         val newUser = userDTO.toEntity(id)
-        repository.save(newUser)
+        users.save(newUser)
     }
 
     fun updatePet(userDTO: UserDTO, id: Int) {
-        if (id <= 0 || !repository.existsById(userDTO.id))
+        if (id <= 0 || !users.existsById(userDTO.id))
             throw NotFoundException("User with id ($id) not found")
 
         saveUser(userDTO, id)
