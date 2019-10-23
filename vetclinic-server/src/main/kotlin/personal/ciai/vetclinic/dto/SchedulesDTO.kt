@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModelProperty
 import java.util.Date
 import personal.ciai.vetclinic.model.ScheduleStatus
 import personal.ciai.vetclinic.model.Schedules
-import personal.ciai.vetclinic.model.TimeSlot
 import personal.ciai.vetclinic.service.VeterinarianService
 
 /**
@@ -18,7 +17,7 @@ import personal.ciai.vetclinic.service.VeterinarianService
  * @property veterinarian the veterinarian of the Schedule.
  * @constructor Creates a Schedule DTO.
  */
-data class ScheduleDTO(
+data class SchedulesDTO(
     @ApiModelProperty(
         "An unique identifier for the schedule",
         required = false,
@@ -26,14 +25,6 @@ data class ScheduleDTO(
         example = "1"
     )
     val id: Int = -1,
-
-    @ApiModelProperty(
-        "The date scheduled for the Veterinarian",
-        required = true,
-        readOnly = false,
-        example = "1"
-    )
-    var date: Date,
 
     @ApiModelProperty(
         "The time that start schedule start",
@@ -72,8 +63,8 @@ data class ScheduleDTO(
     fun toEntity(newId: Int, vetService: VeterinarianService) =
         Schedules(
             id = newId,
-            date = this.date,
-            timeSlot = TimeSlot(startTime, endTime),
+            startDate = Date(startTime),
+            endDate = Date(endTime),
             status = status,
             veterinarian = vetService.getVeterinarianEntity(vetId)
         )

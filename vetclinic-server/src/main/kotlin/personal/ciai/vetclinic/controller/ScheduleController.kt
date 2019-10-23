@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import personal.ciai.vetclinic.dto.ScheduleDTO
-import personal.ciai.vetclinic.service.ScheduleService
+import personal.ciai.vetclinic.dto.SchedulesDTO
+import personal.ciai.vetclinic.service.SchedulesService
 
 @Api(
     value = "VetClinic Management System - Pet API",
@@ -27,13 +27,13 @@ import personal.ciai.vetclinic.service.ScheduleService
 @RestController
 @RequestMapping("/employees/{employeeId:[0-9]+}/veterinarian/{vetId:[0-9]+}/schedules")
 class ScheduleController(
-    @Autowired private val scheduleService: ScheduleService
+    @Autowired private val schedulesService: SchedulesService
 ) {
     @ApiOperation(
         value = "View a list of Schedules for the Veterinarian",
         produces = "application/json",
         responseContainer = "List",
-        response = ScheduleDTO::class
+        response = SchedulesDTO::class
     )
     @ApiResponses(
         value = [
@@ -52,13 +52,13 @@ class ScheduleController(
         @ApiParam(value = "The ID of the Veterinarian", required = true) @PathVariable
         veterinarianId: Int
 
-    ) = scheduleService.geVeterinarianSchedules(veterinarianId)
+    ) = schedulesService.geVeterinarianSchedules(veterinarianId)
 
     @ApiOperation(
-        value = "View a list of Schedules for the Veterinarian from the Date",
+        value = "View a list of Schedules for the Veterinarian from the Date onward",
         produces = "application/json",
         responseContainer = "List",
-        response = ScheduleDTO::class
+        response = SchedulesDTO::class
     )
     @ApiResponses(
         value = [
@@ -79,12 +79,38 @@ class ScheduleController(
         @ApiParam(value = "The date for the schedule. (dd.mm.yyy)", required = true)
         @PathVariable(value = "date") @DateTimeFormat(iso = DATE) date: Date
 
-    ) = scheduleService.geVeterinarianSchedules(veterinarianId, date)
+    ) = schedulesService.geVeterinarianSchedules(veterinarianId, date)
+
+    @ApiOperation(
+        value = "Get a Schedules of the Veterinarian for the Date",
+        produces = "application/json",
+        response = SchedulesDTO::class
+    )
+    @ApiResponses(
+        value = [
+            (ApiResponse(code = 200, message = "Successfully retrieved the Schedules of the Veterinarian")),
+            (ApiResponse(code = 401, message = "You are not authorized to view the resource")),
+            (ApiResponse(
+                code = 403,
+                message = "Accessing the resource you were tyring to reach is forbidden"
+            ))
+        ]
+    )
+    @GetMapping("{date}/")
+    fun getVeterinarianSchedulesForDate(
+        @ApiParam(value = "The ID of the employee", required = true) @PathVariable
+        employeeId: Int,
+        @ApiParam(value = "The ID of the Veterinarian", required = true) @PathVariable
+        veterinarianId: Int,
+        @ApiParam(value = "The date for the schedule. (dd.mm.yyy)", required = true)
+        @PathVariable(value = "date") @DateTimeFormat(iso = DATE) date: Date
+
+    ) = schedulesService.getScheduleByIdAndStartTime(veterinarianId, date)
 
     @ApiOperation(
         value = "Get details of an Schedule",
         produces = "application/json",
-        response = ScheduleDTO::class
+        response = SchedulesDTO::class
     )
     @ApiResponses(
         value = [
@@ -105,7 +131,7 @@ class ScheduleController(
         vetId: Int,
         @ApiParam(value = "The ID of the Schedule", required = true) @PathVariable
         scheduleId: Int
-    ) = scheduleService.getOneSchedule(scheduleId)
+    ) = schedulesService.getOneScheduleById(scheduleId)
 
     @ApiOperation(
         value = "Add a new Schedule for Veterinarian",
@@ -132,8 +158,8 @@ class ScheduleController(
         @ApiParam(
             value = "Details of an Schedule to be created",
             required = true
-        ) @RequestBody schedule: ScheduleDTO
-    ) = scheduleService.saveSchedule(schedule, vetId)
+        ) @RequestBody schedules: SchedulesDTO
+    ) = schedulesService.saveSchedule(schedules, vetId)
 
     @ApiOperation(
         value = "Update the Schedule of Veterinarian",
@@ -159,6 +185,6 @@ class ScheduleController(
         @ApiParam(
             value = "Details of an Schedule to be created",
             required = true
-        ) @RequestBody schedule: ScheduleDTO
-    ) = scheduleService.updateSchedule(schedule, vetId)
+        ) @RequestBody schedules: SchedulesDTO
+    ) = schedulesService.updateSchedule(schedules, vetId)
 }

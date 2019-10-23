@@ -6,10 +6,10 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
 
-class DateTimeUtil {
-    companion object {
         fun asDate(localDate: LocalDate): Date =
             Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
+
+        fun asDate(date: Long): Date = Date(date)
 
         fun asLocalDate(date: Date): LocalDate {
             return Instant.ofEpochMilli(date.time).atZone(ZoneId.systemDefault()).toLocalDate()
@@ -22,5 +22,3 @@ class DateTimeUtil {
 
             return true
         }
-    }
-}
