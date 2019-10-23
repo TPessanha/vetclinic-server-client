@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import personal.ciai.vetclinic.dto.SchedulesDTO
-import personal.ciai.vetclinic.exception.ExpectationFailedException
 import personal.ciai.vetclinic.exception.NotFoundException
+import personal.ciai.vetclinic.exception.PreconditionFailedException
 import personal.ciai.vetclinic.model.ScheduleStatus
 import personal.ciai.vetclinic.model.Schedules
 import personal.ciai.vetclinic.repository.SchedulesRepository
@@ -41,7 +41,7 @@ class SchedulesService(
     fun geVeterinarianSchedules(vetId: Int, afterDate: Date): List<SchedulesDTO> {
         if (veterinarianService.existsById(vetId)) {
             if (afterDate.before(asDate(YearMonth.now().atDay(1)))) {
-                throw ExpectationFailedException()
+                throw PreconditionFailedException()
             }
         }
         return schedulesRepository.findAllByVeterinarianAndStartDateIsGreaterThanEqual(
@@ -53,16 +53,16 @@ class SchedulesService(
     fun saveSchedule(schedules: SchedulesDTO, vetId: Int) {
         if (notWeekends(Date(schedules.startTime)))
             schedulesRepository.save(schedules.toEntity(veterinarianService))
-        else throw ExpectationFailedException()
+        else throw PreconditionFailedException()
     }
 
     fun updateSchedule(schedules: SchedulesDTO, vetId: Int) {
         if (notWeekends(Date(schedules.startTime)))
             schedulesRepository.save(schedules.toEntity(veterinarianService))
-        else throw ExpectationFailedException()
+        else throw PreconditionFailedException()
     }
 
-    fun isScheduleAvailability(vetId: Int, startTime: Long): Boolean {
+    fun isScheduleAvailable(vetId: Int, startTime: Long): Boolean {
         return getScheduleByIdAndStartTime(vetId, Date(startTime))
             .status.equals(ScheduleStatus.Available)
     }

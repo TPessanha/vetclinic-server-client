@@ -46,7 +46,7 @@ class AdministratorTests {
         // see: https://discuss.kotlinlang.org/t/data-class-and-jackson-annotation-conflict/397/6
         val mapper = ObjectMapper().registerModule(KotlinModule())
 
-        val adminsURL = "/employees/1/administratives"
+        val adminsURL = "/employees/1/administrators"
     }
 
     @Test

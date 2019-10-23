@@ -44,7 +44,7 @@ class AdministratorControllerTests {
     companion object {
         val mapper = ObjectMapper().registerModule(KotlinModule())
 
-        val adminURL = "/employees/1/administratives"
+        val adminURL = "/employees/1/administrators"
     }
 
     @Test

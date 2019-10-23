@@ -60,6 +60,6 @@ class VeterinarianService(
 // //        if(appoint.vet.equals(vetId)){
 //            return appoint // TODO ( Wait for vet id in appointments)
 // //        }
-// //        throw ExpectationFailedException()
+// //        throw PreconditionFailedException()
 //    }
 }

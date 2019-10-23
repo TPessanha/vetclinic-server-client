@@ -25,9 +25,9 @@ import personal.ciai.vetclinic.service.EmployeeService
 )
 
 @RestController
-@RequestMapping("employees/{employeeId:[0-9]+}/administratives")
+@RequestMapping("employees/{employeeId:[0-9]+}/administrators")
 class AdministratorController(
-    @Autowired val administrativeService: AdministratorService,
+    @Autowired val administradorService: AdministratorService,
     @Autowired private val employeeService: EmployeeService
 ) {
 
@@ -38,7 +38,7 @@ class AdministratorController(
     )
     @ApiResponses(
         value = [
-            ApiResponse(code = 200, message = "Successfully retrieved the administrative details"),
+            ApiResponse(code = 200, message = "Successfully retrieved the administrador details"),
             ApiResponse(code = 401, message = "You are not authorized to access the resource"),
             ApiResponse(code = 404, message = "The resource not found"),
 
@@ -61,7 +61,7 @@ class AdministratorController(
             value = "adminId",
             required = true
         ) adminId: Int
-    ) = administrativeService.getAdministratorById(adminId)
+    ) = administradorService.getAdministratorById(adminId)
 
     @ApiOperation(
         value = "View a list of Administrators details",
@@ -71,7 +71,7 @@ class AdministratorController(
     )
     @ApiResponses(
         value = [
-            ApiResponse(code = 200, message = "Successfully retrieved a list of all administrative"),
+            ApiResponse(code = 200, message = "Successfully retrieved a list of all administrador"),
             ApiResponse(code = 401, message = "You are not authorized to access the resource"),
             ApiResponse(
                 code = 403, message = "Accessing the resource you were tyring to reach is forbidden"
@@ -84,12 +84,12 @@ class AdministratorController(
             required = true
         )
         employeeId: Int
-    ) = administrativeService.getAllAdministrator()
+    ) = administradorService.getAllAdministrator()
 
     @ApiOperation(value = "Add a new Administrator account")
     @ApiResponses(
         value = [
-            ApiResponse(code = 200, message = "Successfully added a new administrative"),
+            ApiResponse(code = 200, message = "Successfully added a new administrador"),
             ApiResponse(code = 401, message = "You are not authorized to access the resource"),
             ApiResponse(
                 code = 403, message = "Accessing the resource you were tyring to reach is forbidden"
@@ -104,7 +104,7 @@ class AdministratorController(
         employeeId: Int,
         @ApiParam(required = true, value = "(Required) Administrator info necessary to created a new account")
         @RequestBody admin: AdministratorDTO
-    ) = administrativeService.save(admin)
+    ) = administradorService.save(admin)
 
     @ApiOperation(value = "Edit Administrator information", consumes = "application/json")
     @ApiResponses(
@@ -128,12 +128,12 @@ class AdministratorController(
         ) adminId: Int,
         @ApiParam(required = true, value = "(Required) Admin information to be changed")
         @RequestBody admin: AdministratorDTO
-    ) = administrativeService.update(admin, adminId)
+    ) = administradorService.update(admin, adminId)
 
     @ApiOperation(value = "Delete a Administrator account")
     @ApiResponses(
         value = [
-            ApiResponse(code = 200, message = "Successfully delete the administrative"),
+            ApiResponse(code = 200, message = "Successfully delete the administrador"),
             ApiResponse(code = 404, message = "The resource not found"),
             ApiResponse(
                 code = 403, message = "Accessing the resource you were tyring to reach is forbidden"
@@ -149,5 +149,5 @@ class AdministratorController(
         @ApiParam(name = "adminId", required = true, value = "(Required) Admin identificator (id)") @PathVariable(
             value = "adminId", required = true
         ) adminId: Int
-    ) = administrativeService.delete(adminId)
+    ) = administradorService.delete(adminId)
 }

@@ -50,6 +50,6 @@ class AdministratorService(
     private fun getAdministratorEntity(id: Int): Administrator = adminRepository.findById(id)
         .orElseThrow { NotFoundException("Administrator account with Id $id not found") }
 
-    fun administrativeEntityByEmployeeId(id: Int): Administrator = adminRepository.getAdministratorByEmployeeId(id)
+    fun administradorEntityByEmployeeId(id: Int): Administrator = adminRepository.getAdministratorByEmployeeId(id)
         .orElseThrow { NotFoundException("Administrator account with Id $id not found") }
 }
