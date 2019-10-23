@@ -14,7 +14,13 @@ class VeterinarianService(
     @Autowired val vetRepository: VeterinarianRepository
 ) {
 
-    fun existsById(id: Int): Boolean = vetRepository.existsById(id)
+    fun existsById(id: Int): Boolean {
+        if (vetRepository.existsById(id).not()) {
+            throw NotFoundException("Veterinaran with Id $id not found")
+        } else {
+            return true
+        }
+    }
 
     fun getAllVeterinarian(): List<VeterinarianDTO> = vetRepository.findAll()
         .map { it.toDTO() }
@@ -54,6 +60,6 @@ class VeterinarianService(
 // //        if(appoint.vet.equals(vetId)){
 //            return appoint // TODO ( Wait for vet id in appointments)
 // //        }
-// //        throw ExpectationFailedException()
+// //        throw PreconditionFailedException()
 //    }
 }

@@ -16,29 +16,29 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import personal.ciai.vetclinic.dto.AdministratorDTO
-import personal.ciai.vetclinic.service.AdministrativeService
+import personal.ciai.vetclinic.service.AdministratorService
 import personal.ciai.vetclinic.service.EmployeeService
 
 @Api(
     value = "VetClinic Management System - Administrator API",
-    description = "Management Administrative operations in the CIAI 2019 Pet Clinic"
+    description = "Management Administrator operations in the CIAI 2019 Pet Clinic"
 )
 
 @RestController
-@RequestMapping("employees/{employeeId:[0-9]+}/administratives")
-class AdministrativeController(
-    @Autowired val administrativeService: AdministrativeService,
+@RequestMapping("employees/{employeeId:[0-9]+}/administrators")
+class AdministratorController(
+    @Autowired val administradorService: AdministratorService,
     @Autowired private val employeeService: EmployeeService
 ) {
 
     @ApiOperation(
-        value = "Get details of a single  Administrative",
+        value = "Get details of a single  Administrator",
         produces = "application/json",
         response = AdministratorDTO::class
     )
     @ApiResponses(
         value = [
-            ApiResponse(code = 200, message = "Successfully retrieved the administrative details"),
+            ApiResponse(code = 200, message = "Successfully retrieved the administrador details"),
             ApiResponse(code = 401, message = "You are not authorized to access the resource"),
             ApiResponse(code = 404, message = "The resource not found"),
 
@@ -47,7 +47,7 @@ class AdministrativeController(
             )]
     )
     @GetMapping("/{adminId:[0-9]+}", produces = [APPLICATION_JSON_VALUE])
-    fun getAdministrative(
+    fun getAdministrator(
         @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
             value = "employeeId",
             required = true
@@ -56,60 +56,60 @@ class AdministrativeController(
         @ApiParam(
             name = "adminId",
             required = true,
-            value = "(Required) Administrative identificator (id)"
+            value = "(Required) Administrator identificator (id)"
         ) @PathVariable(
             value = "adminId",
             required = true
         ) adminId: Int
-    ) = administrativeService.getAdministrativeById(adminId)
+    ) = administradorService.getAdministratorById(adminId)
 
     @ApiOperation(
-        value = "View a list of Administratives details",
+        value = "View a list of Administrators details",
         produces = "application/json",
         responseContainer = "List",
         response = AdministratorDTO::class
     )
     @ApiResponses(
         value = [
-            ApiResponse(code = 200, message = "Successfully retrieved a list of all administrative"),
+            ApiResponse(code = 200, message = "Successfully retrieved a list of all administrador"),
             ApiResponse(code = 401, message = "You are not authorized to access the resource"),
             ApiResponse(
                 code = 403, message = "Accessing the resource you were tyring to reach is forbidden"
             )]
     )
     @GetMapping("", produces = [APPLICATION_JSON_VALUE])
-    fun getAllAdministrative(
+    fun getAllAdministrator(
         @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
             value = "employeeId",
             required = true
         )
         employeeId: Int
-    ) = administrativeService.getAllAdministrative()
+    ) = administradorService.getAllAdministrator()
 
-    @ApiOperation(value = "Add a new Administrative account")
+    @ApiOperation(value = "Add a new Administrator account")
     @ApiResponses(
         value = [
-            ApiResponse(code = 200, message = "Successfully added a new administrative"),
+            ApiResponse(code = 200, message = "Successfully added a new administrador"),
             ApiResponse(code = 401, message = "You are not authorized to access the resource"),
             ApiResponse(
                 code = 403, message = "Accessing the resource you were tyring to reach is forbidden"
             )]
     )
     @PostMapping("", consumes = [APPLICATION_JSON_VALUE])
-    fun addAdministrative(
+    fun addAdministrator(
         @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
             value = "employeeId",
             required = true
         )
         employeeId: Int,
-        @ApiParam(required = true, value = "(Required) Administrative info necessary to created a new account")
+        @ApiParam(required = true, value = "(Required) Administrator info necessary to created a new account")
         @RequestBody admin: AdministratorDTO
-    ) = administrativeService.save(admin)
+    ) = administradorService.save(admin)
 
-    @ApiOperation(value = "Edit Administrative information", consumes = "application/json")
+    @ApiOperation(value = "Edit Administrator information", consumes = "application/json")
     @ApiResponses(
         value = [
-            ApiResponse(code = 200, message = "Successfully edit the Administrative info"),
+            ApiResponse(code = 200, message = "Successfully edit the Administrator info"),
             ApiResponse(code = 401, message = "You are not authorized to access the resource"),
             ApiResponse(code = 404, message = "Resource not found"),
             ApiResponse(
@@ -117,7 +117,7 @@ class AdministrativeController(
             )]
     )
     @PutMapping("/{adminId:[0-9]+}", consumes = [APPLICATION_JSON_VALUE])
-    fun updateAdministrative(
+    fun updateAdministrator(
         @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
             value = "employeeId",
             required = true
@@ -128,19 +128,19 @@ class AdministrativeController(
         ) adminId: Int,
         @ApiParam(required = true, value = "(Required) Admin information to be changed")
         @RequestBody admin: AdministratorDTO
-    ) = administrativeService.update(admin, adminId)
+    ) = administradorService.update(admin, adminId)
 
-    @ApiOperation(value = "Delete a Administrative account")
+    @ApiOperation(value = "Delete a Administrator account")
     @ApiResponses(
         value = [
-            ApiResponse(code = 200, message = "Successfully delete the administrative"),
+            ApiResponse(code = 200, message = "Successfully delete the administrador"),
             ApiResponse(code = 404, message = "The resource not found"),
             ApiResponse(
                 code = 403, message = "Accessing the resource you were tyring to reach is forbidden"
             )]
     )
     @DeleteMapping("/{adminId:[0-9]+}")
-    fun deleteAdministrative(
+    fun deleteAdministrator(
         @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
             value = "employeeId",
             required = true
@@ -149,5 +149,5 @@ class AdministrativeController(
         @ApiParam(name = "adminId", required = true, value = "(Required) Admin identificator (id)") @PathVariable(
             value = "adminId", required = true
         ) adminId: Int
-    ) = administrativeService.delete(adminId)
+    ) = administradorService.delete(adminId)
 }

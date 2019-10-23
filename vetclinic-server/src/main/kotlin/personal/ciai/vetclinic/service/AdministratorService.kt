@@ -10,7 +10,7 @@ import personal.ciai.vetclinic.model.Administrator
 import personal.ciai.vetclinic.repository.AdministratorRepository
 
 @Service
-class AdministrativeService(
+class AdministratorService(
     @Autowired val adminRepository: AdministratorRepository,
     @Autowired private val employeeService: EmployeeService
 ) {
@@ -22,31 +22,34 @@ class AdministrativeService(
         return true
     }
 
-    fun getAllAdministrative(): List<AdministratorDTO> = adminRepository.findAll()
+    fun getAllAdministrator(): List<AdministratorDTO> = adminRepository.findAll()
         .map { it.toDTO() }
 
-    fun getAdministrativeById(id: Int): AdministratorDTO = getAdministrativeEntity(id).toDTO()
+    fun getAdministratorById(id: Int): AdministratorDTO = getAdministratorEntity(id).toDTO()
 
     fun save(adminDTO: AdministratorDTO) {
-        if (existsAdministrativeById(adminDTO.id).not())
+        if (existsAdministratorById(adminDTO.id).not())
             adminRepository.save(adminDTO.toEntity())
-        else throw ConflictException("Administrative account with Id ${adminDTO.id} already exist")
+        else throw ConflictException("Administrator account with Id ${adminDTO.id} already exist")
     }
 
     fun update(adminDTO: AdministratorDTO, id: Int) {
-        val admin: Administrator = getAdministrativeEntity(id)
+        val admin: Administrator = getAdministratorEntity(id)
 
         adminRepository.save(adminDTO.toEntity(admin.id))
     }
 
     fun delete(id: Int) {
-        val admin: Administrator = getAdministrativeEntity(id)
+        val admin: Administrator = getAdministratorEntity(id)
 
         adminRepository.delete(admin)
     }
 
-    private fun existsAdministrativeById(id: Int): Boolean = adminRepository.existsById(id)
+    private fun existsAdministratorById(id: Int): Boolean = adminRepository.existsById(id)
 
-    private fun getAdministrativeEntity(id: Int): Administrator = adminRepository.findById(id)
-        .orElseThrow { NotFoundException("Administrative account with Id $id not found") }
+    private fun getAdministratorEntity(id: Int): Administrator = adminRepository.findById(id)
+        .orElseThrow { NotFoundException("Administrator account with Id $id not found") }
+
+    fun administradorEntityByEmployeeId(id: Int): Administrator = adminRepository.getAdministratorByEmployeeId(id)
+        .orElseThrow { NotFoundException("Administrator account with Id $id not found") }
 }

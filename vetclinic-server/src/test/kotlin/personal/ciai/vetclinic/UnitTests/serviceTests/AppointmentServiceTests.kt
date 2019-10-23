@@ -105,7 +105,20 @@ class AppointmentServiceTests {
     fun `test cache on getPetAppointments()`() {
         val fakePet = Pet(1, "cat", 3, clientExample)
         val fakeVet =
-            Veterinarian(0, "vetmail@das", "veterio", 52345235, "vet123", "secret", "Rua dos vets", URI("asdf"), true)
+            Veterinarian(
+                0,
+                "vetmail@das",
+                "veterio",
+                52345235,
+                "vet123",
+                "secret",
+                "Rua dos vets",
+                URI("asdf"),
+                true,
+                arrayListOf(),
+                arrayListOf(),
+                12
+            )
         val fakeApp = Appointment(1, TimeSlot(532, 3253), fakeVet, fakePet, clientExample)
 
         fakePet.appointments.add(fakeApp)

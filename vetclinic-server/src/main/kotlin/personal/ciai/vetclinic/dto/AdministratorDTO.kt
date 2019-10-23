@@ -6,22 +6,22 @@ import java.net.URI
 import personal.ciai.vetclinic.model.Administrator
 
 /**
- * Models a Administrative DTO.
+ * Models a Administrator DTO.
  *
- * @property name the name of the Administrative.
- * @property username the user name of the Administrative account.
- * @property photo the photo belonging to the Administrative.
- * @property email the email of the Administrative.
- * @property password the password of the Administrative.
- * @property phoneNumber the phone number belonging to the Administrative.
- * @property address the address of the Administrative.
- * @constructor Creates a Administrative DTO.
+ * @property name the name of the Administrator.
+ * @property username the user name of the Administrator account.
+ * @property photo the photo belonging to the Administrator.
+ * @property email the email of the Administrator.
+ * @property password the password of the Administrator.
+ * @property phoneNumber the phone number belonging to the Administrator.
+ * @property address the address of the Administrator.
+ * @constructor Creates a Administrator DTO.
  */
-@ApiModel("Administrative DTO model", description = "Used to model Administrative")
+@ApiModel("Administrator DTO model", description = "Used to model Administrator")
 data class AdministratorDTO(
 
     @ApiModelProperty(
-        "An unique identifier for the Administrative",
+        "An unique identifier for the Administrator",
         required = true,
         readOnly = false,
         example = "34"
@@ -29,7 +29,16 @@ data class AdministratorDTO(
     val id: Int,
 
     @ApiModelProperty(
-        "The Administrative  full name",
+        "The Administrator  unique employee Id",
+        name = "fullName",
+        required = true,
+        readOnly = true,
+        example = "Dunia Das Flores"
+    )
+    val employeeId: Int,
+
+    @ApiModelProperty(
+        "The Administrator  full name",
         name = "fullName",
         required = true,
         readOnly = true,
@@ -37,11 +46,11 @@ data class AdministratorDTO(
     )
     val name: String,
 
-    @ApiModelProperty("The Administrative photo URI", name = "photo", required = true, readOnly = false)
+    @ApiModelProperty("The Administrator photo URI", name = "photo", required = true, readOnly = false)
     val photo: String,
 
     @ApiModelProperty(
-        "The Administrative user name",
+        "The Administrator user name",
         name = "username",
         required = true,
         readOnly = false,
@@ -50,7 +59,7 @@ data class AdministratorDTO(
     val username: String,
 
     @ApiModelProperty(
-        "The Administrative email",
+        "The Administrator email",
         name = "email",
         required = true,
         readOnly = false,
@@ -58,11 +67,11 @@ data class AdministratorDTO(
     )
     val email: String,
 
-    @ApiModelProperty("The Administrative Password", name = "password", required = true)
+    @ApiModelProperty("The Administrator Password", name = "password", required = true)
     val password: String,
 
     @ApiModelProperty(
-        "The Administrative phone number",
+        "The Administrator phone number",
         name = "phoneNumber",
         required = true,
         readOnly = false,
@@ -71,7 +80,7 @@ data class AdministratorDTO(
     val phoneNumber: Int,
 
     @ApiModelProperty(
-        "The Administrative address",
+        "The Administrator address",
         name = "address",
         required = true,
         readOnly = false,
@@ -85,6 +94,7 @@ data class AdministratorDTO(
     fun toEntity(newId: Int) =
         Administrator(
             id = newId,
+            employeeId = employeeId,
             name = this.name,
             email = this.email,
             phoneNumber = this.phoneNumber,
@@ -97,6 +107,7 @@ data class AdministratorDTO(
     fun toEntity(entity: Administrator) =
         Administrator(
             id = entity.id,
+            employeeId = employeeId,
             name = this.name,
             email = this.email,
             phoneNumber = this.phoneNumber,

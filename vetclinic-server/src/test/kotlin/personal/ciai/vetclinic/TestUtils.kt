@@ -12,7 +12,20 @@ import personal.ciai.vetclinic.model.Veterinarian
 object TestUtils {
     val clientExample1 = Client(0, "gaer@gmail.com", "Pedro", 412532, "Pedro123", "password", "Rua Pedro da cenas")
     val vetExample1 =
-        Veterinarian(0, "vetmail@das", "veterio", 52345235, "vet123", "secret", "Rua dos vets", URI("asdf"), true)
+        Veterinarian(
+            id = 0,
+            email = "vetmail@das",
+            name = "veterio",
+            phoneNumber = 52345235,
+            username = "vet123",
+            password = "secret",
+            address = "Rua dos vets",
+            photo = URI("asdf"),
+            enabled = true,
+            appointments = arrayListOf(),
+            schedules = arrayListOf(),
+            employeeId = 12
+        )
 
     val dogExample = Pet(
         0,

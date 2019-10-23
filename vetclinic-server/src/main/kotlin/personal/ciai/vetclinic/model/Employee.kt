@@ -1,7 +1,10 @@
 package personal.ciai.vetclinic.model
 
 import java.net.URI
+import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
 import javax.persistence.Table
 import personal.ciai.vetclinic.dto.EmployeeDTO
 import personal.ciai.vetclinic.dto.Transferable
@@ -10,6 +13,9 @@ import personal.ciai.vetclinic.dto.Transferable
 @Table(name = "employees")
 abstract class Employee(
     id: Int,
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true)
+    var employeeId: Int,
     email: String,
     name: String,
     phoneNumber: Int,

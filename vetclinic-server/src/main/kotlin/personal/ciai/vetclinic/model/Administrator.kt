@@ -17,8 +17,10 @@ class Administrator(
     username: String,
     password: String,
     address: String,
-    photo: URI
-) : Employee(id, email, name, phoneNumber, username, password, address, photo) {
+    photo: URI,
+    employeeId: Int
+
+) : Employee(id, employeeId, email, name, phoneNumber, username, password, address, photo) {
 
     override fun toDTO() = AdministratorDTO(
         id = id,
@@ -26,6 +28,7 @@ class Administrator(
         username = username,
         email = email,
         password = "",
+        employeeId = employeeId,
         phoneNumber = phoneNumber,
         address = address,
         photo = photo.toString()

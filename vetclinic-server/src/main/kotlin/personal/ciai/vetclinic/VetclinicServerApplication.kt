@@ -68,14 +68,15 @@ class Init(
 
     private fun addAdmin(roles: List<Role>) {
         val admin = Administrator(
-            0,
-            "admin@gmail.com",
-            "adminion",
-            911234567,
-            "admin",
-            BCryptPasswordEncoder().encode("password"),
-            "Rua da direita",
-            URI("emptyForDegub")
+            id = 0,
+            employeeId = 0,
+            email = "admin@gmail.com",
+            name = "adminion",
+            phoneNumber = 911234567,
+            username = "admin",
+            password = BCryptPasswordEncoder().encode("password"),
+            address = "Rua da direita",
+            photo = URI("emptyForDegub")
         )
         admin.roles.add(roles[0])
         admin.roles.add(roles[2])
