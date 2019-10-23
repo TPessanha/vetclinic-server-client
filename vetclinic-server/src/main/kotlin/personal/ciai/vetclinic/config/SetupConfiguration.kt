@@ -21,17 +21,17 @@ class SetupConfiguration(@Autowired private val administrativeRepository: Admini
         if (alreadySetup) {
             return
         }
-
+        // Setup a default Administrative Account
         val defaultAdmin = Administrative(
             id = -1,
             employeeId = -1,
-            name = "Admin",
-            username = "Admin",
+            name = "Veterinarian Clinic",
+            username = "VetClinic",
             phoneNumber = 921321653,
-            email = "admin@vetclinic.pt",
+            email = "vetClinic@vetclinic.pt",
             password = "admin",
             photo = URI.create("default"),
-            address = "Rua da Caparica n 21, 2313-134 Lisbia"
+            address = "Rua da Caparica n 1, 2313-134 Lisbia"
         )
         createAdministrativeIfNotFound(defaultAdmin)
 

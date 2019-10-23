@@ -26,7 +26,6 @@ abstract class Employee(
 ) : User(id, email, name, phoneNumber, username, password, address, photo) {
 
     override fun toDTO(): Transferable = EmployeeDTO(
-        employeeId = employeeId,
         email = this.email,
         name = this.name,
         phoneNumber = this.phoneNumber,
