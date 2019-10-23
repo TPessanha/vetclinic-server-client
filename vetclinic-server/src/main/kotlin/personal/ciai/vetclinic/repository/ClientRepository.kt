@@ -18,6 +18,6 @@ interface ClientRepository : CrudRepository<Client, Int> {
     fun findByIdWithAppointment(id: Int): Optional<Client>
     */
 
-    @Query("select c from Client c left join fetch c.appointments where p.id = :id")
+    @Query("select c from Client c left join fetch c.appointments where c.id = :id")
     fun findByIdWithAppointments(@Param("id") id: Int): Optional<Client>
 }
