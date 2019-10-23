@@ -14,6 +14,11 @@ import personal.ciai.vetclinic.repository.ClientRepository
 @Service
 class ClientService(
 
+    /*
+    @Autowired
+    val appointments: AppointmentRepository,
+    */
+
     @Autowired
     val repository: ClientRepository,
     @Autowired
@@ -31,7 +36,7 @@ class ClientService(
     fun checkAppointments(id: Int): List<Appointment> {
         val client =
             repository.findByIdWithAppointment(id)
-                .orElseThrow { NotFoundException("Pet with id ($id) not found") }
+                .orElseThrow { NotFoundException("Client with id ($id) not found") }
         return client.appointments
     }
     */
