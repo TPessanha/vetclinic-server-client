@@ -4,12 +4,12 @@ import java.net.URI
 import javax.persistence.DiscriminatorValue
 import javax.persistence.Entity
 import javax.persistence.Table
-import personal.ciai.vetclinic.dto.AdministrativeDTO
+import personal.ciai.vetclinic.dto.AdministratorDTO
 
 @Entity
 @DiscriminatorValue("Admin")
-@Table(name = "administratives")
-class Administrative(
+@Table(name = "administrators")
+class Administrator(
     id: Int,
     email: String,
     name: String,
@@ -22,7 +22,7 @@ class Administrative(
 
 ) : Employee(id, employeeId, email, name, phoneNumber, username, password, address, photo) {
 
-    override fun toDTO() = AdministrativeDTO(
+    override fun toDTO() = AdministratorDTO(
         id = id,
         name = name,
         username = username,

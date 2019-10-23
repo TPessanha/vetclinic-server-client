@@ -5,14 +5,18 @@ import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.dto.ClientDTO
-import personal.ciai.vetclinic.exception.ExpectationFailedException
 import personal.ciai.vetclinic.exception.NotFoundException
-// import personal.ciai.vetclinic.model.Appointment
+import personal.ciai.vetclinic.exception.PreconditionFailedException
 import personal.ciai.vetclinic.model.Client
 import personal.ciai.vetclinic.repository.ClientRepository
 
 @Service
 class ClientService(
+
+    /*
+    @Autowired
+    val appointments: AppointmentRepository,
+    */
 
     @Autowired
     val repository: ClientRepository,
@@ -31,7 +35,7 @@ class ClientService(
     fun checkAppointments(id: Int): List<Appointment> {
         val client =
             repository.findByIdWithAppointment(id)
-                .orElseThrow { NotFoundException("Pet with id ($id) not found") }
+                .orElseThrow { NotFoundException("Client with id ($id) not found") }
         return client.appointments
     }
     */
@@ -60,7 +64,7 @@ class ClientService(
 
     fun addClient(clientDTO: ClientDTO) {
         if (clientDTO.id != 0)
-            throw ExpectationFailedException("Client id must be 0 in insertion")
+            throw PreconditionFailedException("Client id must be 0 in insertion")
 
         saveClient(clientDTO)
     }

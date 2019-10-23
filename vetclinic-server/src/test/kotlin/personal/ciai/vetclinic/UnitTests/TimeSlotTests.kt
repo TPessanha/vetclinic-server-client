@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
-import personal.ciai.vetclinic.exception.ExpectationFailedException
+import personal.ciai.vetclinic.exception.PreconditionFailedException
 import personal.ciai.vetclinic.model.TimeSlot
 
 class TimeSlotTests {
@@ -36,7 +36,7 @@ class TimeSlotTests {
 
     @Test
     fun `Test new TimeSlot (ExpectationFailed)`() {
-        assertThrows(ExpectationFailedException::class.java) {
+        assertThrows(PreconditionFailedException::class.java) {
             TimeSlot(1000, 500)
         }
     }

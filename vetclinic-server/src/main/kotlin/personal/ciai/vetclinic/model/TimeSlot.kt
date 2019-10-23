@@ -6,7 +6,7 @@ import javax.persistence.Embeddable
 import javax.persistence.Temporal
 import javax.persistence.TemporalType
 import org.springframework.format.annotation.DateTimeFormat
-import personal.ciai.vetclinic.exception.ExpectationFailedException
+import personal.ciai.vetclinic.exception.PreconditionFailedException
 
 @Embeddable
 class TimeSlot(
@@ -24,7 +24,7 @@ class TimeSlot(
 
     init {
         if (endDate < startDate)
-            throw ExpectationFailedException("Start date most be before end date")
+            throw PreconditionFailedException("Start date most be before end date")
     }
 
     /**

@@ -2,16 +2,16 @@ package personal.ciai.vetclinic.service
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import personal.ciai.vetclinic.dto.AdministrativeDTO
+import personal.ciai.vetclinic.dto.AdministratorDTO
 import personal.ciai.vetclinic.exception.AccessForbiddenException
 import personal.ciai.vetclinic.exception.ConflictException
 import personal.ciai.vetclinic.exception.NotFoundException
-import personal.ciai.vetclinic.model.Administrative
-import personal.ciai.vetclinic.repository.AdministrativeRepository
+import personal.ciai.vetclinic.model.Administrator
+import personal.ciai.vetclinic.repository.AdministratorRepository
 
 @Service
 class AdministrativeService(
-    @Autowired val adminRepository: AdministrativeRepository,
+    @Autowired val adminRepository: AdministratorRepository,
     @Autowired private val employeeService: EmployeeService
 ) {
 
@@ -22,32 +22,32 @@ class AdministrativeService(
         return true
     }
 
-    fun getAllAdministrative(): List<AdministrativeDTO> = adminRepository.findAll()
+    fun getAllAdministrative(): List<AdministratorDTO> = adminRepository.findAll()
         .map { it.toDTO() }
 
-    fun getAdministrativeById(id: Int): AdministrativeDTO = getAdministrativeEntity(id).toDTO()
+    fun getAdministrativeById(id: Int): AdministratorDTO = getAdministrativeEntity(id).toDTO()
 
-    fun save(adminDTO: AdministrativeDTO) {
+    fun save(adminDTO: AdministratorDTO) {
         if (existsAdministrativeById(adminDTO.id).not())
             adminRepository.save(adminDTO.toEntity())
         else throw ConflictException("Administrative account with Id ${adminDTO.id} already exist")
     }
 
-    fun update(adminDTO: AdministrativeDTO, id: Int) {
-        val admin: Administrative = getAdministrativeEntity(id)
+    fun update(adminDTO: AdministratorDTO, id: Int) {
+        val admin: Administrator = getAdministrativeEntity(id)
 
         adminRepository.save(adminDTO.toEntity(admin.id))
     }
 
     fun delete(id: Int) {
-        val admin: Administrative = getAdministrativeEntity(id)
+        val admin: Administrator = getAdministrativeEntity(id)
 
         adminRepository.delete(admin)
     }
 
     private fun existsAdministrativeById(id: Int): Boolean = adminRepository.existsById(id)
 
-    private fun getAdministrativeEntity(id: Int): Administrative = adminRepository.findById(id)
+    private fun getAdministrativeEntity(id: Int): Administrator = adminRepository.findById(id)
         .orElseThrow { NotFoundException("Administrative account with Id $id not found") }
 
     fun administrativeEntityByEmployeeId(id: Int): Administrative = adminRepository.getAdministrativeByEmployeeId(id)

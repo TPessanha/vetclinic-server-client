@@ -2,7 +2,7 @@ package personal.ciai.vetclinic.dto
 
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
-import java.net.URI
+import java.nio.file.Paths
 import personal.ciai.vetclinic.model.Pet
 import personal.ciai.vetclinic.service.ClientService
 
@@ -87,11 +87,11 @@ data class PetDTO(
     val photo: String? = null
 ) : Transferable {
 
-    fun toEntity(clientService: ClientService): Pet {
-        return toEntity(this.id, clientService)
+    fun toEntity(clientService: ClientService, picturePath: String): Pet {
+        return toEntity(this.id, picturePath, clientService)
     }
 
-    fun toEntity(newId: Int, clientService: ClientService): Pet {
+    fun toEntity(newId: Int, picturePath: String, clientService: ClientService): Pet {
         return Pet(
             id = newId,
             species = this.species,
@@ -101,7 +101,7 @@ data class PetDTO(
             medicalRecord = this.medicalRecord,
             physicalDescription = this.physicalDescription,
             notes = this.notes,
-            photo = if (this.photo == null) null else URI.create(this.photo)
+            photo = if (this.photo == null) null else Paths.get(picturePath, this.photo).toUri()
         )
     }
 }

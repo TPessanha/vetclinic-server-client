@@ -13,10 +13,10 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.admin1
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.listAdmin
-import personal.ciai.vetclinic.dto.AdministrativeDTO
+import personal.ciai.vetclinic.dto.AdministratorDTO
 import personal.ciai.vetclinic.exception.NotFoundException
-import personal.ciai.vetclinic.model.Administrative
-import personal.ciai.vetclinic.repository.AdministrativeRepository
+import personal.ciai.vetclinic.model.Administrator
+import personal.ciai.vetclinic.repository.AdministratorRepository
 import personal.ciai.vetclinic.service.AdministrativeService
 
 /**
@@ -24,13 +24,13 @@ import personal.ciai.vetclinic.service.AdministrativeService
  */
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
-class AdministrativeServiceTests {
+class AdministratorServiceTests {
 
     @Autowired
     lateinit var adminService: AdministrativeService
 
     @MockBean
-    lateinit var repository: AdministrativeRepository
+    lateinit var repository: AdministratorRepository
 
     @Test
     fun `basic test on get All`() {
@@ -57,9 +57,9 @@ class AdministrativeServiceTests {
 
     @Test
     fun `test on add new Administrative`() {
-        `when`(repository.save(Mockito.any(Administrative::class.java)))
+        `when`(repository.save(Mockito.any(Administrator::class.java)))
             .then {
-                val admin: Administrative = it.getArgument(0)
+                val admin: Administrator = it.getArgument(0)
                 assertEquals(admin.id, admin1.id)
                 assertEquals(admin.name, admin1.name)
                 assertEquals(admin.email, admin1.email)
@@ -75,7 +75,7 @@ class AdministrativeServiceTests {
         `assert AdministrativeDTO`(adminDTO)
     }
 
-    private fun `assert AdministrativeDTO`(admin: AdministrativeDTO) {
+    private fun `assert AdministrativeDTO`(admin: AdministratorDTO) {
         assertEquals(admin.id, (admin1.id))
         assertEquals(admin.name, (admin1.name))
         assertEquals(admin.email, (admin1.email))
