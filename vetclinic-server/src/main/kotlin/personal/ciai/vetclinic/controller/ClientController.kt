@@ -13,7 +13,9 @@ import personal.ciai.vetclinic.service.ClientService
 
 @RestController
 @RequestMapping("/clients")
-class ClientController(@Autowired val clientService: ClientService) {
+class ClientController(
+    @Autowired val clientService: ClientService
+) {
 
     /*
     @ApiOperation(

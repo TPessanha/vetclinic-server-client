@@ -51,10 +51,9 @@ class Pet(
         species = species,
         age = age,
         owner = owner.id,
-//        appointments = appointments.map { it.toDTO() },
         notes = notes,
         physicalDescription = physicalDescription,
         medicalRecord = medicalRecord,
-        photo = photo?.toString()
+        photo = "$id.jpg"
     )
 }

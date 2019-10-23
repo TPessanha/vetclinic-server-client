@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.context.WebApplicationContext
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.admin1
-import personal.ciai.vetclinic.dto.AdministrativeDTO
+import personal.ciai.vetclinic.dto.AdministratorDTO
 import personal.ciai.vetclinic.service.AdministrativeService
 
 @ExtendWith(SpringExtension::class)
@@ -30,7 +30,7 @@ import personal.ciai.vetclinic.service.AdministrativeService
 @AutoConfigureMockMvc
 @Transactional
 @WithMockUser(username = "admin", password = "123", roles = ["ADMIN"])
-class AdministrativeTests {
+class AdministratorTests {
     @Autowired
     lateinit var adminService: AdministrativeService
 
@@ -51,7 +51,7 @@ class AdministrativeTests {
 
     @Test
     fun `Add a new Administrative`() {
-        assertTrue(adminService.getAllAdministrative().size == 0)
+        val nAdmins = adminService.getAllAdministrative().size
         val dogJSON = mapper.writeValueAsString(admin1.toDTO())
 
         mvc.perform(
@@ -68,21 +68,21 @@ class AdministrativeTests {
                 .accept(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$", hasSize<Any>(1)))
+            .andExpect(jsonPath("$", hasSize<Any>(nAdmins + 1)))
             .andReturn()
 
         val res = resultList.response.contentAsString
-        val allAdmin = mapper.readValue<List<AdministrativeDTO>>(res)
+        val allAdmin = mapper.readValue<List<AdministratorDTO>>(res)
 
         val result = mvc.perform(
             MockMvcRequestBuilders
-                .get("$adminsURL/" + allAdmin[0].id)
+                .get("$adminsURL/" + allAdmin[1].id)
         )
             .andExpect(status().isOk)
             .andReturn()
 
         val responseString = result.response.contentAsString
-        val persistentAdmin = mapper.readValue<AdministrativeDTO>(responseString)
+        val persistentAdmin = mapper.readValue<AdministratorDTO>(responseString)
 
         assertNotEquals(admin1.id, persistentAdmin.id)
         assertEquals(admin1.name, persistentAdmin.name)
@@ -92,10 +92,10 @@ class AdministrativeTests {
 
         mvc.perform(
             MockMvcRequestBuilders
-                .delete("$adminsURL/" + allAdmin[0].id)
+                .delete("$adminsURL/" + allAdmin[1].id)
         )
             .andExpect(status().isOk)
 
-        assertTrue(adminService.getAllAdministrative().size == 0)
+        assertTrue(adminService.getAllAdministrative().size == nAdmins)
     }
 }

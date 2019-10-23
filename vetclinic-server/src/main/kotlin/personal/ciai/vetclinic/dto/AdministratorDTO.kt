@@ -3,7 +3,7 @@ package personal.ciai.vetclinic.dto
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import java.net.URI
-import personal.ciai.vetclinic.model.Administrative
+import personal.ciai.vetclinic.model.Administrator
 
 /**
  * Models a Administrative DTO.
@@ -18,7 +18,7 @@ import personal.ciai.vetclinic.model.Administrative
  * @constructor Creates a Administrative DTO.
  */
 @ApiModel("Administrative DTO model", description = "Used to model Administrative")
-data class AdministrativeDTO(
+data class AdministratorDTO(
 
     @ApiModelProperty(
         "An unique identifier for the Administrative",
@@ -37,8 +37,8 @@ data class AdministrativeDTO(
     )
     val name: String,
 
-    @ApiModelProperty("The Administrative photo URI", name = "photo", required = false, readOnly = false)
-    val photo: String?,
+    @ApiModelProperty("The Administrative photo URI", name = "photo", required = true, readOnly = false)
+    val photo: String,
 
     @ApiModelProperty(
         "The Administrative user name",
@@ -83,7 +83,7 @@ data class AdministrativeDTO(
     fun toEntity() = toEntity(this.id)
 
     fun toEntity(newId: Int) =
-        Administrative(
+        Administrator(
             id = newId,
             name = this.name,
             email = this.email,
@@ -94,8 +94,8 @@ data class AdministrativeDTO(
             photo = if (this.photo.isNullOrEmpty()) URI.create("default") else URI.create(this.photo)
         )
 
-    fun toEntity(entity: Administrative) =
-        Administrative(
+    fun toEntity(entity: Administrator) =
+        Administrator(
             id = entity.id,
             name = this.name,
             email = this.email,

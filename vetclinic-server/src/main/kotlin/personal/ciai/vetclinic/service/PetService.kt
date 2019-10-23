@@ -5,9 +5,10 @@ import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
+import personal.ciai.vetclinic.config.ConfigurationProperties
 import personal.ciai.vetclinic.dto.PetDTO
-import personal.ciai.vetclinic.exception.PreconditionFailedException
 import personal.ciai.vetclinic.exception.NotFoundException
+import personal.ciai.vetclinic.exception.PreconditionFailedException
 import personal.ciai.vetclinic.model.Pet
 import personal.ciai.vetclinic.repository.PetRepository
 
@@ -18,7 +19,9 @@ class PetService(
     @Autowired
     val imageService: ImageService,
     @Autowired
-    val clientService: ClientService
+    val clientService: ClientService,
+    @Autowired
+    val configurationProperties: ConfigurationProperties
 ) {
     fun getPetById(id: Int) = getPetEntityById(id).toDTO()
 
@@ -26,7 +29,7 @@ class PetService(
         repository.findById(id).orElseThrow { NotFoundException("Pet with id ($id) not found") }
 
     private fun savePet(petDTO: PetDTO, id: Int = 0) {
-        val newPet = petDTO.toEntity(id, clientService)
+        val newPet = petDTO.toEntity(id, configurationProperties.fullPathToPetPhotos, clientService)
         repository.save(newPet)
     }
 

@@ -7,14 +7,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
+import personal.ciai.vetclinic.security.CustomUserDetailsService
 import personal.ciai.vetclinic.service.UserService
 
 @Configuration
 class SecurityConfig(
-    val customUserDetails:CustomUserDetailsService,
+    val customUserDetails: CustomUserDetailsService,
     val users: UserService
-) : WebSecurityConfigurerAdapter()
-{
+) : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity) {
         http.csrf().disable() // for now, we can disable cross site request forgery protection
             .authorizeRequests()
@@ -22,15 +22,18 @@ class SecurityConfig(
             .antMatchers("/webjars/**").permitAll()
             .antMatchers("/swagger-resources/**").permitAll()
             .antMatchers("/swagger-ui.html").permitAll()
+            .antMatchers("/h2-console/**").permitAll()
+            .antMatchers("/console/**").permitAll()
             .antMatchers(HttpMethod.POST, "/login").permitAll()
-            .antMatchers(HttpMethod.POST,"/signup").permitAll()
-            .antMatchers("/clients/**").hasRole("CLIENT")
-            .antMatchers("/clients").hasRole("ADMIN")
+            .antMatchers(HttpMethod.POST, "/signup").permitAll()
+//            .antMatchers("/clients/**").hasRole("CLIENT")
+//            .antMatchers("/clients").hasRole("ADMIN")
             .anyRequest().authenticated()
+            .and().headers().frameOptions().sameOrigin() // H2CONSOLE
             .and()
-            .addFilterBefore(UserPasswordAuthenticationFilterToJWT ("/login", super.authenticationManagerBean()),
+            .addFilterBefore(UserPasswordAuthenticationFilterToJWT("/login", super.authenticationManagerBean()),
                 BasicAuthenticationFilter::class.java)
-            .addFilterBefore(UserPasswordSignUpFilterToJWT ("/signup", users),
+            .addFilterBefore(UserPasswordSignUpFilterToJWT("/signup", users),
                 BasicAuthenticationFilter::class.java)
             .addFilterBefore(JWTAuthenticationFilter(),
                 BasicAuthenticationFilter::class.java)

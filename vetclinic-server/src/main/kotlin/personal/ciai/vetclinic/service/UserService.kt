@@ -1,18 +1,23 @@
 package personal.ciai.vetclinic.service
 
+import java.util.Optional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import personal.ciai.vetclinic.config.ConfigurationProperties
 import personal.ciai.vetclinic.dto.UserDTO
-import personal.ciai.vetclinic.exception.PreconditionFailedException
 import personal.ciai.vetclinic.exception.NotFoundException
+import personal.ciai.vetclinic.exception.PreconditionFailedException
 import personal.ciai.vetclinic.model.User
 import personal.ciai.vetclinic.repository.UserRepository
-import java.util.Optional
 
 @Service
 class UserService(
     @Autowired
-    val repository: UserRepository
+    val repository: UserRepository,
+    @Autowired
+    val configurationProperties: ConfigurationProperties,
+    @Autowired
+    val roleService: RoleService
 ) {
     // fun login()
 
@@ -31,7 +36,7 @@ class UserService(
         repository.findById(id).orElseThrow { NotFoundException("User with id ($id) not found") }
 
     private fun saveUser(userDTO: UserDTO, id: Int = 0): Optional<User> {
-        val newUser = userDTO.toEntity(id)
+        val newUser = userDTO.toEntity(id, configurationProperties.fullPathToUserPhotos, roleService)
         return Optional.of(repository.save(newUser))
     }
 
@@ -49,7 +54,7 @@ class UserService(
         return saveUser(userDTO)
     }
 
-    fun getUserEntityByUsername(username: String): Optional<User> {
-        return repository.findByUsername(username)
+    fun getUserEntityByUsernameWithRoles(username: String): Optional<User> {
+        return repository.findByUsernameWithRoles(username)
     }
 }

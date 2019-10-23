@@ -2,15 +2,16 @@ package personal.ciai.vetclinic.dto
 
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import personal.ciai.vetclinic.dto.validation.PasswordMatches
-import java.net.URI
-import personal.ciai.vetclinic.model.User
+import java.nio.file.Paths
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import personal.ciai.vetclinic.dto.validation.PasswordMatches
+import personal.ciai.vetclinic.model.User
+import personal.ciai.vetclinic.service.RoleService
 
 /**
  * Models a User DTO.
@@ -55,7 +56,7 @@ open class UserDTO(
     @ApiModelProperty("The User's Password", name = "password", required = true)
     @NotNull
     @NotEmpty
-    @Size(min=6)
+    @Size(min = 6)
     val password: String,
     @ApiModelProperty("The User's Password again", name = "matching password", required = true)
     val passwordRepeat: String,
@@ -70,9 +71,9 @@ open class UserDTO(
     )
     open val photo: String? = null
 ) : Transferable {
-    open fun toEntity() = toEntity(this.id)
+    open fun toEntity(roleService: RoleService, picturePath: String) = toEntity(this.id, picturePath, roleService)
 
-    open fun toEntity(newId: Int) =
+    open fun toEntity(newId: Int, picturePath: String, roleService: RoleService) =
         User(
             id = newId,
             name = this.name,
@@ -81,6 +82,7 @@ open class UserDTO(
             username = this.username,
             password = BCryptPasswordEncoder().encode(this.password),
             address = this.address,
-            photo = if (this.photo == null) null else URI.create(this.photo!!)
+            photo = if (this.photo == null) null else Paths.get(picturePath, this.photo).toUri(),
+            roles = roleService.getClientRoles(newId).toMutableList()
         )
 }

@@ -24,8 +24,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.admin2
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.listAdminDTO
-import personal.ciai.vetclinic.IntegrationTests.AdministrativeTests
-import personal.ciai.vetclinic.dto.AdministrativeDTO
+import personal.ciai.vetclinic.IntegrationTests.AdministratorTests
+import personal.ciai.vetclinic.dto.AdministratorDTO
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.service.AdministrativeService
 
@@ -33,7 +33,7 @@ import personal.ciai.vetclinic.service.AdministrativeService
 @SpringBootTest
 @AutoConfigureMockMvc
 @WithMockUser(username = "admin", password = "123", roles = ["ADMIN"])
-class AdministrativeControllerTests {
+class AdministratorControllerTests {
 
     @Autowired
     lateinit var mvc: MockMvc
@@ -57,7 +57,7 @@ class AdministrativeControllerTests {
             .andReturn()
 
         val responseString = result.response.contentAsString
-        val responseDTO = mapper.readValue<List<AdministrativeDTO>>(responseString)
+        val responseDTO = mapper.readValue<List<AdministratorDTO>>(responseString)
         assertEquals(responseDTO, listAdminDTO)
     }
 
@@ -70,7 +70,7 @@ class AdministrativeControllerTests {
             .andReturn()
 
         val responseString = result.response.contentAsString
-        val responseDTO = mapper.readValue<AdministrativeDTO>(responseString)
+        val responseDTO = mapper.readValue<AdministratorDTO>(responseString)
         assertEquals(responseDTO, admin2.toDTO())
     }
 
@@ -89,7 +89,7 @@ class AdministrativeControllerTests {
 
         val adminJSON = mapper.writeValueAsString(admin2.toDTO())
 
-        `when`(admin.save(nonNullAny(AdministrativeDTO::class.java)))
+        `when`(admin.save(nonNullAny(AdministratorDTO::class.java)))
             .then { assertEquals(admin2.toDTO(), it.getArgument(0)) }
 
         mvc.perform(
@@ -102,7 +102,7 @@ class AdministrativeControllerTests {
 
         mvc.perform(
             MockMvcRequestBuilders
-                .delete("${AdministrativeTests.adminsURL}/1")
+                .delete("${AdministratorTests.adminsURL}/1")
         )
             .andExpect(status().isOk)
     }

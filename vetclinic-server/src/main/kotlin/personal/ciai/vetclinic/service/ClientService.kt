@@ -5,9 +5,8 @@ import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.dto.ClientDTO
-import personal.ciai.vetclinic.exception.PreconditionFailedException
 import personal.ciai.vetclinic.exception.NotFoundException
-// import personal.ciai.vetclinic.model.Appointment
+import personal.ciai.vetclinic.exception.PreconditionFailedException
 import personal.ciai.vetclinic.model.Client
 import personal.ciai.vetclinic.repository.ClientRepository
 

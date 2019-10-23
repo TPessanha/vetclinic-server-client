@@ -5,6 +5,9 @@ import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Inheritance
 import javax.persistence.InheritanceType
+import javax.persistence.JoinColumn
+import javax.persistence.JoinTable
+import javax.persistence.ManyToMany
 import javax.persistence.Table
 import org.hibernate.annotations.NaturalId
 import personal.ciai.vetclinic.dto.Transferable
@@ -41,7 +44,23 @@ open class User(
     @Column(nullable = false)
     val address: String,
     @Column(nullable = true)
-    open var photo: URI? = null
+    open var photo: URI? = null,
+
+    @ManyToMany
+    @JoinTable(
+        name = "user_role",
+        joinColumns = arrayOf(
+            JoinColumn(
+                name = "user_id", referencedColumnName = "id"
+            )
+        ),
+        inverseJoinColumns = arrayOf(
+            JoinColumn(
+                name = "role_id", referencedColumnName = "id"
+            )
+        )
+    )
+    val roles: MutableList<Role> = arrayListOf()
 ) : IdentifiedEntity(id) {
     override fun toDTO(): Transferable =
         UserDTO(
@@ -53,6 +72,6 @@ open class User(
             password = this.password,
             passwordRepeat = this.password,
             address = this.address,
-            photo = photo?.toString()
+            photo = "$id.jpg"
         )
 }

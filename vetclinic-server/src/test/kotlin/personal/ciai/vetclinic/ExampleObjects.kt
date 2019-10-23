@@ -1,9 +1,9 @@
 package personal.ciai.vetclinic
 
 import java.net.URI
-import personal.ciai.vetclinic.dto.AdministrativeDTO
+import personal.ciai.vetclinic.dto.AdministratorDTO
 import personal.ciai.vetclinic.dto.VeterinarianDTO
-import personal.ciai.vetclinic.model.Administrative
+import personal.ciai.vetclinic.model.Administrator
 import personal.ciai.vetclinic.model.Veterinarian
 
 class ExampleObjects {
@@ -41,7 +41,7 @@ class ExampleObjects {
 
         // Administrative
 
-        val admin1 = Administrative(
+        val admin1 = Administrator(
             -1,
             "admin1@vetclinic.pt",
             "Simmons Gon",
@@ -51,7 +51,7 @@ class ExampleObjects {
             "Rua de Pina 23, 2341-323, Lisboa",
             URI.create("admin/1")
         )
-        val admin2 = Administrative(
+        val admin2 = Administrator(
             -1,
             "admin2@vetclinic.pt",
             "Lufy D Monkey",
@@ -61,7 +61,7 @@ class ExampleObjects {
             "Grand Line 3, Lisboa",
             URI.create("admin/2")
         )
-        val admin3 = Administrative(
+        val admin3 = Administrator(
             -1,
             "admin2@vetclinic.pt",
             "Homer Simpson",
@@ -72,7 +72,7 @@ class ExampleObjects {
             URI.create("admin/3")
         )
 
-        val listAdmin = listOf<Administrative>(admin1, admin2, admin3)
-        val listAdminDTO = listOf<AdministrativeDTO>(admin1.toDTO(), admin2.toDTO(), admin3.toDTO())
+        val listAdmin = listOf<Administrator>(admin1, admin2, admin3)
+        val listAdminDTO = listOf<AdministratorDTO>(admin1.toDTO(), admin2.toDTO(), admin3.toDTO())
     }
 }

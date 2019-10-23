@@ -15,15 +15,6 @@ public class AccessControlRules {
             String condition = "@SecurityService.isPetOwner(principal,#id)";
         }
 
-//        @Target({ElementType.METHOD, ElementType.TYPE})
-//        @Retention(RetentionPolicy.RUNTIME)
-//        @Inherited
-//        @Documented
-//        @PreAuthorize(AllowedForCreatePet.condition)
-//        public @interface AllowedForCreatePet {
-//            String condition = "hasRole('CLIENT')";
-//        }
-
         @Target({ElementType.METHOD, ElementType.TYPE})
         @Retention(RetentionPolicy.RUNTIME)
         @Inherited

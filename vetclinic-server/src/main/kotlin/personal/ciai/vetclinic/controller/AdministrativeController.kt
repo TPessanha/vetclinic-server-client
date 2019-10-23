@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import personal.ciai.vetclinic.dto.AdministrativeDTO
+import personal.ciai.vetclinic.dto.AdministratorDTO
 import personal.ciai.vetclinic.service.AdministrativeService
 import personal.ciai.vetclinic.service.EmployeeService
 
 @Api(
-    value = "VetClinic Management System - Administrative API",
-    description = "Management operation of Administrative in the CIAI 2019 Pet Clinic"
+    value = "VetClinic Management System - Administrator API",
+    description = "Management Administrative operations in the CIAI 2019 Pet Clinic"
 )
 
 @RestController
@@ -34,7 +34,7 @@ class AdministrativeController(
     @ApiOperation(
         value = "Get details of a single  Administrative",
         produces = "application/json",
-        response = AdministrativeDTO::class
+        response = AdministratorDTO::class
     )
     @ApiResponses(
         value = [
@@ -67,7 +67,7 @@ class AdministrativeController(
         value = "View a list of Administratives details",
         produces = "application/json",
         responseContainer = "List",
-        response = AdministrativeDTO::class
+        response = AdministratorDTO::class
     )
     @ApiResponses(
         value = [
@@ -103,7 +103,7 @@ class AdministrativeController(
         )
         employeeId: Int,
         @ApiParam(required = true, value = "(Required) Administrative info necessary to created a new account")
-        @RequestBody admin: AdministrativeDTO
+        @RequestBody admin: AdministratorDTO
     ) = administrativeService.save(admin)
 
     @ApiOperation(value = "Edit Administrative information", consumes = "application/json")
@@ -127,7 +127,7 @@ class AdministrativeController(
             value = "adminId", required = true
         ) adminId: Int,
         @ApiParam(required = true, value = "(Required) Admin information to be changed")
-        @RequestBody admin: AdministrativeDTO
+        @RequestBody admin: AdministratorDTO
     ) = administrativeService.update(admin, adminId)
 
     @ApiOperation(value = "Delete a Administrative account")
