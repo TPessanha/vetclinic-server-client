@@ -11,7 +11,9 @@ interface ClientRepository : JpaRepository<Client, Int> {
     @Query("select c from Client c left join fetch c.pets where c.id = :owner")
     fun findByIdWithPets(owner: Int): Optional<Client>
 
+    /*
     // A query that loads all Clients with prefetching of the appointments associated
     @Query("select c from Client p left join fetch c.appointments where c.id = :id")
     fun findByIdWithAppointment(id: Int): Optional<Client>
+    */
 }
