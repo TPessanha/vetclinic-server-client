@@ -9,6 +9,7 @@ import java.security.Principal
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -75,7 +76,8 @@ class PetController(
         ]
     )
     @GetMapping("/{id:[0-9]+}")
-    @AccessControlRules.PetsRules.AllowedForGetPet
+//    @AccessControlRules.PetsRules.AllowedForGetPet
+    @PreAuthorize("hasRole('CLIENT')")
     fun getOnePet(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,

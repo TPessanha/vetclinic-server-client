@@ -40,10 +40,12 @@ class CustomUserDetailsService(
         username?.let {
             val user = users.getUserEntityByUsernameWithRoles(it)
             if (user.isPresent) {
+                val authorityList = getAuthorityList(user.get().roles)
+
                 return CustomUserDetails(
                     user.get().username,
                     user.get().password,
-                    getAuthorityList(user.get().roles)
+                    authorityList
                 )
             } else
                 throw UsernameNotFoundException(username)

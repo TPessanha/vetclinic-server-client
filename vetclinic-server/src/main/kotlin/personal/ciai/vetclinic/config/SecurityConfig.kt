@@ -3,7 +3,9 @@ package personal.ciai.vetclinic.config
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
@@ -11,7 +13,8 @@ import personal.ciai.vetclinic.security.CustomUserDetailsService
 import personal.ciai.vetclinic.service.UserService
 
 @Configuration
-class SecurityConfig(
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+private class SecurityConfig(
     val customUserDetails: CustomUserDetailsService,
     val users: UserService
 ) : WebSecurityConfigurerAdapter() {
@@ -37,6 +40,7 @@ class SecurityConfig(
                 BasicAuthenticationFilter::class.java)
             .addFilterBefore(JWTAuthenticationFilter(),
                 BasicAuthenticationFilter::class.java)
+
     }
 
     override fun configure(auth: AuthenticationManagerBuilder) {
