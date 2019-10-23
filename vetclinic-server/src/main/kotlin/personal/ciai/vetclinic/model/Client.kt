@@ -26,6 +26,8 @@ class Client(
     override fun toDTO(): ClientDTO =
         ClientDTO(
             id = this.id, email = this.email, name = this.name, phoneNumber = this.phoneNumber,
-            username = this.username, password = this.password, address = this.address, photo = photo?.toString()
+            username = this.username, password = this.password, address = this.address,
+            photo = photo?.toString()
+            //        appointments = appointments.map { it.toDTO() },
         )
 }
