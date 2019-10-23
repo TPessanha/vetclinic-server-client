@@ -38,7 +38,7 @@ class ClientController(@Autowired val clientService: ClientService) {
             ))
         ]
     )
-    @GetMapping("")
+    @GetMapping("{clientId}")
     fun getAllAppointments(
         @ApiParam(value = "The ID of the client", required = false, defaultValue = "1") @PathVariable
         clientId: Int
