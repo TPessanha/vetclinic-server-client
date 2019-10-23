@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.context.WebApplicationContext
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.admin1
 import personal.ciai.vetclinic.dto.AdministratorDTO
-import personal.ciai.vetclinic.service.AdministrativeService
+import personal.ciai.vetclinic.service.AdministratorService
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
@@ -32,7 +32,7 @@ import personal.ciai.vetclinic.service.AdministrativeService
 @WithMockUser(username = "admin", password = "123", roles = ["ADMIN"])
 class AdministratorTests {
     @Autowired
-    lateinit var adminService: AdministrativeService
+    lateinit var adminService: AdministratorService
 
     @Autowired
     lateinit var webApplicationContext: WebApplicationContext
@@ -50,8 +50,8 @@ class AdministratorTests {
     }
 
     @Test
-    fun `Add a new Administrative`() {
-        val nAdmins = adminService.getAllAdministrative().size
+    fun `Add a new Administrator`() {
+        val nAdmins = adminService.getAllAdministrator().size
         val dogJSON = mapper.writeValueAsString(admin1.toDTO())
 
         mvc.perform(
@@ -96,6 +96,6 @@ class AdministratorTests {
         )
             .andExpect(status().isOk)
 
-        assertTrue(adminService.getAllAdministrative().size == nAdmins)
+        assertTrue(adminService.getAllAdministrator().size == nAdmins)
     }
 }

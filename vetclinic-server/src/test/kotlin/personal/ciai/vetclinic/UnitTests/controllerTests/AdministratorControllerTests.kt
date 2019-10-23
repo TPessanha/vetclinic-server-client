@@ -27,7 +27,7 @@ import personal.ciai.vetclinic.ExampleObjects.exampleObjects.listAdminDTO
 import personal.ciai.vetclinic.IntegrationTests.AdministratorTests
 import personal.ciai.vetclinic.dto.AdministratorDTO
 import personal.ciai.vetclinic.exception.NotFoundException
-import personal.ciai.vetclinic.service.AdministrativeService
+import personal.ciai.vetclinic.service.AdministratorService
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
@@ -39,7 +39,7 @@ class AdministratorControllerTests {
     lateinit var mvc: MockMvc
 
     @MockBean
-    lateinit var admin: AdministrativeService
+    lateinit var admin: AdministratorService
 
     companion object {
         val mapper = ObjectMapper().registerModule(KotlinModule())
@@ -48,8 +48,8 @@ class AdministratorControllerTests {
     }
 
     @Test
-    fun `Test GET all Administrative`() {
-        `when`(admin.getAllAdministrative()).thenReturn(listAdminDTO)
+    fun `Test GET all Administrator`() {
+        `when`(admin.getAllAdministrator()).thenReturn(listAdminDTO)
 
         val result = mvc.perform(get(adminURL))
             .andExpect(status().isOk)
@@ -62,8 +62,8 @@ class AdministratorControllerTests {
     }
 
     @Test
-    fun `Test GET One Administrative`() {
-        `when`(admin.getAdministrativeById(1)).thenReturn(admin2.toDTO())
+    fun `Test GET One Administrator`() {
+        `when`(admin.getAdministratorById(1)).thenReturn(admin2.toDTO())
 
         val result = mvc.perform(get("$adminURL/1"))
             .andExpect(status().isOk)
@@ -75,8 +75,8 @@ class AdministratorControllerTests {
     }
 
     @Test
-    fun `Test GET One Administrative (Not Found)`() {
-        `when`(admin.getAdministrativeById(2)).thenThrow(NotFoundException("not found"))
+    fun `Test GET One Administrator (Not Found)`() {
+        `when`(admin.getAdministratorById(2)).thenThrow(NotFoundException("not found"))
 
         mvc.perform(get("$adminURL/2"))
             .andExpect(status().is4xxClientError)
@@ -85,7 +85,7 @@ class AdministratorControllerTests {
     fun <T> nonNullAny(t: Class<T>): T = any(t)
 
     @Test
-    fun `Test POST One Administrative`() {
+    fun `Test POST One Administrator`() {
 
         val adminJSON = mapper.writeValueAsString(admin2.toDTO())
 

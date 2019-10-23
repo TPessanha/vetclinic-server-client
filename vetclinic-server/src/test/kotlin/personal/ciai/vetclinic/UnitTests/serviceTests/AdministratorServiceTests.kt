@@ -17,7 +17,7 @@ import personal.ciai.vetclinic.dto.AdministratorDTO
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.model.Administrator
 import personal.ciai.vetclinic.repository.AdministratorRepository
-import personal.ciai.vetclinic.service.AdministrativeService
+import personal.ciai.vetclinic.service.AdministratorService
 
 /**
  * Description:
@@ -27,7 +27,7 @@ import personal.ciai.vetclinic.service.AdministrativeService
 class AdministratorServiceTests {
 
     @Autowired
-    lateinit var adminService: AdministrativeService
+    lateinit var adminService: AdministratorService
 
     @MockBean
     lateinit var repository: AdministratorRepository
@@ -36,27 +36,27 @@ class AdministratorServiceTests {
     fun `basic test on get All`() {
         `when`(repository.findAll()).thenReturn(listAdmin)
 
-        assertEquals(adminService.getAllAdministrative(), listAdmin.map { it.toDTO() })
+        assertEquals(adminService.getAllAdministrator(), listAdmin.map { it.toDTO() })
     }
 
     @Test
     fun `basic test on get only One`() {
         `when`(repository.findById(1)).thenReturn(Optional.of(admin1))
 
-        assertEquals(adminService.getAdministrativeById(1), admin1.toDTO())
+        assertEquals(adminService.getAdministratorById(1), admin1.toDTO())
     }
 
     @Test
-    fun `test on getAdministrativeById() exception`() {
+    fun `test on getAdministratorById() exception`() {
         `when`(repository.findById(4)).thenThrow(NotFoundException("not found"))
 
         assertThrows(NotFoundException::class.java) {
-            adminService.getAdministrativeById(4)
+            adminService.getAdministratorById(4)
         }
     }
 
     @Test
-    fun `test on add new Administrative`() {
+    fun `test on add new Administrator`() {
         `when`(repository.save(Mockito.any(Administrator::class.java)))
             .then {
                 val admin: Administrator = it.getArgument(0)
@@ -70,12 +70,12 @@ class AdministratorServiceTests {
     }
 
     @Test
-    fun `Test function toDTO for the Administrative Class`() {
+    fun `Test function toDTO for the Administrator Class`() {
         val adminDTO = admin1.toDTO()
-        `assert AdministrativeDTO`(adminDTO)
+        `assert AdministratorDTO`(adminDTO)
     }
 
-    private fun `assert AdministrativeDTO`(admin: AdministratorDTO) {
+    private fun `assert AdministratorDTO`(admin: AdministratorDTO) {
         assertEquals(admin.id, (admin1.id))
         assertEquals(admin.name, (admin1.name))
         assertEquals(admin.email, (admin1.email))

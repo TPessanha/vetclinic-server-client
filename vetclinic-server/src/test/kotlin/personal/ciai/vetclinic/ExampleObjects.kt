@@ -1,9 +1,9 @@
 package personal.ciai.vetclinic
 
 import java.net.URI
-import personal.ciai.vetclinic.dto.AdministrativeDTO
+import personal.ciai.vetclinic.dto.AdministratorDTO
 import personal.ciai.vetclinic.dto.VeterinarianDTO
-import personal.ciai.vetclinic.model.Administrative
+import personal.ciai.vetclinic.model.Administrator
 import personal.ciai.vetclinic.model.Veterinarian
 
 class ExampleObjects {
@@ -44,9 +44,9 @@ class ExampleObjects {
         val vetList = listOf<Veterinarian>(vet1, vet2)
         val vetDTOList = listOf<VeterinarianDTO>(vet1.toDTO(), vet2.toDTO())
 
-        // Administrative
+        // Administrator
 
-        val admin1 = Administrative(
+        val admin1 = Administrator(
             id = -1,
             email = "admin1@vetclinic.pt",
             name = "Simmons Gon",
@@ -57,7 +57,7 @@ class ExampleObjects {
             photo = URI.create("admin/1"),
             employeeId = 12
         )
-        val admin2 = Administrative(
+        val admin2 = Administrator(
             id = -1,
             email = "admin2@vetclinic.pt",
             name = "Lufy D Monkey",
@@ -68,7 +68,7 @@ class ExampleObjects {
             photo = URI.create("admin/2"),
             employeeId = 12
         )
-        val admin3 = Administrative(
+        val admin3 = Administrator(
             id = -1,
             email = "admin2@vetclinic.pt",
             name = "Homer Simpson",
@@ -80,7 +80,7 @@ class ExampleObjects {
             employeeId = 12
         )
 
-        val listAdmin = listOf<Administrative>(admin1, admin2, admin3)
-        val listAdminDTO = listOf<AdministrativeDTO>(admin1.toDTO(), admin2.toDTO(), admin3.toDTO())
+        val listAdmin = listOf<Administrator>(admin1, admin2, admin3)
+        val listAdminDTO = listOf<AdministratorDTO>(admin1.toDTO(), admin2.toDTO(), admin3.toDTO())
     }
 }
