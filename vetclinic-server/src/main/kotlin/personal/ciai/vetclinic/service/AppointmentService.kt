@@ -5,7 +5,7 @@ import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import personal.ciai.vetclinic.dto.AppointmentDTO
-import personal.ciai.vetclinic.exception.ExpectationFailedException
+import personal.ciai.vetclinic.exception.PreconditionFailedException
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.model.Appointment
 import personal.ciai.vetclinic.repository.AppointmentRepository
@@ -46,7 +46,7 @@ class AppointmentService(
 
     fun addAppointment(appointmentDTO: AppointmentDTO) {
         if (appointmentDTO.id != 0)
-            throw ExpectationFailedException("Appointment id must be 0 in insertion or > 0 for update")
+            throw PreconditionFailedException("Appointment id must be 0 in insertion or > 0 for update")
 
         // TODO CHECK IF VET IS AVAILABLE
         // SOmething like vetService.CheckAvailability(AppointmentDTO)

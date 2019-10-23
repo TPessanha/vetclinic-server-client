@@ -3,10 +3,11 @@ package personal.ciai.vetclinic.service
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import personal.ciai.vetclinic.dto.UserDTO
-import personal.ciai.vetclinic.exception.ExpectationFailedException
+import personal.ciai.vetclinic.exception.PreconditionFailedException
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.model.User
 import personal.ciai.vetclinic.repository.UserRepository
+import java.util.Optional
 
 @Service
 class UserService(
@@ -29,22 +30,26 @@ class UserService(
     fun getUserEntityById(id: Int): User =
         repository.findById(id).orElseThrow { NotFoundException("User with id ($id) not found") }
 
-    private fun saveUser(userDTO: UserDTO, id: Int = 0) {
+    private fun saveUser(userDTO: UserDTO, id: Int = 0): Optional<User> {
         val newUser = userDTO.toEntity(id)
-        repository.save(newUser)
+        return Optional.of(repository.save(newUser))
     }
 
-    fun updatePet(userDTO: UserDTO, id: Int) {
+    fun updateUser(userDTO: UserDTO, id: Int): Optional<User> {
         if (id <= 0 || !repository.existsById(userDTO.id))
             throw NotFoundException("User with id ($id) not found")
 
-        saveUser(userDTO, id)
+        return saveUser(userDTO, id)
     }
 
-    fun addPet(userDTO: UserDTO) {
+    fun addUser(userDTO: UserDTO): Optional<User> {
         if (userDTO.id != 0)
-            throw ExpectationFailedException("User id must be 0 in insertion")
+            throw PreconditionFailedException("User id must be 0 in insertion")
 
-        saveUser(userDTO)
+        return saveUser(userDTO)
+    }
+
+    fun getUserEntityByUsername(username: String): Optional<User> {
+        return repository.findByUsername(username)
     }
 }

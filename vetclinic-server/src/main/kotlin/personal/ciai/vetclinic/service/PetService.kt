@@ -6,7 +6,7 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.dto.PetDTO
-import personal.ciai.vetclinic.exception.ExpectationFailedException
+import personal.ciai.vetclinic.exception.PreconditionFailedException
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.model.Pet
 import personal.ciai.vetclinic.repository.PetRepository
@@ -39,7 +39,7 @@ class PetService(
 
     fun addPet(petDTO: PetDTO) {
         if (petDTO.id != 0)
-            throw ExpectationFailedException("Pet id must be 0 in insertion")
+            throw PreconditionFailedException("Pet id must be 0 in insertion")
 
         savePet(petDTO)
     }

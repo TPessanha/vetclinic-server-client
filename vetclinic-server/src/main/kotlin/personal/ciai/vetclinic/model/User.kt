@@ -51,6 +51,7 @@ open class User(
             phoneNumber = this.phoneNumber,
             username = this.username,
             password = this.password,
+            passwordRepeat = this.password,
             address = this.address,
             photo = photo?.toString()
         )
