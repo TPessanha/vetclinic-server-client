@@ -31,8 +31,8 @@ private class SecurityConfig(
             .antMatchers("/console/**").permitAll()
             .antMatchers(HttpMethod.POST, "/login").permitAll()
             .antMatchers(HttpMethod.POST, "/signup").permitAll()
-//            .antMatchers("/clients/**").hasRole("CLIENT")
-//            .antMatchers("/clients").hasRole("ADMIN")
+            .antMatchers("/clients/**").hasRole("CLIENT")
+            .antMatchers("/clients").hasRole("ADMIN")
             .anyRequest().authenticated()
             .and().headers().frameOptions().sameOrigin() // H2CONSOLE
             .and()
