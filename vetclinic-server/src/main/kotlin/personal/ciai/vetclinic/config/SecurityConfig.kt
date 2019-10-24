@@ -1,11 +1,11 @@
 package personal.ciai.vetclinic.config
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
@@ -16,7 +16,9 @@ import personal.ciai.vetclinic.service.UserService
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 private class SecurityConfig(
     val customUserDetails: CustomUserDetailsService,
-    val users: UserService
+    val users: UserService,
+    @Autowired
+    val userService: UserService
 ) : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity) {
         http.csrf().disable() // for now, we can disable cross site request forgery protection
@@ -38,9 +40,8 @@ private class SecurityConfig(
                 BasicAuthenticationFilter::class.java)
             .addFilterBefore(UserPasswordSignUpFilterToJWT("/signup", users),
                 BasicAuthenticationFilter::class.java)
-            .addFilterBefore(JWTAuthenticationFilter(),
+            .addFilterBefore(JWTAuthenticationFilter(userService),
                 BasicAuthenticationFilter::class.java)
-
     }
 
     override fun configure(auth: AuthenticationManagerBuilder) {

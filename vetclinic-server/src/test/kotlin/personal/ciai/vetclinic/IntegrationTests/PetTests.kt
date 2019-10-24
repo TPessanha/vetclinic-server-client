@@ -10,9 +10,14 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.ArgumentMatchers
+import org.mockito.Mockito
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.anyInt
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -28,8 +33,10 @@ import org.springframework.transaction.annotation.Transactional
 import personal.ciai.vetclinic.dto.PetDTO
 import personal.ciai.vetclinic.model.Client
 import personal.ciai.vetclinic.model.Pet
+import personal.ciai.vetclinic.security.SecurityService
 import personal.ciai.vetclinic.service.ClientService
 import personal.ciai.vetclinic.service.PetService
+import java.security.Principal
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
@@ -44,6 +51,9 @@ class PetTests {
 
     @Autowired
     lateinit var mvc: MockMvc
+
+    @MockBean
+    lateinit var securityService: SecurityService
 
     companion object {
         // To avoid all annotations JsonProperties in data classes
@@ -68,7 +78,7 @@ class PetTests {
     @Transactional
     fun `Client add a new pet`() {
         val nPets = petService.getAllPets().size
-        assertTrue(petService.getAllPets().size == 2)
+        assertTrue(petService.getAllPets().size == nPets)
 
         val dogJSON = mapper.writeValueAsString(petExample.toDTO().copy(id = 0, owner = 1))
 
@@ -111,9 +121,13 @@ class PetTests {
         assertEquals(petService.getAllPets().size, nPets)
     }
 
+    fun <T> nonNullAny(t: Class<T>): T = Mockito.any(t)
+
     @Test
     @Transactional
     fun `test updatePet`() {
+        `when`(securityService.isPetOwner(nonNullAny(Principal::class.java), anyInt())).thenReturn(true)
+
         val result = mvc.perform(
             get("$petsURL/1")
         )

@@ -54,6 +54,6 @@ class Pet(
         notes = notes,
         physicalDescription = physicalDescription,
         medicalRecord = medicalRecord,
-        photo = "$id.jpg"
+        photo = if (photo != null) "$id.jpg" else ""
     )
 }

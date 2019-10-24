@@ -2,11 +2,13 @@ package personal.ciai.vetclinic.service
 
 import java.util.Optional
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.stereotype.Service
 import personal.ciai.vetclinic.config.ConfigurationProperties
 import personal.ciai.vetclinic.dto.UserDTO
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.exception.PreconditionFailedException
+import personal.ciai.vetclinic.model.Role
 import personal.ciai.vetclinic.model.User
 import personal.ciai.vetclinic.repository.UserRepository
 
@@ -56,5 +58,17 @@ class UserService(
 
     fun getUserEntityByUsernameWithRoles(username: String): Optional<User> {
         return repository.findByUsernameWithRoles(username)
+    }
+
+    private fun getAuthoritiesList(roles: MutableList<Role>): MutableList<SimpleGrantedAuthority> {
+        return roles.map { SimpleGrantedAuthority(it.name.name) }.toMutableList()
+    }
+
+    fun getAuthorities(username: String): MutableList<SimpleGrantedAuthority> {
+        val user = getUserEntityByUsernameWithRoles(username)
+        if (user.isPresent)
+            return user.get().getAuthorities()
+        else
+            return arrayListOf()
     }
 }

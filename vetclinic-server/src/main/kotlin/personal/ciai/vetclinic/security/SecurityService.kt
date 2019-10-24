@@ -2,8 +2,10 @@ package personal.ciai.vetclinic.security
 
 import java.security.Principal
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
 import personal.ciai.vetclinic.service.PetService
 
+@Component("SecurityService")
 public class SecurityService {
     @Autowired
     lateinit var petService: PetService

@@ -21,7 +21,7 @@ public class AccessControlRules {
         @Documented
         @PreAuthorize(AllowedForGetPet.condition)
         public @interface AllowedForGetPet {
-            String condition = "hasRole('ADMIN') or " + AllowedForEditPet.condition;
+            String condition = "hasRole('ROLE_ADMIN') or " + AllowedForEditPet.condition;
         }
     }
 

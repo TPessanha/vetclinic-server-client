@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component
 import personal.ciai.vetclinic.config.ConfigurationProperties
 import personal.ciai.vetclinic.model.Administrator
 import personal.ciai.vetclinic.model.Client
+import personal.ciai.vetclinic.model.Pet
 import personal.ciai.vetclinic.model.Role
 import personal.ciai.vetclinic.model.RoleName
 import personal.ciai.vetclinic.repository.AdministratorRepository
@@ -47,10 +48,19 @@ class Init(
     fun appReady(event: ApplicationReadyEvent) {
         val roles = addRoles()
         addAdmin(roles)
-        addClients(roles)
+        val clients = addClients(roles)
+        addPets(clients)
     }
 
-    private fun addClients(roles: List<Role>) {
+    private fun addPets(clients: List<Client>) {
+        val p1 = Pet(
+            0, "cat", 2, clients[0]
+        )
+
+        petRepository.save(p1)
+    }
+
+    private fun addClients(roles: List<Role>): List<Client> {
         val c1 = Client(
             0,
             "rui@gmail.com",
@@ -64,6 +74,8 @@ class Init(
         c1.roles.add(roles[2])
 
         clientRepository.save(c1)
+
+        return listOf(c1)
     }
 
     private fun addAdmin(roles: List<Role>) {

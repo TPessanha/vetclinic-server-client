@@ -10,6 +10,7 @@ import javax.persistence.JoinTable
 import javax.persistence.ManyToMany
 import javax.persistence.Table
 import org.hibernate.annotations.NaturalId
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import personal.ciai.vetclinic.dto.Transferable
 import personal.ciai.vetclinic.dto.UserDTO
 
@@ -21,7 +22,7 @@ import personal.ciai.vetclinic.dto.UserDTO
  * @property phoneNumber the phone number of this User.
  * @property username the username of the User.
  * @property password the username of the User.
- * @property address the adress of the User.
+ * @property address the address of the User.
  * @constructor Creates a User DAO
  */
 @Entity
@@ -49,16 +50,12 @@ open class User(
     @ManyToMany
     @JoinTable(
         name = "user_role",
-        joinColumns = arrayOf(
-            JoinColumn(
-                name = "user_id", referencedColumnName = "id"
-            )
-        ),
-        inverseJoinColumns = arrayOf(
-            JoinColumn(
-                name = "role_id", referencedColumnName = "id"
-            )
-        )
+        joinColumns = [JoinColumn(
+            name = "user_id", referencedColumnName = "id"
+        )],
+        inverseJoinColumns = [JoinColumn(
+            name = "role_id", referencedColumnName = "id"
+        )]
     )
     val roles: MutableList<Role> = arrayListOf()
 ) : IdentifiedEntity(id) {
@@ -72,6 +69,9 @@ open class User(
             password = this.password,
             passwordRepeat = this.password,
             address = this.address,
-            photo = "$id.jpg"
+            photo = if (photo != null) "$id.jpg" else ""
         )
+
+    fun getAuthorities() =
+        roles.map { SimpleGrantedAuthority(it.name.name) }.toMutableList()
 }
