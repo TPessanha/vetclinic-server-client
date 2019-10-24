@@ -9,13 +9,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
-import personal.ciai.vetclinic.security.CustomUserDetailsService
+import personal.ciai.vetclinic.security.UserDetailsService
 import personal.ciai.vetclinic.service.UserService
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 private class SecurityConfig(
-    val customUserDetails: CustomUserDetailsService,
+    val userDetails: UserDetailsService,
     val users: UserService,
     @Autowired
     val userService: UserService
@@ -52,7 +52,7 @@ private class SecurityConfig(
             .and()
             .passwordEncoder(BCryptPasswordEncoder())
             .and()
-            .userDetailsService(customUserDetails)
+            .userDetailsService(userDetails)
             .passwordEncoder(BCryptPasswordEncoder())
     }
 }

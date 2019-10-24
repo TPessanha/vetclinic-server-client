@@ -1,15 +1,13 @@
 package personal.ciai.vetclinic.security
 
 import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
-import personal.ciai.vetclinic.model.Role
 import personal.ciai.vetclinic.service.UserService
 
-class CustomUserDetails(
+class UserDetails(
     private val aUsername: String,
     private val aPassword: String,
     private val authorities: MutableCollection<out GrantedAuthority>
@@ -31,7 +29,7 @@ class CustomUserDetails(
 }
 
 @Service
-class CustomUserDetailsService(
+class UserDetailsService(
     val users: UserService
 ) : UserDetailsService {
 
@@ -40,20 +38,14 @@ class CustomUserDetailsService(
         username?.let {
             val user = users.getUserEntityByUsernameWithRoles(it)
             if (user.isPresent) {
-                val authorityList = getAuthorityList(user.get().roles)
-
-                return CustomUserDetails(
+                return UserDetails(
                     user.get().username,
                     user.get().password,
-                    authorityList
+                    user.get().getAuthorities()
                 )
             } else
                 throw UsernameNotFoundException(username)
         }
         throw UsernameNotFoundException(username)
-    }
-
-    private fun getAuthorityList(roles: MutableList<Role>): MutableList<SimpleGrantedAuthority> {
-        return roles.map { SimpleGrantedAuthority(it.name.name) }.toMutableList()
     }
 }

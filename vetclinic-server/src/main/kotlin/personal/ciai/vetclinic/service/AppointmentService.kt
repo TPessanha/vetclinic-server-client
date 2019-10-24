@@ -54,7 +54,6 @@ class AppointmentService(
         saveAppointment(appointmentDTO)
     }
 
-    // TODO Spring security check if is the right client
     @Cacheable("PetAppointments")
     fun getPetAppointments(petId: Int) =
         petService.getPetWithAppointments(petId).appointments.map { it.toDTO() }

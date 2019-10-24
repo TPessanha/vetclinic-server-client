@@ -73,5 +73,5 @@ open class User(
         )
 
     fun getAuthorities() =
-        roles.map { SimpleGrantedAuthority(it.name.name) }.toMutableList()
+        roles.map { SimpleGrantedAuthority(it.toAuthority()) }.toMutableList()
 }

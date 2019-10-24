@@ -21,10 +21,12 @@ class Role(
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
+    fun toAuthority() = "ROLE_${name.name}"
+
     enum class RoleName {
-        ROLE_ADMIN,
-        ROLE_VET,
-        ROLE_CLIENT
+        ADMIN,
+        VET,
+        CLIENT
     }
 }
 

@@ -60,10 +60,6 @@ class UserService(
         return repository.findByUsernameWithRoles(username)
     }
 
-    private fun getAuthoritiesList(roles: MutableList<Role>): MutableList<SimpleGrantedAuthority> {
-        return roles.map { SimpleGrantedAuthority(it.name.name) }.toMutableList()
-    }
-
     fun getAuthorities(username: String): MutableList<SimpleGrantedAuthority> {
         val user = getUserEntityByUsernameWithRoles(username)
         if (user.isPresent)

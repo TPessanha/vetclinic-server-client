@@ -97,9 +97,9 @@ class Init(
     }
 
     private fun addRoles(): List<Role> {
-        val admin = Role(1, RoleName.ROLE_ADMIN)
-        val vet = Role(2, RoleName.ROLE_VET)
-        val client = Role(3, RoleName.ROLE_CLIENT)
+        val admin = Role(1, RoleName.ADMIN)
+        val vet = Role(2, RoleName.VET)
+        val client = Role(3, RoleName.CLIENT)
 
         roleRepository.save(admin)
         roleRepository.save(vet)
