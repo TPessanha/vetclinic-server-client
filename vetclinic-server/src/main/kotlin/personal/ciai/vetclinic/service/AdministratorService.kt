@@ -3,7 +3,6 @@ package personal.ciai.vetclinic.service
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import personal.ciai.vetclinic.dto.AdministratorDTO
-import personal.ciai.vetclinic.exception.AccessForbiddenException
 import personal.ciai.vetclinic.exception.ConflictException
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.model.Administrator
@@ -11,15 +10,11 @@ import personal.ciai.vetclinic.repository.AdministratorRepository
 
 @Service
 class AdministratorService(
-    @Autowired val adminRepository: AdministratorRepository,
-    @Autowired private val employeeService: EmployeeService
+    @Autowired val adminRepository: AdministratorRepository
 ) {
 
     fun existsById(id: Int): Boolean {
-        if (adminRepository.existsById(id).not()) {
-            throw AccessForbiddenException()
-        }
-        return true
+        return adminRepository.existsById(id)
     }
 
     fun getAllAdministrator(): List<AdministratorDTO> = adminRepository.findAll()
@@ -33,8 +28,8 @@ class AdministratorService(
         else throw ConflictException("Administrator account with Id ${adminDTO.id} already exist")
     }
 
-    fun update(adminDTO: AdministratorDTO, id: Int) {
-        val admin: Administrator = getAdministratorEntity(id)
+    fun update(adminDTO: AdministratorDTO) {
+        val admin: Administrator = getAdministratorEntity(adminDTO.id)
 
         adminRepository.save(adminDTO.toEntity(admin.id))
     }

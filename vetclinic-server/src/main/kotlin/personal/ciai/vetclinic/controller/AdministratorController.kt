@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import personal.ciai.vetclinic.dto.AdministratorDTO
+import personal.ciai.vetclinic.security.AccessControlRules
 import personal.ciai.vetclinic.service.AdministratorService
-import personal.ciai.vetclinic.service.EmployeeService
 
 @Api(
     value = "VetClinic Management System - Administrator API",
@@ -27,8 +27,7 @@ import personal.ciai.vetclinic.service.EmployeeService
 @RestController
 @RequestMapping("employees/{employeeId:[0-9]+}/administrators")
 class AdministratorController(
-    @Autowired val administradorService: AdministratorService,
-    @Autowired private val employeeService: EmployeeService
+    @Autowired val administradorService: AdministratorService
 ) {
 
     @ApiOperation(
@@ -96,6 +95,7 @@ class AdministratorController(
             )]
     )
     @PostMapping("", consumes = [APPLICATION_JSON_VALUE])
+    @AccessControlRules.AdministratorsRules.AllowedForEditAdministrator
     fun addAdministrator(
         @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
             value = "employeeId",
@@ -117,6 +117,7 @@ class AdministratorController(
             )]
     )
     @PutMapping("/{adminId:[0-9]+}", consumes = [APPLICATION_JSON_VALUE])
+    @AccessControlRules.AdministratorsRules.AllowedForEditAdministrator
     fun updateAdministrator(
         @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
             value = "employeeId",
@@ -128,7 +129,7 @@ class AdministratorController(
         ) adminId: Int,
         @ApiParam(required = true, value = "(Required) Admin information to be changed")
         @RequestBody admin: AdministratorDTO
-    ) = administradorService.update(admin, adminId)
+    ) = administradorService.update(admin.copy(id = adminId))
 
     @ApiOperation(value = "Delete a Administrator account")
     @ApiResponses(
@@ -140,6 +141,7 @@ class AdministratorController(
             )]
     )
     @DeleteMapping("/{adminId:[0-9]+}")
+    @AccessControlRules.AdministratorsRules.AllowedForDeleteAdministrador
     fun deleteAdministrator(
         @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
             value = "employeeId",

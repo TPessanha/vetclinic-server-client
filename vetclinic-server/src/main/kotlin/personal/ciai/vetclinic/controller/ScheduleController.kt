@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiResponses
 import java.util.Date
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.format.annotation.DateTimeFormat
-import org.springframework.format.annotation.DateTimeFormat.ISO.DATE
+import org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import personal.ciai.vetclinic.dto.SchedulesDTO
+import personal.ciai.vetclinic.security.AccessControlRules
 import personal.ciai.vetclinic.service.SchedulesService
 
 @Api(
@@ -46,6 +47,7 @@ class ScheduleController(
         ]
     )
     @GetMapping("")
+    @AccessControlRules.SchedulesRules.AllowedForGetSchedule
     fun getVeterinarianSchedules(
         @ApiParam(value = "The ID of the employee", required = true) @PathVariable
         employeeId: Int,
@@ -71,13 +73,14 @@ class ScheduleController(
         ]
     )
     @GetMapping("{date}")
+    @AccessControlRules.SchedulesRules.AllowedForGetSchedule
     fun getVeterinarianSchedulesDate(
         @ApiParam(value = "The ID of the employee", required = true) @PathVariable
         employeeId: Int,
         @ApiParam(value = "The ID of the Veterinarian", required = true) @PathVariable
         veterinarianId: Int,
         @ApiParam(value = "The date for the schedule. (dd.mm.yyy)", required = true)
-        @PathVariable(value = "date") @DateTimeFormat(iso = DATE) date: Date
+        @PathVariable(value = "date") @DateTimeFormat(iso = DATE_TIME) date: Date
 
     ) = schedulesService.geVeterinarianSchedules(veterinarianId, date)
 
@@ -97,13 +100,14 @@ class ScheduleController(
         ]
     )
     @GetMapping("{date}/")
+    @AccessControlRules.SchedulesRules.AllowedForGetSchedule
     fun getVeterinarianSchedulesForDate(
         @ApiParam(value = "The ID of the employee", required = true) @PathVariable
         employeeId: Int,
         @ApiParam(value = "The ID of the Veterinarian", required = true) @PathVariable
         veterinarianId: Int,
         @ApiParam(value = "The date for the schedule. (dd.mm.yyy)", required = true)
-        @PathVariable(value = "date") @DateTimeFormat(iso = DATE) date: Date
+        @PathVariable(value = "date") @DateTimeFormat(iso = DATE_TIME) date: Date
 
     ) = schedulesService.getScheduleByIdAndStartTime(veterinarianId, date)
 
@@ -124,6 +128,7 @@ class ScheduleController(
         ]
     )
     @GetMapping("/{scheduleId:[0-9]+}")
+    @AccessControlRules.SchedulesRules.AllowedForGetSchedule
     fun getOneSchedule(
         @ApiParam(value = "The ID of the employee", required = true) @PathVariable
         employeeId: Int,
@@ -150,6 +155,7 @@ class ScheduleController(
         ]
     )
     @PostMapping("")
+    @AccessControlRules.SchedulesRules.AllowedForEditSchedule
     fun addSchedule(
         @ApiParam(value = "The ID of the employee", required = true) @PathVariable
         employeeId: Int,
@@ -176,15 +182,18 @@ class ScheduleController(
             (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
         ]
     )
-    @PutMapping("")
+    @PutMapping("/{scheduleId:[0-9]+}")
+    @AccessControlRules.SchedulesRules.AllowedForEditSchedule
     fun updateSchedule(
         @ApiParam(value = "The ID of the employee", required = true) @PathVariable
         employeeId: Int,
         @ApiParam(value = "The ID of the Veterinarian", required = true) @PathVariable
         vetId: Int,
+        @ApiParam(value = "The ID of the Schedule", required = true) @PathVariable
+        scheduleId: Int,
         @ApiParam(
             value = "Details of an Schedule to be created",
             required = true
         ) @RequestBody schedules: SchedulesDTO
-    ) = schedulesService.updateSchedule(schedules, vetId)
+    ) = schedulesService.updateSchedule(schedules.copy(id = scheduleId, vetId = vetId))
 }

@@ -11,6 +11,8 @@ fun asDate(localDate: LocalDate): Date =
 
 fun asDate(date: Long): Date = Date(date)
 
+fun now(): Date = Date.from(Instant.now())
+
 fun asLocalDate(date: Date): LocalDate {
     return Instant.ofEpochMilli(date.time).atZone(ZoneId.systemDefault()).toLocalDate()
 }
