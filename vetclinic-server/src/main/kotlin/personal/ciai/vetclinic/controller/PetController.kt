@@ -52,10 +52,10 @@ class PetController(
         ]
     )
     @GetMapping("")
+    @AccessControlRules.PetsRules.IsPrincipalTheClient
     fun getAllClientPets(
-        @ApiParam(value = "The ID of the client", required = false, defaultValue = "1") @PathVariable
-        clientId: Int,
-        principal: Principal
+        @ApiParam(value = "The ID of the client", required = true, defaultValue = "1") @PathVariable
+        clientId: Int
     ) = petService.getClientPets(clientId)
 
     @ApiOperation(
@@ -76,7 +76,6 @@ class PetController(
     )
     @GetMapping("/{id:[0-9]+}")
     @AccessControlRules.PetsRules.AllowedForGetPet
-//    @PreAuthorize("hasRole('CLIENT')")
     fun getOnePet(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
@@ -103,6 +102,7 @@ class PetController(
         ]
     )
     @PostMapping("")
+    @AccessControlRules.PetsRules.IsPrincipalTheClient
     fun addPet(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
@@ -130,7 +130,7 @@ class PetController(
         ]
     )
     @PutMapping("/{id:[0-9]+}")
-    @AccessControlRules.PetsRules.AllowedForEditPet
+    @AccessControlRules.PetsRules.IsPetOwner
     fun updatePet(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
@@ -156,7 +156,7 @@ class PetController(
         ]
     )
     @PutMapping("/{id:[0-9]+}/photo")
-    @AccessControlRules.PetsRules.AllowedForEditPet
+    @AccessControlRules.PetsRules.IsPetOwner
     fun savePhoto(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
@@ -183,7 +183,7 @@ class PetController(
         ]
     )
     @GetMapping("/{id:[0-9]+}/photo")
-    @AccessControlRules.PetsRules.AllowedForEditPet
+    @AccessControlRules.PetsRules.IsPetOwner
     fun getPhoto(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
@@ -203,7 +203,7 @@ class PetController(
         ]
     )
     @DeleteMapping("/{id:[0-9]+}")
-    @AccessControlRules.PetsRules.AllowedForEditPet
+    @AccessControlRules.PetsRules.IsPetOwner
     fun deletePet(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,

@@ -20,10 +20,11 @@ class Role(
     override fun toDTO(): Transferable {
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
+
+    enum class RoleName {
+        ROLE_ADMIN,
+        ROLE_VET,
+        ROLE_CLIENT
+    }
 }
 
-enum class RoleName {
-    ROLE_ADMIN,
-    ROLE_VET,
-    ROLE_CLIENT
-}

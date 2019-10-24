@@ -10,8 +10,8 @@ public class AccessControlRules {
         @Retention(RetentionPolicy.RUNTIME)
         @Inherited
         @Documented
-        @PreAuthorize(AllowedForEditPet.condition)
-        public @interface AllowedForEditPet {
+        @PreAuthorize(IsPetOwner.condition)
+        public @interface IsPetOwner {
             String condition = "@SecurityService.isPetOwner(principal,#id)";
         }
 
@@ -21,7 +21,16 @@ public class AccessControlRules {
         @Documented
         @PreAuthorize(AllowedForGetPet.condition)
         public @interface AllowedForGetPet {
-            String condition = "hasRole('ROLE_ADMIN') or " + AllowedForEditPet.condition;
+            String condition = "hasRole('ROLE_ADMIN') or " + IsPetOwner.condition;
+        }
+
+        @Target({ElementType.METHOD, ElementType.TYPE})
+        @Retention(RetentionPolicy.RUNTIME)
+        @Inherited
+        @Documented
+        @PreAuthorize(IsPrincipalTheClient.condition)
+        public @interface IsPrincipalTheClient {
+            String condition = "@SecurityService.isPrincipalWithID(principal,#clientId)";
         }
     }
 

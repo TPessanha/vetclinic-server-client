@@ -41,7 +41,7 @@ import java.security.Principal
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@WithMockUser(username = "user", password = "password", roles = ["CLIENT"])
+@WithMockUser(username = "admin", password = "password", roles = ["CLIENT","ADMIN"])
 class PetTests {
     @Autowired
     lateinit var petService: PetService
@@ -80,7 +80,9 @@ class PetTests {
         val nPets = petService.getAllPets().size
         assertTrue(petService.getAllPets().size == nPets)
 
-        val dogJSON = mapper.writeValueAsString(petExample.toDTO().copy(id = 0, owner = 1))
+        val DTO = PetDTO(0,"cat",2,1)
+
+        val dogJSON = mapper.writeValueAsString(DTO.copy(id = 0, owner = 1))
 
         mvc.perform(
             post(petsURL)

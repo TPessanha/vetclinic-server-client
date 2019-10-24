@@ -27,7 +27,7 @@ class PetRepositoryTests {
     @Test
     @Transactional
     fun `basic test on findAll`() {
-        assertEquals(pets.findAll().toList().size, 2)
+        assertTrue(pets.findAll().toList().isNotEmpty())
     }
 
     @Test
@@ -89,10 +89,10 @@ class PetRepositoryTests {
 
         pets.delete(pet0)
 
-        assertTrue(pets.findAll().toList().size == 3)
+        assertTrue(pets.findAll().toList().size == previousList.size-1)
 
         pets.delete(pet1)
 
-        assertTrue(pets.findAll().toList().size == 2)
+        assertTrue(pets.findAll().toList().size == previousList.size-2)
     }
 }

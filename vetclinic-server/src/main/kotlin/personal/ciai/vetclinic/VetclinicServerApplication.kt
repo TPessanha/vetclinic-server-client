@@ -15,7 +15,7 @@ import personal.ciai.vetclinic.model.Administrator
 import personal.ciai.vetclinic.model.Client
 import personal.ciai.vetclinic.model.Pet
 import personal.ciai.vetclinic.model.Role
-import personal.ciai.vetclinic.model.RoleName
+import personal.ciai.vetclinic.model.Role.RoleName
 import personal.ciai.vetclinic.repository.AdministratorRepository
 import personal.ciai.vetclinic.repository.ClientRepository
 import personal.ciai.vetclinic.repository.PetRepository
