@@ -3,6 +3,7 @@ package personal.ciai.vetclinic.IntegrationTests
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
+import java.security.Principal
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
@@ -10,7 +11,6 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.anyInt
@@ -36,7 +36,6 @@ import personal.ciai.vetclinic.model.Pet
 import personal.ciai.vetclinic.security.SecurityService
 import personal.ciai.vetclinic.service.ClientService
 import personal.ciai.vetclinic.service.PetService
-import java.security.Principal
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest

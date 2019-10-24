@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty
 import java.util.Date
 import personal.ciai.vetclinic.model.ScheduleStatus
 import personal.ciai.vetclinic.model.Schedules
-import personal.ciai.vetclinic.service.VeterinarianService
+import personal.ciai.vetclinic.model.Veterinarian
 
 /**
  * Models a Schedule DTO.
@@ -58,14 +58,14 @@ data class SchedulesDTO(
     val status: ScheduleStatus
 
 ) : Transferable {
-    fun toEntity(vetService: VeterinarianService) = toEntity(this.id, vetService)
+    fun toEntity(vet: Veterinarian) = toEntity(this.id, vet)
 
-    fun toEntity(newId: Int, vetService: VeterinarianService) =
+    fun toEntity(newId: Int, vet: Veterinarian) =
         Schedules(
             id = newId,
             startDate = Date(startTime),
             endDate = Date(endTime),
             status = status,
-            veterinarian = vetService.getVeterinarianEntity(vetId)
+            veterinarian = vet
         )
 }
