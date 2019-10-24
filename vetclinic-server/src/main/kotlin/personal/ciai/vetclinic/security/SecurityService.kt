@@ -5,12 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import personal.ciai.vetclinic.service.AdministratorService
 import personal.ciai.vetclinic.model.User
-import personal.ciai.vetclinic.service.AdministratorService
 import personal.ciai.vetclinic.service.PetService
 import personal.ciai.vetclinic.service.SchedulesService
 import personal.ciai.vetclinic.service.UserService
-import personal.ciai.vetclinic.service.VeterinarianService
-import personal.ciai.vetclinic.service.SchedulesService
 import personal.ciai.vetclinic.service.VeterinarianService
 
 @Component("SecurityService")
