@@ -41,7 +41,7 @@ open class User(
     @Column(nullable = false, unique = true)
     val username: String,
     @Column(nullable = false)
-    val password: String,
+    var password: String,
     @Column(nullable = false)
     val address: String,
     @Column(nullable = true)

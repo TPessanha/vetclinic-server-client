@@ -7,16 +7,17 @@ import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.dto.ClientDTO
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.exception.PreconditionFailedException
+import personal.ciai.vetclinic.model.Appointment
+// import personal.ciai.vetclinic.model.Appointment
 import personal.ciai.vetclinic.model.Client
+import personal.ciai.vetclinic.repository.AppointmentRepository
 import personal.ciai.vetclinic.repository.ClientRepository
 
 @Service
 class ClientService(
 
-    /*
     @Autowired
     val appointments: AppointmentRepository,
-    */
 
     @Autowired
     val repository: ClientRepository,
@@ -31,14 +32,13 @@ class ClientService(
             MediaType.IMAGE_PNG.toString()
         )
     }
-    /*
+
     fun checkAppointments(id: Int): List<Appointment> {
         val client =
-            repository.findByIdWithAppointment(id)
+            repository.findByIdWithAppointments(id)
                 .orElseThrow { NotFoundException("Client with id ($id) not found") }
         return client.appointments
     }
-    */
 
     fun getClientById(id: Int) = getClientEntityById(id).toDTO()
 

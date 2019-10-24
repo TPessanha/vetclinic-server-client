@@ -8,7 +8,6 @@ import personal.ciai.vetclinic.config.ConfigurationProperties
 import personal.ciai.vetclinic.dto.UserDTO
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.exception.PreconditionFailedException
-import personal.ciai.vetclinic.model.Role
 import personal.ciai.vetclinic.model.User
 import personal.ciai.vetclinic.repository.UserRepository
 

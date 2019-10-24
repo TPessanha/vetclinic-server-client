@@ -61,7 +61,14 @@ data class ClientDTO(
         required = false,
         readOnly = true
     )
-    val photo: String? = null
+    val photo: String? = null,
+    @ApiModelProperty(
+        "A list of appointments scheduled for the client",
+        required = false,
+        readOnly = true,
+        hidden = true
+    )
+    val appointments: List<String> = emptyList()
 ) : Transferable {
     fun toEntity() = toEntity(this.id)
 
@@ -73,6 +80,7 @@ data class ClientDTO(
         username = this.username,
         password = this.password,
         address = this.address,
-        photo = if (this.photo == null) null else URI.create(this.photo)
+        photo = if (this.photo == null) null else URI.create(this.photo),
+        appointments = arrayListOf()
     )
 }
