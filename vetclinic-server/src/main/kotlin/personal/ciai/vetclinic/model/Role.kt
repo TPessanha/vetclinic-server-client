@@ -23,7 +23,7 @@ class Role(
 }
 
 enum class RoleName {
-    ADMIN,
-    VET,
-    CLIENT
+    ROLE_ADMIN,
+    ROLE_VET,
+    ROLE_CLIENT
 }

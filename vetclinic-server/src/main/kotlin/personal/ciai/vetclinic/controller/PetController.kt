@@ -76,6 +76,7 @@ class PetController(
     )
     @GetMapping("/{id:[0-9]+}")
     @AccessControlRules.PetsRules.AllowedForGetPet
+//    @PreAuthorize("hasRole('CLIENT')")
     fun getOnePet(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,

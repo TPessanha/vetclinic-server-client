@@ -1,12 +1,15 @@
 package personal.ciai.vetclinic.security
 
+import java.security.Principal
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
 import personal.ciai.vetclinic.model.User
 import personal.ciai.vetclinic.service.AdministratorService
 import personal.ciai.vetclinic.service.PetService
 import personal.ciai.vetclinic.service.SchedulesService
 import personal.ciai.vetclinic.service.VeterinarianService
 
+@Component("SecurityService")
 public class SecurityService {
     @Autowired
     lateinit var petService: PetService
@@ -20,9 +23,9 @@ public class SecurityService {
     @Autowired
     lateinit var schedulesService: SchedulesService
 
-    public fun isPetOwner(user: User, id: Int): Boolean {
+    public fun isPetOwner(principal: Principal, id: Int): Boolean {
         val pet = petService.getPetEntityById(id)
-        return pet.owner.id == user.id
+        return pet.owner.username == principal.name
     }
 
     private fun isVeterinarian(user: User): Boolean = veterinarianService.existsById(user.id)

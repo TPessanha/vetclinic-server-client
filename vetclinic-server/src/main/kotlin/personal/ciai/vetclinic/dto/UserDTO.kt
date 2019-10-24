@@ -9,7 +9,6 @@ import javax.validation.constraints.NotNull
 import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import personal.ciai.vetclinic.dto.validation.PasswordMatches
 import personal.ciai.vetclinic.model.User
 import personal.ciai.vetclinic.service.RoleService
 
@@ -26,7 +25,7 @@ import personal.ciai.vetclinic.service.RoleService
  */
 
 @ApiModel("User DTO model", description = "To model Users")
-@PasswordMatches
+// @PasswordMatches
 open class UserDTO(
     @ApiModelProperty(
         "An unique identifier for the user",

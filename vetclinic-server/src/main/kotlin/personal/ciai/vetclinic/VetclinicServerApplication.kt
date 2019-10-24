@@ -12,6 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Component
 import personal.ciai.vetclinic.config.ConfigurationProperties
 import personal.ciai.vetclinic.model.Administrator
+import personal.ciai.vetclinic.model.Client
+import personal.ciai.vetclinic.model.Pet
 import personal.ciai.vetclinic.model.Role
 import personal.ciai.vetclinic.model.RoleName
 import personal.ciai.vetclinic.repository.AdministratorRepository
@@ -46,6 +48,34 @@ class Init(
     fun appReady(event: ApplicationReadyEvent) {
         val roles = addRoles()
         addAdmin(roles)
+        val clients = addClients(roles)
+        addPets(clients)
+    }
+
+    private fun addPets(clients: List<Client>) {
+        val p1 = Pet(
+            0, "cat", 2, clients[0]
+        )
+
+        petRepository.save(p1)
+    }
+
+    private fun addClients(roles: List<Role>): List<Client> {
+        val c1 = Client(
+            0,
+            "rui@gmail.com",
+            "Rui",
+            925364545,
+            "rui",
+            BCryptPasswordEncoder().encode("password"),
+            "Rua da direita"
+        )
+
+        c1.roles.add(roles[2])
+
+        clientRepository.save(c1)
+
+        return listOf(c1)
     }
 
     private fun addAdmin(roles: List<Role>) {
@@ -67,9 +97,9 @@ class Init(
     }
 
     private fun addRoles(): List<Role> {
-        val admin = Role(1, RoleName.ADMIN)
-        val vet = Role(2, RoleName.VET)
-        val client = Role(3, RoleName.CLIENT)
+        val admin = Role(1, RoleName.ROLE_ADMIN)
+        val vet = Role(2, RoleName.ROLE_VET)
+        val client = Role(3, RoleName.ROLE_CLIENT)
 
         roleRepository.save(admin)
         roleRepository.save(vet)
