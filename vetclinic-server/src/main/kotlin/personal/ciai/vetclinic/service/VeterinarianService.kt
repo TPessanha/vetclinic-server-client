@@ -45,7 +45,7 @@ class VeterinarianService(
     fun update(vetDTO: VeterinarianDTO) {
         val vet: Veterinarian = getVeterinarianEntity(vetDTO.id)
 
-        vetRepository.save(vetDTO.toEntity(vet,configurationProperties.fullPathToUserPhotos))
+        vetRepository.save(vetDTO.toEntity(vet, configurationProperties.fullPathToUserPhotos))
     }
 
     fun delete(id: Int) {

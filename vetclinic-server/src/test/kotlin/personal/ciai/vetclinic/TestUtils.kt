@@ -3,17 +3,16 @@ package personal.ciai.vetclinic
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import java.net.URI
+import java.util.Base64
+import java.util.Date
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.assertAll
-import org.springframework.security.core.GrantedAuthority
 import personal.ciai.vetclinic.config.JWTSecret
 import personal.ciai.vetclinic.model.Appointment
 import personal.ciai.vetclinic.model.Client
 import personal.ciai.vetclinic.model.Pet
 import personal.ciai.vetclinic.model.TimeSlot
 import personal.ciai.vetclinic.model.Veterinarian
-import java.util.Base64
-import java.util.Date
 
 object TestUtils {
     val clientExample1 = Client(0, "gaer@gmail.com", "Pedro", 412532, "Pedro123", "password", "Rua Pedro da cenas")

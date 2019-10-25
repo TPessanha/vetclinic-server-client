@@ -54,7 +54,7 @@ class ClientService(
     }
 
     fun saveClient(clientDTO: ClientDTO, id: Int = 0) {
-        val newClient = clientDTO.toEntity(id,configurationProperties.fullPathToUserPhotos)
+        val newClient = clientDTO.toEntity(id, configurationProperties.fullPathToUserPhotos)
         repository.save(newClient)
     }
 

@@ -83,7 +83,6 @@ class Init(
             0, "pig", 6, clients[1]
         )
 
-
         petRepository.save(p1)
         petRepository.save(p2)
         petRepository.save(p3)
@@ -109,7 +108,6 @@ class Init(
             BCryptPasswordEncoder().encode("password"),
             "Rua da esquerda"
         )
-
 
         c1.roles.add(roles[2])
         c2.roles.add(roles[2])

@@ -2,7 +2,6 @@ package personal.ciai.vetclinic.security
 
 import java.security.Principal
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
 import personal.ciai.vetclinic.model.User
 import personal.ciai.vetclinic.service.AdministratorService

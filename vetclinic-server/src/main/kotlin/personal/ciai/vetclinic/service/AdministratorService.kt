@@ -33,7 +33,7 @@ class AdministratorService(
     fun update(adminDTO: AdministratorDTO) {
         val admin: Administrator = getAdministratorEntity(adminDTO.id)
 
-        adminRepository.save(adminDTO.toEntity(admin.id,configurationProperties.fullPathToUserPhotos))
+        adminRepository.save(adminDTO.toEntity(admin.id, configurationProperties.fullPathToUserPhotos))
     }
 
     fun delete(id: Int) {

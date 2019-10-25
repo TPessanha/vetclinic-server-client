@@ -1,7 +1,7 @@
 package personal.ciai.vetclinic.service
 
-import io.swagger.models.auth.In
 import java.io.File
+import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Paths
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,10 +12,6 @@ import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.config.ConfigurationProperties
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.exception.UnsupportedMediaTypeException
-import personal.ciai.vetclinic.model.Client
-import personal.ciai.vetclinic.model.Pet
-import personal.ciai.vetclinic.model.User
-import java.net.URI
 
 @Service
 class ImageService(
@@ -36,7 +32,7 @@ class ImageService(
             throw UnsupportedMediaTypeException("Photos can only be of type (jpg/png)")
 
         val path = Paths.get(
-            configurationProperties.fullPathToPetPhotos, "${petId}.jpg"
+            configurationProperties.fullPathToPetPhotos, "$petId.jpg"
         )
 
         val directory = File(configurationProperties.fullPathToPetPhotos)
@@ -61,7 +57,7 @@ class ImageService(
             throw UnsupportedMediaTypeException("Photos can only be of type (jpg/png)")
 
         val path = Paths.get(
-            configurationProperties.fullPathToUserPhotos, "${userId}.jpg"
+            configurationProperties.fullPathToUserPhotos, "$userId.jpg"
         )
 
         val directory = File(configurationProperties.fullPathToUserPhotos)

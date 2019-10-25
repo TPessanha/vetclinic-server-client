@@ -27,7 +27,7 @@ class Veterinarian(
 
     employeeId: Int
 
-) : Employee(id, employeeId, email, name, phoneNumber, username, password, address,photo) {
+) : Employee(id, employeeId, email, name, phoneNumber, username, password, address, photo) {
 
     override fun toDTO() = VeterinarianDTO(
         id = id,
