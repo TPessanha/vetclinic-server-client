@@ -8,7 +8,10 @@ import personal.ciai.vetclinic.dto.VeterinarianDTO
 import personal.ciai.vetclinic.exception.ConflictException
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.exception.PreconditionFailedException
-import personal.ciai.vetclinic.model.AppointmentStatus
+import personal.ciai.vetclinic.model.AppointmentStatus.Accepted
+import personal.ciai.vetclinic.model.AppointmentStatus.Completed
+import personal.ciai.vetclinic.model.AppointmentStatus.Refused
+import personal.ciai.vetclinic.model.AppointmentStatus.valueOf
 import personal.ciai.vetclinic.model.ScheduleStatus
 import personal.ciai.vetclinic.model.Veterinarian
 import personal.ciai.vetclinic.repository.AppointmentRepository
@@ -21,6 +24,7 @@ class VeterinarianService(
     @Autowired private val appointmentRepository: AppointmentRepository,
     @Autowired private val schedulesService: SchedulesService
 ) {
+    fun existByUserName(userName: String) = vetRepository.existsByUsername(userName)
 
     fun existsById(id: Int): Boolean = vetRepository.existsById(id)
 
@@ -35,7 +39,7 @@ class VeterinarianService(
         .orElseThrow { NotFoundException("Veterinarian account with Id $id not found") }
 
     fun save(vetDTO: VeterinarianDTO) {
-        if (existsById(vetDTO.id).not()) {
+        if (existByUserName(vetDTO.username).not()) {
             vetRepository.save(vetDTO.toEntity())
         } else throw ConflictException("Veterinarian account with Id ${vetDTO.id} already exist")
     }
@@ -61,23 +65,23 @@ class VeterinarianService(
         val savedAppoint = appointmentRepository.findById(appointmentDTO.id)
             .orElseThrow { NotFoundException("Appointment with id (${appointmentDTO.id}) not found") }
 
-        val newStatus = AppointmentStatus.valueOf(appointmentDTO.status.toString())
+        val newStatus = valueOf(appointmentDTO.status.toString())
         if (newStatus == savedAppoint.status)
             throw PreconditionFailedException("Appointment Already ${newStatus.name}")
 
         when (newStatus) {
-            AppointmentStatus.Refused -> refusedAppointment(appointmentDTO)
-            AppointmentStatus.Completed -> completeAppointment(Date(appointmentDTO.startTime), appointmentDTO.id)
-            AppointmentStatus.Accepted -> acceptAppointment(appointmentDTO)
+            Refused -> refuseAppointment(appointmentDTO)
+            Completed -> completeAppointment(Date(appointmentDTO.startTime), appointmentDTO.id)
+            Accepted -> acceptAppointment(appointmentDTO)
             else -> throw PreconditionFailedException()
         }
 
     // appointmentRepository.save(appointmentDTO.toEntity(savedAppoint))  TODO NEED TOENTITY WITH ENTITY PARM
     }
 
-    private fun refusedAppointment(appointmentDTO: AppointmentDTO) {
+    private fun refuseAppointment(appointmentDTO: AppointmentDTO) {
         if (Date(appointmentDTO.startTime).before(now())) {
-            throw PreconditionFailedException("A Appointment ${appointmentDTO.id} Already passed")
+            throw PreconditionFailedException("Appointment ${appointmentDTO.id} Already passed")
         }
         //  appointmentDTO.Justification.notPresent TODO( Need Var )
         // throw PreconditionFailedException("A justifiaction is need")
@@ -91,7 +95,7 @@ class VeterinarianService(
 
     private fun acceptAppointment(appointmentDTO: AppointmentDTO) {
         if (Date(appointmentDTO.startTime).before(now())) {
-            throw PreconditionFailedException("A Appointment ${appointmentDTO.id} Already passed")
+            throw PreconditionFailedException("Appointment ${appointmentDTO.id} Already passed")
         }
 
         val schedule = schedulesService.getScheduleByVeterinarianIdAndStartTimeEntity(
@@ -104,7 +108,7 @@ class VeterinarianService(
 
     private fun completeAppointment(startTime: Date, vetId: Int) {
         if (startTime.after(now())) {
-            throw PreconditionFailedException("A Appointment $vetId Didnt happen yet")
+            throw PreconditionFailedException("Appointment $vetId Didnt happen yet")
         }
     }
 }

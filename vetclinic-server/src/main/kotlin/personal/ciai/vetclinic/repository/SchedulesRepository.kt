@@ -3,17 +3,29 @@ package personal.ciai.vetclinic.repository
 import java.util.Date
 import java.util.Optional
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 import personal.ciai.vetclinic.model.Schedules
-import personal.ciai.vetclinic.model.Veterinarian
 
 @Repository
 interface SchedulesRepository : JpaRepository<Schedules, Int> {
 
-    fun getByVeterinarianAndStartDate(veterinarian: Veterinarian, startDate: Date): Optional<Schedules>
+    @Query(
+        "select s from Schedules s left join fetch s.veterinarian" +
+                " where s.veterinarian = :veterinarian and  s.timeSlot.startDate = :date"
+    )
+    fun getVeterinarianAndStartDateIsEqual(
+        @Param("veterinarian") veterinarian: Int,
+        @Param("date") date: Date
+    ): Optional<Schedules>
 
+    @Query(
+        "select s from Schedules s left join fetch s.veterinarian" +
+                " where s.veterinarian = :veterinarian and  s.timeSlot.startDate <= :startDate"
+    )
     fun findAllByVeterinarianAndStartDateIsGreaterThanEqual(
-        veterinarian: Veterinarian,
-        startDate: Date
+        @Param("veterinarian") veterinarian: Int,
+        @Param("startDate") startDate: Date
     ): List<Schedules>
 }

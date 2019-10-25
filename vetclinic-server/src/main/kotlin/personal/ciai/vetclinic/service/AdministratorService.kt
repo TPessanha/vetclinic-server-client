@@ -23,9 +23,9 @@ class AdministratorService(
     fun getAdministratorById(id: Int): AdministratorDTO = getAdministratorEntity(id).toDTO()
 
     fun save(adminDTO: AdministratorDTO) {
-        if (existsAdministratorById(adminDTO.id).not())
+        if (existByUserName(adminDTO.username).not())
             adminRepository.save(adminDTO.toEntity())
-        else throw ConflictException("Administrator account with Id ${adminDTO.id} already exist")
+        else throw ConflictException("Administrator account with UserName ${adminDTO.username} already exist")
     }
 
     fun update(adminDTO: AdministratorDTO) {
@@ -40,11 +40,8 @@ class AdministratorService(
         adminRepository.delete(admin)
     }
 
-    private fun existsAdministratorById(id: Int): Boolean = adminRepository.existsById(id)
+    fun existByUserName(userName: String) = adminRepository.existsByUsername(userName)
 
-    private fun getAdministratorEntity(id: Int): Administrator = adminRepository.findById(id)
-        .orElseThrow { NotFoundException("Administrator account with Id $id not found") }
-
-    fun administradorEntityByEmployeeId(id: Int): Administrator = adminRepository.getAdministratorByEmployeeId(id)
+    fun getAdministratorEntity(id: Int): Administrator = adminRepository.findById(id)
         .orElseThrow { NotFoundException("Administrator account with Id $id not found") }
 }

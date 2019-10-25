@@ -129,8 +129,6 @@ data class VeterinarianDTO(
             address = this.address,
             photo = if (this.photo.isNullOrEmpty()) URI.create("default") else URI.create(this.photo),
             enabled = entity.enabled,
-//            appointments = entity.appointments,
-//            schedules = entity.schedules,
             appointments = arrayListOf(),
             schedules = arrayListOf()
         )
