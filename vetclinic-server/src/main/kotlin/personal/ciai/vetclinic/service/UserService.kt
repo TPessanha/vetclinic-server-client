@@ -37,7 +37,7 @@ class UserService(
         repository.findById(id).orElseThrow { NotFoundException("User with id ($id) not found") }
 
     private fun saveUser(userDTO: UserDTO, id: Int = 0): Optional<User> {
-        val newUser = userDTO.toEntity(id, configurationProperties.fullPathToUserPhotos, roleService)
+        val newUser = userDTO.toEntity(id, roleService)
         return Optional.of(repository.save(newUser))
     }
 

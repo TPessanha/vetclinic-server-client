@@ -2,7 +2,7 @@ package personal.ciai.vetclinic.dto
 
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
-import java.net.URI
+import java.nio.file.Paths
 import personal.ciai.vetclinic.model.Administrator
 
 /**
@@ -46,9 +46,6 @@ data class AdministratorDTO(
     )
     val name: String,
 
-    @ApiModelProperty("The Administrator photo URI", name = "photo", required = true, readOnly = false)
-    val photo: String,
-
     @ApiModelProperty(
         "The Administrator user name",
         name = "username",
@@ -89,9 +86,9 @@ data class AdministratorDTO(
     val address: String
 ) : Transferable {
 
-    fun toEntity() = toEntity(this.id)
+    fun toEntity(picturePath: String) = toEntity(this.id, picturePath)
 
-    fun toEntity(newId: Int) =
+    fun toEntity(newId: Int, picturePath: String) =
         Administrator(
             id = newId,
             employeeId = employeeId,
@@ -101,10 +98,10 @@ data class AdministratorDTO(
             username = this.username,
             password = this.password,
             address = this.address,
-            photo = if (this.photo.isNullOrEmpty()) URI.create("default") else URI.create(this.photo)
+            photo = Paths.get(picturePath, this.id.toString()).toUri()
         )
 
-    fun toEntity(entity: Administrator) =
+    fun toEntity(entity: Administrator, picturePath: String) =
         Administrator(
             id = entity.id,
             employeeId = employeeId,
@@ -114,6 +111,6 @@ data class AdministratorDTO(
             username = this.username,
             password = entity.password,
             address = this.address,
-            photo = if (this.photo.isNullOrEmpty()) URI.create("default") else URI.create(this.photo)
+            photo = Paths.get(picturePath, this.id.toString()).toUri()
         )
 }

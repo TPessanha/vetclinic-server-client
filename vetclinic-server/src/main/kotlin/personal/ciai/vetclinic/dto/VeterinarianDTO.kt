@@ -2,7 +2,7 @@ package personal.ciai.vetclinic.dto
 
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
-import java.net.URI
+import java.nio.file.Paths
 import personal.ciai.vetclinic.model.Veterinarian
 
 /**
@@ -45,9 +45,6 @@ data class VeterinarianDTO(
         example = "Nunes D Landers"
     )
     val name: String,
-
-    @ApiModelProperty("The Veterinarian photo URI", name = "photo", required = false, readOnly = false)
-    val photo: String,
 
     @ApiModelProperty(
         "The Veterinarian user name",
@@ -99,9 +96,9 @@ data class VeterinarianDTO(
 
 ) : Transferable {
 
-    fun toEntity() = toEntity(this.id)
+    fun toEntity(picturePath: String) = toEntity(this.id, picturePath)
 
-    fun toEntity(newId: Int) =
+    fun toEntity(newId: Int, picturePath: String) =
         Veterinarian(
             id = newId,
             employeeId = employeeId,
@@ -111,13 +108,13 @@ data class VeterinarianDTO(
             username = this.username,
             password = this.password,
             address = this.address,
-            photo = if (this.photo.isNullOrEmpty()) URI.create("default") else URI.create(this.photo),
+            photo = Paths.get(picturePath, this.id.toString()).toUri(),
             enabled = enabled,
             appointments = arrayListOf(),
             schedules = arrayListOf()
         )
 
-    fun toEntity(entity: Veterinarian) =
+    fun toEntity(entity: Veterinarian, picturePath: String) =
         Veterinarian(
             id = entity.id,
             employeeId = employeeId,
@@ -127,7 +124,7 @@ data class VeterinarianDTO(
             username = this.username,
             password = entity.password,
             address = this.address,
-            photo = if (this.photo.isNullOrEmpty()) URI.create("default") else URI.create(this.photo),
+            photo = Paths.get(picturePath, this.id.toString()).toUri(),
             enabled = entity.enabled,
             appointments = arrayListOf(),
             schedules = arrayListOf()

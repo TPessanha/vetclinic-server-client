@@ -3,6 +3,8 @@ package personal.ciai.vetclinic.UnitTests.controllerTests
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
+import java.security.Principal
+import javax.transaction.Transactional
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -15,30 +17,36 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
-import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.web.context.WebApplicationContext
+import personal.ciai.vetclinic.TestUtils
 import personal.ciai.vetclinic.TestUtils.dogExample
 import personal.ciai.vetclinic.TestUtils.petList
 import personal.ciai.vetclinic.dto.PetDTO
 import personal.ciai.vetclinic.exception.NotFoundException
+import personal.ciai.vetclinic.security.SecurityService
 import personal.ciai.vetclinic.service.PetService
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@WithMockUser(username = "user", password = "password", roles = ["CLIENT"])
 class PetControllerTests {
+    @MockBean
+    lateinit var pets: PetService
+
+    @MockBean
+    lateinit var securityService: SecurityService
+
+    @Autowired
+    lateinit var context: WebApplicationContext
 
     @Autowired
     lateinit var mvc: MockMvc
-
-    @MockBean
-    lateinit var pets: PetService
 
     companion object {
         // To avoid all annotations JsonProperties in data classes
@@ -46,15 +54,20 @@ class PetControllerTests {
         // see: https://discuss.kotlinlang.org/t/data-class-and-jackson-annotation-conflict/397/6
         val mapper = ObjectMapper().registerModule(KotlinModule())
 
-        val petsURL = "/clients/1/pets"
+        val petsURL = "/clients/2/pets"
+
+        val token = TestUtils.generateTestToken("user2", listOf("ROLE_CLIENT"))
     }
 
     @Test
+    @Transactional
+//    @WithMockUser(username = "user2", password = "password", roles = ["CLIENT"])
     fun `Test GET client pets`() {
         val dtoList = petList.map { it.toDTO() }
         `when`(pets.getClientPets(anyInt())).thenReturn(dtoList)
+        `when`(securityService.isPrincipalWithID(nonNullAny(Principal::class.java), anyInt())).thenReturn(true)
 
-        val result = mvc.perform(get(petsURL))
+        val result = mvc.perform(get(petsURL).header("Authorization", token))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$", hasSize<Any>(petList.size)))
             .andReturn()
@@ -65,12 +78,16 @@ class PetControllerTests {
     }
 
     @Test
+    @Transactional
     fun `Test GET One Pet`() {
         val dtoList = petList.map { it.toDTO() }
 
-        `when`(pets.getPetById(1)).thenReturn(dogExample.toDTO())
+        `when`(pets.getPetById(anyInt())).thenReturn(dogExample.toDTO())
+        `when`(securityService.isPetOwner(nonNullAny(Principal::class.java), anyInt())).thenReturn(true)
 
-        val result = mvc.perform(get("$petsURL/1"))
+        val token = TestUtils.generateTestToken("user2", listOf("ROLE_CLIENT"))
+
+        val result = mvc.perform(get("$petsURL/1").header("Authorization", token))
             .andExpect(status().isOk)
             .andReturn()
 
@@ -83,7 +100,7 @@ class PetControllerTests {
     fun `Test GET One Pet (Not Found)`() {
         `when`(pets.getPetById(2)).thenThrow(NotFoundException("not found"))
 
-        mvc.perform(get("$petsURL/2"))
+        mvc.perform(get("$petsURL/2").header("Authorization", token))
             .andExpect(status().is4xxClientError)
     }
 
@@ -91,15 +108,16 @@ class PetControllerTests {
 
     @Test
     fun `Test POST One Pet`() {
-        val dtoList = petList.map { it.toDTO() }
+        val dtoL = petList.get(0).toDTO()
 
-        val petJSON = mapper.writeValueAsString(dtoList[0])
+        val petJSON = mapper.writeValueAsString(dtoL)
 
         `when`(pets.addPet(nonNullAny(PetDTO::class.java)))
-            .then { assertEquals(dtoList[0].copy(owner = 1), it.getArgument(0)) }
+            .then { assertEquals(dtoL.copy(owner = 2), it.getArgument(0)) }
+        `when`(securityService.isPrincipalWithID(nonNullAny(Principal::class.java), anyInt())).thenReturn(true)
 
         mvc.perform(
-            post(petsURL)
+            post(petsURL).header("Authorization", token)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(petJSON)

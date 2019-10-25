@@ -16,6 +16,7 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.anyInt
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
@@ -30,6 +31,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
+import personal.ciai.vetclinic.controller.PetController
 import personal.ciai.vetclinic.dto.PetDTO
 import personal.ciai.vetclinic.model.Client
 import personal.ciai.vetclinic.model.Pet
@@ -40,7 +42,7 @@ import personal.ciai.vetclinic.service.PetService
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@WithMockUser(username = "admin", password = "password", roles = ["CLIENT", "ADMIN"])
+@WebMvcTest(PetController::class)
 class PetTests {
     @Autowired
     lateinit var petService: PetService
@@ -75,6 +77,7 @@ class PetTests {
 
     @Test
     @Transactional
+    @WithMockUser(username = "admin", password = "password", roles = ["CLIENT", "ADMIN"])
     fun `Client add a new pet`() {
         val nPets = petService.getAllPets().size
         assertTrue(petService.getAllPets().size == nPets)

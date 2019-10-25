@@ -39,7 +39,7 @@ class SchedulesService(
     fun getScheduleByVeterinarianIdAndStartTimeEntity(vetId: Int, startTime: Date): Schedules {
         return schedulesRepository.getVeterinarianAndStartDateIsEqual(
             vetId,
-            startTime
+            startTime.time
         ).orElseThrow {
             NotFoundException("Schedules for Veterinarian with id $vetId and slot for date $startTime not found")
         }
@@ -60,7 +60,7 @@ class SchedulesService(
 
         return schedulesRepository.findAllByVeterinarianAndStartDateIsGreaterThanEqual(
             vetId,
-            afterDate
+            afterDate.time
         ).map { it.toDTO() }
     }
 
@@ -107,7 +107,7 @@ class SchedulesService(
         if (s.status == ScheduleStatus.Booked)
             throw PreconditionFailedException("Slot ${a.startTime} already taken")
 
-        if (a.startTime.equals(s.timeSlot.startDate.time).not() || a.endTime.compareTo(s.timeSlot.endDate.time) > 0)
+        if (a.startTime.equals(s.timeSlot.startDate).not() || a.endTime.compareTo(s.timeSlot.endDate.toLong()) > 0)
             throw PreconditionFailedException("Slot Time mismatch")
     }
 

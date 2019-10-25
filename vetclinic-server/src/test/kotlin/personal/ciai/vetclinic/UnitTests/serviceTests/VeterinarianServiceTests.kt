@@ -81,7 +81,6 @@ class VeterinarianServiceTests {
         assertEquals(vets.email, (vet1.email))
         assertEquals(vets.address, (vet1.address))
         assertEquals(vets.phoneNumber, (vet1.phoneNumber))
-        assertEquals(vets.photo, vet1.photo.toString())
         assertEquals(vets.username, (vet1.username))
         assertEquals(vets.password, "")
     }

@@ -2,7 +2,7 @@ package personal.ciai.vetclinic.dto
 
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
-import java.net.URI
+import java.nio.file.Paths
 import personal.ciai.vetclinic.model.Client
 
 @ApiModel("Client DTO model", description = "Used to transport client data")
@@ -61,11 +61,18 @@ data class ClientDTO(
         required = false,
         readOnly = true
     )
-    val photo: String? = null
+    val photo: Boolean,
+    @ApiModelProperty(
+        "A list of appointments scheduled for the client",
+        required = false,
+        readOnly = true,
+        hidden = true
+    )
+    val appointments: List<String> = emptyList()
 ) : Transferable {
-    fun toEntity() = toEntity(this.id)
+    fun toEntity(picturePath: String) = toEntity(this.id, picturePath)
 
-    fun toEntity(newId: Int) = Client(
+    fun toEntity(newId: Int, picturePath: String) = Client(
         id = newId,
         name = this.name,
         email = this.email,
@@ -73,6 +80,7 @@ data class ClientDTO(
         username = this.username,
         password = this.password,
         address = this.address,
-        photo = if (this.photo == null) null else URI.create(this.photo)
+        photo = Paths.get(picturePath, this.id.toString()).toUri(),
+        appointments = arrayListOf()
     )
 }

@@ -60,13 +60,16 @@ class PetService(
 
     @CacheEvict("PetPicture", key = "#id")
     fun updatePhoto(id: Int, photo: MultipartFile) {
-        val newPet = imageService.updatePetPhoto(getPetEntityById(id), photo)
+        val uri = imageService.updatePetPhoto(id, photo)
+        val newPet = getPetEntityById(id)
+        newPet.photo = uri
         repository.save(newPet)
     }
 
     @Cacheable("PetPicture", key = "#id")
     fun getPhoto(id: Int): ByteArray {
-        return imageService.getPetPhoto(getPetEntityById(id))
+        val pet = getPetEntityById(id)
+        return imageService.getPetPhoto(pet.photo)
     }
 
     fun getPetWithAppointments(id: Int): Pet =

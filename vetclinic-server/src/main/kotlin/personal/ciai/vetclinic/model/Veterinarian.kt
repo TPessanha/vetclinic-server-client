@@ -38,7 +38,6 @@ class Veterinarian(
         phoneNumber = phoneNumber,
         address = address,
         employeeId = employeeId,
-        photo = photo.toString(),
         enabled = enabled
 
     )

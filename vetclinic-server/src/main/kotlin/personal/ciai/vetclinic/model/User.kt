@@ -1,6 +1,5 @@
 package personal.ciai.vetclinic.model
 
-import java.net.URI
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Inheritance
@@ -41,11 +40,9 @@ open class User(
     @Column(nullable = false, unique = true)
     val username: String,
     @Column(nullable = false)
-    val password: String,
+    var password: String,
     @Column(nullable = false)
     val address: String,
-    @Column(nullable = true)
-    open var photo: URI? = null,
 
     @ManyToMany
     @JoinTable(
@@ -68,8 +65,7 @@ open class User(
             username = this.username,
             password = this.password,
             passwordRepeat = this.password,
-            address = this.address,
-            photo = if (photo != null) "$id.jpg" else ""
+            address = this.address
         )
 
     fun getAuthorities() =

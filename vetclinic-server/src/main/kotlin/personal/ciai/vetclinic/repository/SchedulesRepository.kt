@@ -1,6 +1,5 @@
 package personal.ciai.vetclinic.repository
 
-import java.util.Date
 import java.util.Optional
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
@@ -17,7 +16,7 @@ interface SchedulesRepository : JpaRepository<Schedules, Int> {
     )
     fun getVeterinarianAndStartDateIsEqual(
         @Param("veterinarian") veterinarian: Int,
-        @Param("date") date: Date
+        @Param("date") date: Number
     ): Optional<Schedules>
 
     @Query(
@@ -26,6 +25,6 @@ interface SchedulesRepository : JpaRepository<Schedules, Int> {
     )
     fun findAllByVeterinarianAndStartDateIsGreaterThanEqual(
         @Param("veterinarian") veterinarian: Int,
-        @Param("startDate") startDate: Date
+        @Param("startDate") startDate: Number
     ): List<Schedules>
 }

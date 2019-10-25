@@ -30,7 +30,6 @@ class Administrator(
         password = "",
         employeeId = employeeId,
         phoneNumber = phoneNumber,
-        address = address,
-        photo = photo.toString()
+        address = address
     )
 }

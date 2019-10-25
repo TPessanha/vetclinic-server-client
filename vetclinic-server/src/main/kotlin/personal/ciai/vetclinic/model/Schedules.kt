@@ -32,8 +32,8 @@ class Schedules(
     override fun toDTO() = SchedulesDTO(
         id = id,
         vetId = veterinarian.id,
-        startTime = timeSlot.endDate.time,
-        endTime = timeSlot.endDate.time,
+        startTime = timeSlot.startDate as Long,
+        endTime = timeSlot.endDate as Long,
         status = ScheduleStatus.Available
     )
 }

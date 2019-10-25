@@ -52,7 +52,7 @@ class PetController(
         ]
     )
     @GetMapping("")
-    @AccessControlRules.PetsRules.IsPrincipalTheClient
+    @AccessControlRules.PetsRules.AllowedForGetPets
     fun getAllClientPets(
         @ApiParam(value = "The ID of the client", required = true, defaultValue = "1") @PathVariable
         clientId: Int
@@ -75,13 +75,12 @@ class PetController(
         ]
     )
     @GetMapping("/{id:[0-9]+}")
-    @AccessControlRules.PetsRules.AllowedForGetPet
+    @AccessControlRules.PetsRules.AllowedForGetOnePet
     fun getOnePet(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
         @ApiParam(value = "The ID of the pet", required = true) @PathVariable
-        id: Int,
-        principal: Principal
+        id: Int
     ) = petService.getPetById(id)
 
     @ApiOperation(
