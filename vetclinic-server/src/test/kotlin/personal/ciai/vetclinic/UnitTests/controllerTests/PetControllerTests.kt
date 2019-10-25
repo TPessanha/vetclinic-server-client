@@ -48,9 +48,7 @@ import javax.transaction.Transactional
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
-//@AutoConfigureMockMvc
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//@WithUserDetails("rui", userDetailsServiceBeanName = "UserDetailsService")
+@AutoConfigureMockMvc
 class PetControllerTests {
     @MockBean
     lateinit var pets: PetService
@@ -58,35 +56,22 @@ class PetControllerTests {
     @MockBean
     lateinit var securityService: SecurityService
 
-    // To avoid all annotations JsonProperties in data classes
-    // see: https://github.com/FasterXML/jackson-module-kotlin
-    // see: https://discuss.kotlinlang.org/t/data-class-and-jackson-annotation-conflict/397/6
-    val mapper = ObjectMapper().registerModule(KotlinModule())
-
-    val petsURL = "/clients/2/pets"
-
-    val token = TestUtils.generateTestToken("user2", listOf("ROLE_CLIENT"))
-
     @Autowired
     lateinit var context: WebApplicationContext
+
+    @Autowired
     lateinit var mvc: MockMvc
 
-    @BeforeAll
-    fun setup() {
-        mvc = MockMvcBuilders.webAppContextSetup(context)
-            .apply<DefaultMockMvcBuilder>(springSecurity())
-            .build();
-    }
+    companion object{
+        // To avoid all annotations JsonProperties in data classes
+        // see: https://github.com/FasterXML/jackson-module-kotlin
+        // see: https://discuss.kotlinlang.org/t/data-class-and-jackson-annotation-conflict/397/6
+        val mapper = ObjectMapper().registerModule(KotlinModule())
 
-//    @BeforeEach
-//    fun login() {
-//        this.mvc.perform(
-//            post("/login")
-//                .param("username", "rui")
-//                .param("password", "password")
-//        )
-//            .andExpect(status().isOk)
-//    }
+        val petsURL = "/clients/2/pets"
+
+        val token = TestUtils.generateTestToken("user2", listOf("ROLE_CLIENT"))
+    }
 
     @Test
     @Transactional
