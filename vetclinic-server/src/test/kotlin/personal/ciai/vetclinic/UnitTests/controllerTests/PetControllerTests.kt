@@ -42,6 +42,8 @@ import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.service.PetService
 import org.springframework.web.context.WebApplicationContext
 import personal.ciai.vetclinic.TestUtils
+import personal.ciai.vetclinic.security.SecurityService
+import java.security.Principal
 import javax.transaction.Transactional
 
 @ExtendWith(SpringExtension::class)
@@ -52,6 +54,9 @@ import javax.transaction.Transactional
 class PetControllerTests {
     @MockBean
     lateinit var pets: PetService
+
+    @MockBean
+    lateinit var securityService: SecurityService
 
     // To avoid all annotations JsonProperties in data classes
     // see: https://github.com/FasterXML/jackson-module-kotlin
@@ -89,6 +94,7 @@ class PetControllerTests {
     fun `Test GET client pets`() {
         val dtoList = petList.map { it.toDTO() }
         `when`(pets.getClientPets(anyInt())).thenReturn(dtoList)
+        `when`(securityService.isPrincipalWithID(nonNullAny(Principal::class.java), anyInt())).thenReturn(true)
 
         val result = mvc.perform(get(petsURL).header("Authorization", token))
             .andExpect(status().isOk)
@@ -106,6 +112,7 @@ class PetControllerTests {
         val dtoList = petList.map { it.toDTO() }
 
         `when`(pets.getPetById(anyInt())).thenReturn(dogExample.toDTO())
+        `when`(securityService.isPetOwner(nonNullAny(Principal::class.java), anyInt())).thenReturn(true)
 
         val token = TestUtils.generateTestToken("user2", listOf("ROLE_CLIENT"))
 
@@ -122,7 +129,7 @@ class PetControllerTests {
     fun `Test GET One Pet (Not Found)`() {
         `when`(pets.getPetById(2)).thenThrow(NotFoundException("not found"))
 
-        mvc.perform(get("$petsURL/2"))
+        mvc.perform(get("$petsURL/2").header("Authorization", token))
             .andExpect(status().is4xxClientError)
     }
 
@@ -130,15 +137,17 @@ class PetControllerTests {
 
     @Test
     fun `Test POST One Pet`() {
-        val dtoList = petList.map { it.toDTO() }
+        val dtoL = petList.get(0).toDTO()
 
-        val petJSON = mapper.writeValueAsString(dtoList[0])
+        val petJSON = mapper.writeValueAsString(dtoL)
 
         `when`(pets.addPet(nonNullAny(PetDTO::class.java)))
-            .then { assertEquals(dtoList[0].copy(owner = 1), it.getArgument(0)) }
+            .then { assertEquals(dtoL.copy(owner = 2), it.getArgument(0)) }
+        `when`(securityService.isPrincipalWithID(nonNullAny(Principal::class.java), anyInt())).thenReturn(true)
+
 
         mvc.perform(
-            post(petsURL)
+            post(petsURL).header("Authorization", token)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(petJSON)
