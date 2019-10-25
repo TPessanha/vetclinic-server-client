@@ -70,9 +70,9 @@ open class UserDTO(
     )
     open val photo: String? = null
 ) : Transferable {
-    open fun toEntity(roleService: RoleService, picturePath: String) = toEntity(this.id, picturePath, roleService)
+    open fun toEntity(roleService: RoleService) = toEntity(this.id, roleService)
 
-    open fun toEntity(newId: Int, picturePath: String, roleService: RoleService) =
+    open fun toEntity(newId: Int, roleService: RoleService) =
         User(
             id = newId,
             name = this.name,
@@ -81,7 +81,6 @@ open class UserDTO(
             username = this.username,
             password = BCryptPasswordEncoder().encode(this.password),
             address = this.address,
-            photo = if (this.photo == null) null else Paths.get(picturePath, this.photo).toUri(),
             roles = roleService.getClientRoles(newId).toMutableList()
         )
 }

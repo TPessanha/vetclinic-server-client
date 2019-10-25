@@ -3,6 +3,7 @@ package personal.ciai.vetclinic.service
 import java.util.Date
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import personal.ciai.vetclinic.config.ConfigurationProperties
 import personal.ciai.vetclinic.dto.AppointmentDTO
 import personal.ciai.vetclinic.dto.VeterinarianDTO
 import personal.ciai.vetclinic.exception.ConflictException
@@ -19,7 +20,8 @@ import personal.ciai.vetclinic.util.now
 class VeterinarianService(
     @Autowired val vetRepository: VeterinarianRepository,
     @Autowired private val appointmentRepository: AppointmentRepository,
-    @Autowired private val schedulesService: SchedulesService
+    @Autowired private val schedulesService: SchedulesService,
+    @Autowired private val configurationProperties: ConfigurationProperties
 ) {
 
     fun existsById(id: Int): Boolean = vetRepository.existsById(id)
@@ -36,14 +38,14 @@ class VeterinarianService(
 
     fun save(vetDTO: VeterinarianDTO) {
         if (existsById(vetDTO.id).not()) {
-            vetRepository.save(vetDTO.toEntity())
+            vetRepository.save(vetDTO.toEntity(configurationProperties.fullPathToUserPhotos))
         } else throw ConflictException("Veterinarian account with Id ${vetDTO.id} already exist")
     }
 
     fun update(vetDTO: VeterinarianDTO) {
         val vet: Veterinarian = getVeterinarianEntity(vetDTO.id)
 
-        vetRepository.save(vetDTO.toEntity(vet))
+        vetRepository.save(vetDTO.toEntity(vet,configurationProperties.fullPathToUserPhotos))
     }
 
     fun delete(id: Int) {
@@ -72,7 +74,7 @@ class VeterinarianService(
             else -> throw PreconditionFailedException()
         }
 
-    // appointmentRepository.save(appointmentDTO.toEntity(savedAppoint))  TODO NEED TOENTITY WITH ENTITY PARM
+        // appointmentRepository.save(appointmentDTO.toEntity(savedAppoint))  TODO NEED TOENTITY WITH ENTITY PARM
     }
 
     private fun refusedAppointment(appointmentDTO: AppointmentDTO) {

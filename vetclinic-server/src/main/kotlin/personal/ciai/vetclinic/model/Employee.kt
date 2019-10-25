@@ -1,6 +1,8 @@
 package personal.ciai.vetclinic.model
 
+import org.hibernate.annotations.NaturalId
 import java.net.URI
+import javax.persistence.AttributeOverride
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -11,8 +13,7 @@ import javax.persistence.Table
 @Table(name = "employees")
 abstract class Employee(
     id: Int,
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     var employeeId: Int,
     email: String,
     name: String,
@@ -20,5 +21,6 @@ abstract class Employee(
     username: String,
     password: String,
     address: String,
-    photo: URI
-) : User(id, email, name, phoneNumber, username, password, address, photo)
+    @Column(nullable = false)
+    var photo: URI
+) : User(id, email, name, phoneNumber, username, password, address)

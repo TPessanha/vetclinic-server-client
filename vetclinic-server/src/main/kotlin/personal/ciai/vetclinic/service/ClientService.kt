@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
+import personal.ciai.vetclinic.config.ConfigurationProperties
 import personal.ciai.vetclinic.dto.ClientDTO
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.exception.PreconditionFailedException
@@ -22,7 +23,9 @@ class ClientService(
     @Autowired
     val repository: ClientRepository,
     @Autowired
-    val imageService: ImageService
+    val imageService: ImageService,
+    @Autowired
+    val configurationProperties: ConfigurationProperties
 ) {
 
     companion object MediaTypes {
@@ -51,7 +54,7 @@ class ClientService(
     }
 
     fun saveClient(clientDTO: ClientDTO, id: Int = 0) {
-        val newClient = clientDTO.toEntity(id)
+        val newClient = clientDTO.toEntity(id,configurationProperties.fullPathToUserPhotos)
         repository.save(newClient)
     }
 
@@ -71,13 +74,13 @@ class ClientService(
 
     fun getPhoto(id: Int): ByteArray {
         val client = getClientEntityById(id)
-        return imageService.getClientPhoto(client)
+        return imageService.getUserPhoto(client.photo)
     }
 
     fun updatePhoto(id: Int, photo: MultipartFile) {
         val client = getClientEntityById(id)
-        val newClient = imageService.updateClientPhoto(client, photo)
-        saveClient(newClient.toDTO(), newClient.id)
+        client.photo = imageService.updateUserPhoto(client.id, photo)
+        saveClient(client.toDTO(), client.id)
     }
 
     fun getClientWithPets(id: Int): Client =

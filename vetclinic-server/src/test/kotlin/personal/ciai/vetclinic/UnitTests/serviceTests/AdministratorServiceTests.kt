@@ -81,7 +81,6 @@ class AdministratorServiceTests {
         assertEquals(admin.email, (admin1.email))
         assertEquals(admin.address, (admin1.address))
         assertEquals(admin.phoneNumber, (admin1.phoneNumber))
-        assertEquals(admin.photo, admin1.photo.toString())
         assertEquals(admin.username, (admin1.username))
         assertEquals(admin.password, "")
     }
