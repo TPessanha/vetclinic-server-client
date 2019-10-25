@@ -66,7 +66,7 @@ class UserController(@Autowired val clientService: ClientService) {
     )
     @PostMapping("/signup")
     fun register(
-        @ApiParam(value = "The ID of the client", required = true) @PathVariable
+        @ApiParam(value = "The Client DTO", required = true) @PathVariable
         client: ClientDTO
     ) = clientService.addClient(client)
 }
