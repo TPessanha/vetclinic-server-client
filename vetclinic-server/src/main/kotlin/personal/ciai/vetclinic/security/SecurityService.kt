@@ -29,6 +29,11 @@ public class SecurityService(
         return pet.owner.username == principal.name
     }
 
+//    public fun isPetOwner(principal: Principal, id: Int?): Boolean {
+//        val pet = petService.getPetEntityById(1)
+//        return pet.owner.username == principal.name
+//    }
+
     public fun isPrincipalWithID(principal: Principal, id: Int): Boolean {
         val user = userService.getUserEntityById(id)
         return user.username == principal.name

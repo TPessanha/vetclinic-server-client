@@ -19,17 +19,17 @@ data class AppointmentDTO(
     )
     val id: Int = 0,
     @ApiModelProperty(
-        "The start time of the appointment",
+        "The start time of the appointment in the month",
         required = true,
         readOnly = false,
-        example = "1539555316323"
+        example = "5"
     )
     val startTime: Long,
     @ApiModelProperty(
-        "The end time of the appointment",
+        "The end time of the appointment in the month",
         required = true,
         readOnly = false,
-        example = "1539555326323"
+        example = "10"
     )
     val endTime: Long,
     @ApiModelProperty(

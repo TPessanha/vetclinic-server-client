@@ -56,26 +56,48 @@ class Init(
         val p1 = Pet(
             0, "cat", 2, clients[0]
         )
+        val p2 = Pet(
+            0, "dog", 3, clients[0]
+        )
+        val p3 = Pet(
+            0, "pig", 6, clients[1]
+        )
+
 
         petRepository.save(p1)
+        petRepository.save(p2)
+        petRepository.save(p3)
     }
 
     private fun addClients(roles: List<Role>): List<Client> {
         val c1 = Client(
             0,
             "rui@gmail.com",
-            "Rui",
-            925364545,
             "rui",
+            925364545,
+            "user2",
             BCryptPasswordEncoder().encode("password"),
             "Rua da direita"
         )
 
+        val c2 = Client(
+            0,
+            "pedro@gmail.com",
+            "pedro",
+            925354545,
+            "user3",
+            BCryptPasswordEncoder().encode("password"),
+            "Rua da esquerda"
+        )
+
+
         c1.roles.add(roles[2])
+        c2.roles.add(roles[2])
 
         clientRepository.save(c1)
+        clientRepository.save(c2)
 
-        return listOf(c1)
+        return listOf(c1,c2)
     }
 
     private fun addAdmin(roles: List<Role>) {

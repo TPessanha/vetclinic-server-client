@@ -33,8 +33,8 @@ class Appointment(
 
     override fun toDTO() = AppointmentDTO(
         id = id,
-        startTime = this.timeSlot.startDate.time,
-        endTime = this.timeSlot.endDate.time,
+        startTime = this.timeSlot.startDate.toLong(),
+        endTime = this.timeSlot.endDate.toLong(),
         veterinarian = veterinarian.id,
         pet = pet.id,
         client = client.id,

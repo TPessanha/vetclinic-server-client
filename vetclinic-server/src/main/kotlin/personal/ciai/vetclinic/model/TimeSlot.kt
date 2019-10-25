@@ -10,20 +10,16 @@ import personal.ciai.vetclinic.exception.PreconditionFailedException
 
 @Embeddable
 class TimeSlot(
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @Column
-    val startDate: Date,
+    val startDate: Number,
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @Column
-    val endDate: Date
+    val endDate: Number
 ) {
-    constructor(startDate: Long, endDate: Long) : this(Date(startDate), Date(endDate))
+//    constructor(startDate: Long, endDate: Long) : this(Int.t, Date(endDate))
 
     init {
-        if (endDate < startDate)
+        if (endDate.toInt() < startDate.toInt())
             throw PreconditionFailedException("Start date most be before end date")
     }
 
@@ -34,5 +30,5 @@ class TimeSlot(
      * @return Boolean true if there is NO conflict, false if there is a conflict
      */
     fun checkConflict(timeSlot: TimeSlot) =
-        (timeSlot.endDate <= this.startDate || timeSlot.startDate >= this.endDate)
+        (timeSlot.endDate.toInt() < this.startDate.toInt() || timeSlot.startDate.toInt() > this.endDate.toInt())
 }

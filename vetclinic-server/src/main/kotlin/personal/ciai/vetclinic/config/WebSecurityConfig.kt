@@ -13,8 +13,7 @@ import personal.ciai.vetclinic.security.UserDetailsService
 import personal.ciai.vetclinic.service.UserService
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-private class SecurityConfig(
+private class WebSecurityConfig(
     val userDetails: UserDetailsService,
     val users: UserService,
     @Autowired

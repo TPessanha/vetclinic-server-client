@@ -1,13 +1,19 @@
 package personal.ciai.vetclinic
 
+import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.SignatureAlgorithm
 import java.net.URI
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.assertAll
+import org.springframework.security.core.GrantedAuthority
+import personal.ciai.vetclinic.config.JWTSecret
 import personal.ciai.vetclinic.model.Appointment
 import personal.ciai.vetclinic.model.Client
 import personal.ciai.vetclinic.model.Pet
 import personal.ciai.vetclinic.model.TimeSlot
 import personal.ciai.vetclinic.model.Veterinarian
+import java.util.Base64
+import java.util.Date
 
 object TestUtils {
     val clientExample1 = Client(0, "gaer@gmail.com", "Pedro", 412532, "Pedro123", "password", "Rua Pedro da cenas")
@@ -86,5 +92,27 @@ object TestUtils {
             { assertEquals(a1.description, a2.description) },
             { assertPetEquals(a1.pet, a2.pet) }
         )
+    }
+
+    fun generateTestToken(username: String, authorities: List<String>): String {
+        val passphrase = "este é um grande segredo que tem que ser mantido escondido"
+        val KEY: String = Base64.getEncoder().encodeToString(passphrase.toByteArray())
+        val SUBJECT = "JSON Web Token for CIAI 2019/20"
+        val VALIDITY = 1000 * 60 * 60 * 10 // 10 minutes in microseconds
+
+        val claims = HashMap<String, Any?>()
+        claims["username"] = username
+        claims["authorities"] = authorities.toString()
+
+        val token = Jwts
+            .builder()
+            .setClaims(claims)
+            .setSubject(JWTSecret.SUBJECT)
+            .setIssuedAt(Date(System.currentTimeMillis()))
+            .setExpiration(Date(System.currentTimeMillis() + JWTSecret.VALIDITY))
+            .signWith(SignatureAlgorithm.HS256, JWTSecret.KEY)
+            .compact()
+
+        return "Bearer $token"
     }
 }

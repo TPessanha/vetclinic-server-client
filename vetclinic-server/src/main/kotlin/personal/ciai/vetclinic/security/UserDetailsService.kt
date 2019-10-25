@@ -28,7 +28,7 @@ class UserDetails(
     override fun isAccountNonLocked(): Boolean = true
 }
 
-@Service
+@Service("UserDetailsService")
 class UserDetailsService(
     val users: UserService
 ) : UserDetailsService {

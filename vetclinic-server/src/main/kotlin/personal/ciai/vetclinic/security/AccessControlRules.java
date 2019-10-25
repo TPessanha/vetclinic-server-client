@@ -19,10 +19,20 @@ public class AccessControlRules {
         @Retention(RetentionPolicy.RUNTIME)
         @Inherited
         @Documented
-        @PreAuthorize(AllowedForGetPet.condition)
-        public @interface AllowedForGetPet {
-            String condition = "hasRole('ADMIN') or hasRole('VET') or" + IsPetOwner.condition;
+        @PreAuthorize(AllowedForGetOnePet.condition)
+        public @interface AllowedForGetOnePet {
+            String condition = "hasRole('ADMIN') or hasRole('VET') or " + IsPetOwner.condition;
         }
+
+        @Target({ElementType.METHOD, ElementType.TYPE})
+        @Retention(RetentionPolicy.RUNTIME)
+        @Inherited
+        @Documented
+        @PreAuthorize(AllowedForGetPets.condition)
+        public @interface AllowedForGetPets {
+            String condition = "hasRole('ADMIN') or " + IsPrincipalTheClient.condition;
+        }
+
 
         @Target({ElementType.METHOD, ElementType.TYPE})
         @Retention(RetentionPolicy.RUNTIME)
