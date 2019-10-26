@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import personal.ciai.vetclinic.dto.SchedulesDTO
-import personal.ciai.vetclinic.security.AccessControlRules
+import personal.ciai.vetclinic.security.AccessControlRules.SchedulesRules.AllowedForEditSchedule
+import personal.ciai.vetclinic.security.AccessControlRules.SchedulesRules.AllowedForGetSchedule
 import personal.ciai.vetclinic.service.SchedulesService
 
 @Api(
@@ -47,7 +48,7 @@ class ScheduleController(
         ]
     )
     @GetMapping("")
-    @AccessControlRules.SchedulesRules.AllowedForGetSchedule
+    @AllowedForGetSchedule
     fun getVeterinarianSchedules(
         @ApiParam(value = "The ID of the employee", required = true) @PathVariable
         employeeId: Int,
@@ -73,7 +74,7 @@ class ScheduleController(
         ]
     )
     @GetMapping("{date}")
-    @AccessControlRules.SchedulesRules.AllowedForGetSchedule
+    @AllowedForGetSchedule
     fun getVeterinarianSchedulesDate(
         @ApiParam(value = "The ID of the employee", required = true) @PathVariable
         employeeId: Int,
@@ -100,7 +101,7 @@ class ScheduleController(
         ]
     )
     @GetMapping("{date}/")
-    @AccessControlRules.SchedulesRules.AllowedForGetSchedule
+    @AllowedForGetSchedule
     fun getVeterinarianSchedulesForDate(
         @ApiParam(value = "The ID of the employee", required = true) @PathVariable
         employeeId: Int,
@@ -128,7 +129,7 @@ class ScheduleController(
         ]
     )
     @GetMapping("/{scheduleId:[0-9]+}")
-    @AccessControlRules.SchedulesRules.AllowedForGetSchedule
+    @AllowedForGetSchedule
     fun getOneSchedule(
         @ApiParam(value = "The ID of the employee", required = true) @PathVariable
         employeeId: Int,
@@ -139,7 +140,7 @@ class ScheduleController(
     ) = schedulesService.getOneScheduleById(scheduleId)
 
     @ApiOperation(
-        value = "Add a new Schedule for Veterinarian",
+        value = "Add a ScheduleS for Veterinarian for a month",
         consumes = "application/json"
     )
     @ApiResponses(
@@ -155,7 +156,7 @@ class ScheduleController(
         ]
     )
     @PostMapping("")
-    @AccessControlRules.SchedulesRules.AllowedForEditSchedule
+    @AllowedForEditSchedule
     fun addSchedule(
         @ApiParam(value = "The ID of the employee", required = true) @PathVariable
         employeeId: Int,
@@ -164,7 +165,7 @@ class ScheduleController(
         @ApiParam(
             value = "Details of an Schedule to be created",
             required = true
-        ) @RequestBody schedules: SchedulesDTO
+        ) @RequestBody schedules: List<SchedulesDTO>
     ) = schedulesService.saveSchedule(schedules, vetId)
 
     @ApiOperation(
@@ -183,7 +184,7 @@ class ScheduleController(
         ]
     )
     @PutMapping("/{scheduleId:[0-9]+}")
-    @AccessControlRules.SchedulesRules.AllowedForEditSchedule
+    @AllowedForEditSchedule
     fun updateSchedule(
         @ApiParam(value = "The ID of the employee", required = true) @PathVariable
         employeeId: Int,

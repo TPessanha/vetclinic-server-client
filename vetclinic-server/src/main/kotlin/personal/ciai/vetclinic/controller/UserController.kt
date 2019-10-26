@@ -12,12 +12,14 @@ import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 */
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import personal.ciai.vetclinic.dto.ClientDTO
 import personal.ciai.vetclinic.dto.CredentialsDTO
-import personal.ciai.vetclinic.service.UserService
+import personal.ciai.vetclinic.service.ClientService
 
 @Api(
     value = "VetClinic Management System - User API",
@@ -26,7 +28,7 @@ import personal.ciai.vetclinic.service.UserService
 
 @RestController
 @RequestMapping("")
-class UserController(@Autowired val userService: UserService) {
+class UserController(@Autowired val clientService: ClientService) {
     @ApiOperation(
         value = "Login as a registered user",
         consumes = "application/json"
@@ -47,13 +49,10 @@ class UserController(@Autowired val userService: UserService) {
         @RequestBody credentials: CredentialsDTO
     ) {
     }
-    /*
 
     @ApiOperation(
         value = "Register as a registered user",
-        produces = "application/json",
-        responseContainer = "List",
-        response = AppointmentDTO::class
+        produces = "application/json"
     )
     @ApiResponses(
         value = [
@@ -66,7 +65,8 @@ class UserController(@Autowired val userService: UserService) {
         ]
     )
     @PostMapping("/signup")
-    fun register
-
-     */
+    fun register(
+        @ApiParam(value = "The Client DTO", required = true) @PathVariable
+        client: ClientDTO
+    ) = clientService.addClient(client)
 }

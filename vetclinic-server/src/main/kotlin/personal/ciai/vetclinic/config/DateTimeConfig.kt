@@ -1,8 +1,6 @@
 package personal.ciai.vetclinic.config
 
 import java.time.format.DateTimeFormatter
-import java.util.TimeZone
-import javax.annotation.PostConstruct
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar
@@ -25,8 +23,8 @@ class DateTimeConfig {
         return conversionService
     }
 
-    @PostConstruct
-    fun setTimeZone() {
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC+1"))
-    }
+//    @PostConstruct
+//    fun setTimeZone() {
+//        TimeZone.setDefault(TimeZone.getTimeZone("UTC+1"))
+//    }
 }
