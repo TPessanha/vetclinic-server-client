@@ -16,6 +16,9 @@ import personal.ciai.vetclinic.model.Veterinarian
 import personal.ciai.vetclinic.repository.SchedulesRepository
 import personal.ciai.vetclinic.repository.VeterinarianRepository
 import personal.ciai.vetclinic.util.asDate
+import personal.ciai.vetclinic.util.asLocalDate
+import personal.ciai.vetclinic.util.isValidateDate
+import personal.ciai.vetclinic.util.numberOfWeeks
 import personal.ciai.vetclinic.util.sameDate
 import personal.ciai.vetclinic.util.toHours
 
@@ -121,9 +124,9 @@ class SchedulesService(
         if (schedules.size != SLOTS)
             throw PreconditionFailedException("Numbers of Slots mismatch")
 
-        var durationMonth = 0L
-        var durationWeek = 0L
-        var durationDay = 0L
+        var durationMonth = 0
+        var durationWeek = 0
+        var durationDay = 0
         val sortedSchedules = schedules.sortedBy { it.startTime }.toMutableList()
 
         var monthDays = sortedSchedules.size
@@ -135,12 +138,13 @@ class SchedulesService(
             // Validate per Week
             for (j in 0..min(7, monthDays)) {
                 // The first shift of the day
-                val day = asDate(sortedSchedules.get(count).startTime)
+                val day = asLocalDate(sortedSchedules.first().startTime)
 
                 // Validate per Day
-                for (k in count..(schedules.size - 1)) {
-                    if (!sameDate(day, asDate(sortedSchedules.get(k).startTime))) {
-                        if (toHours(durationDay) > NORMALWORKHOURS) {
+                for (k in 0..leftToCheck) {
+
+                    if (!sameDate(day, (sortedSchedules.get(k).startTime))) {
+                        if (durationDay > NORMALWORKHOURS) {
                             if (k < sortedSchedules.size - 1) {
                                 if (toHours(
                                         sortedSchedules.get(k + 1).endTime - sortedSchedules.get(k).startTime
@@ -151,26 +155,32 @@ class SchedulesService(
                         }
                         break
                     }
-                    durationDay += (sortedSchedules.get(i).endTime - sortedSchedules.get(i).startTime)
-                    count++
+
+                    val duration = toHours(sortedSchedules.get(i).endTime - sortedSchedules.get(i).startTime)
+                    if (duration != 1)
+                        throw PreconditionFailedException("Invalid slot duration")
+
+                    durationDay += duration
+                    sortedSchedules.removeAt(0)
                 }
 
                 durationWeek += durationDay
                 durationDay = 0
-                if (toHours(durationDay) > MAXDAILYHOURS)
+                leftToCheck = sortedSchedules.size
+                if ((durationDay) > MAXDAILYHOURS)
                     throw PreconditionFailedException("Invalid hours work hour per day")
             }
 
             monthDays -= 7
 
-            if (toHours(durationWeek) != WEEKLYHOURS)
+            if ((durationWeek) != WEEKLYHOURS)
                 throw PreconditionFailedException("Invalid weekly work hour")
 
             durationMonth += durationWeek
-            durationWeek = 0L
+            durationWeek = 0
         }
 
-        if (toHours(durationMonth) != MONTHLYHOURS)
+        if (durationMonth != MONTHLYHOURS)
             throw PreconditionFailedException("Invalid monthly work hour")
     }
 }

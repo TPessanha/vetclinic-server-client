@@ -2,8 +2,10 @@ package personal.ciai.vetclinic.util
 
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.YearMonth
 import java.time.ZoneId
-import java.util.Calendar
+import java.time.temporal.WeekFields
 import java.util.Date
 
 fun asDate(localDate: LocalDate): Date =
@@ -17,16 +19,21 @@ fun asLocalDate(date: Date): LocalDate {
     return Instant.ofEpochMilli(date.time).atZone(ZoneId.systemDefault()).toLocalDate()
 }
 
+fun asLocalDate(date: Long): LocalDate {
+    return Instant.ofEpochMilli(asDate(date).time).atZone(ZoneId.systemDefault()).toLocalDate()
+}
+
 fun toHours(mills: Long): Int {
     return ((mills / 1000) / 60 / 60).toInt()
 }
 
-fun sameDate(date1: Date, date2: Date): Boolean {
-    val cal1 = Calendar.getInstance()
-    val cal2 = Calendar.getInstance()
-    cal1.time = date1
-    cal2.time = date2
-    return cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR) && cal1.get(Calendar.YEAR) == cal2.get(
-        Calendar.YEAR
-    )
+fun sameDate(date1: LocalDate, date2: Long) = date1.dayOfMonth == (asLocalDate(date2).dayOfMonth)
+
+fun numberOfWeeks(date: LocalDateTime) = YearMonth.from(date).atEndOfMonth().get(
+    WeekFields.ISO.weekOfMonth()
+)
+
+fun isValidateDate(date: LocalDateTime): Boolean {
+    val current = YearMonth.now()
+    return current.year <= date.year && current.month == date.month - 1
 }
