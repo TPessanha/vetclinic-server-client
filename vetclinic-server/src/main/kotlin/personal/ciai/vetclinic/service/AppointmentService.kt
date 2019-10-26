@@ -3,6 +3,7 @@ package personal.ciai.vetclinic.service
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
+import org.springframework.security.access.annotation.Secured
 import org.springframework.stereotype.Service
 import personal.ciai.vetclinic.dto.AppointmentDTO
 import personal.ciai.vetclinic.exception.NotFoundException
@@ -21,6 +22,7 @@ class AppointmentService(
     @Autowired
     val veterinarianService: VeterinarianService
 ) {
+    @Secured("ROLE_ADMIN")
     fun getAllAppointments() = repository.findAll().map { it.toDTO() }
 
     fun getAppointmentById(id: Int) = getAppointmentEntityById(id).toDTO()

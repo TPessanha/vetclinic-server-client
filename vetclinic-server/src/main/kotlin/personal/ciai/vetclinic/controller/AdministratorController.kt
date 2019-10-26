@@ -141,7 +141,7 @@ class AdministratorController(
             )]
     )
     @DeleteMapping("/{adminId:[0-9]+}")
-    @AccessControlRules.AdministratorsRules.AllowedForDeleteAdministrador
+    @AccessControlRules.AdministratorsRules.AllowedForDeleteAdministrator
     fun deleteAdministrator(
         @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
             value = "employeeId",

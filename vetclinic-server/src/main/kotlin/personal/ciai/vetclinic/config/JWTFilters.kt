@@ -3,6 +3,8 @@ package personal.ciai.vetclinic.config
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import java.util.Base64
 import java.util.Date
 import javax.servlet.FilterChain
@@ -14,13 +16,17 @@ import kotlin.collections.HashMap
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
+import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter
 import org.springframework.web.filter.GenericFilterBean
+import personal.ciai.vetclinic.dto.CredentialsDTO
 import personal.ciai.vetclinic.dto.UserDTO
+import personal.ciai.vetclinic.exception.ConflictException
 import personal.ciai.vetclinic.model.User
 import personal.ciai.vetclinic.service.UserService
+import java.lang.Exception
 
 object JWTSecret {
     private const val passphrase = "este é um grande segredo que tem que ser mantido escondido"
@@ -135,8 +141,8 @@ class JWTAuthenticationFilter(val userService: UserService) : GenericFilterBean(
                 chain!!.doFilter(request, response)
             }
         } else {
+            (response as HttpServletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED)
             chain!!.doFilter(request, response) // TODO: Replace with an error
-//          (response as HttpServletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED)
         }
     }
 }
@@ -167,14 +173,19 @@ class UserPasswordSignUpFilterToJWT(
         // getting user from request body
         val user = ObjectMapper().readValue(request!!.inputStream, User::class.java)
 
-        return users
-            .addUser(user.toDTO() as UserDTO)
-            .orElse(null)
-            .let {
-                val auth = UserAuthToken(user.username, user.getAuthorities())
-                SecurityContextHolder.getContext().authentication = auth
-                auth
-            }
+        try {
+            return users
+                .addUser(user.toDTO() as UserDTO)
+                .orElse(null)
+                .let {
+                    val auth = UserAuthToken(user.username, mutableListOf(SimpleGrantedAuthority("CLIENT")))
+                    SecurityContextHolder.getContext().authentication = auth
+                    auth
+                }
+        } catch (e: ConflictException) {
+            (response as HttpServletResponse).sendError(HttpServletResponse.SC_CONFLICT)
+            return null
+        }
     }
 
     override fun successfulAuthentication(

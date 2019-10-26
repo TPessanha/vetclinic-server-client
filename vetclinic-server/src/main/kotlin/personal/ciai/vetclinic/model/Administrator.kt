@@ -20,7 +20,7 @@ class Administrator(
     photo: URI,
     employeeId: Int
 
-) : Employee(id, employeeId, email, name, phoneNumber, username, password, address, photo) {
+) : Employee(id, email, name, phoneNumber, username, password, address, employeeId, photo) {
 
     override fun toDTO() = AdministratorDTO(
         id = id,

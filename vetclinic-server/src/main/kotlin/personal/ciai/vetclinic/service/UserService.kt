@@ -6,10 +6,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.stereotype.Service
 import personal.ciai.vetclinic.config.ConfigurationProperties
 import personal.ciai.vetclinic.dto.UserDTO
+import personal.ciai.vetclinic.exception.ConflictException
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.exception.PreconditionFailedException
 import personal.ciai.vetclinic.model.User
 import personal.ciai.vetclinic.repository.UserRepository
+import java.lang.Exception
+import javax.validation.ConstraintViolationException
 
 @Service
 class UserService(
@@ -38,6 +41,7 @@ class UserService(
 
     private fun saveUser(userDTO: UserDTO, id: Int = 0): Optional<User> {
         val newUser = userDTO.toEntity(id, roleService)
+
         return Optional.of(repository.save(newUser))
     }
 
@@ -51,8 +55,11 @@ class UserService(
     fun addUser(userDTO: UserDTO): Optional<User> {
         if (userDTO.id != 0)
             throw PreconditionFailedException("User id must be 0 in insertion")
-
-        return saveUser(userDTO)
+        try {
+            return saveUser(userDTO)
+        } catch (e: Exception) {
+            throw ConflictException("Username already in use")
+        }
     }
 
     fun getUserEntityByUsernameWithRoles(username: String): Optional<User> {

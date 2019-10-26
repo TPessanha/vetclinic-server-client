@@ -21,6 +21,7 @@ data class ClientDTO(
         example = "Luis"
     )
     val name: String,
+
     @ApiModelProperty(
         "The email of the client",
         required = true,
@@ -28,6 +29,7 @@ data class ClientDTO(
         example = "l@gmail.com"
     )
     val email: String,
+
     @ApiModelProperty(
         "The phone number of the client",
         required = true,
@@ -35,6 +37,7 @@ data class ClientDTO(
         example = "912345678"
     )
     val phoneNumber: Int,
+
     @ApiModelProperty(
         "The username of the client",
         required = true,
@@ -42,6 +45,7 @@ data class ClientDTO(
         example = "user123"
     )
     val username: String,
+
     @ApiModelProperty(
         "The password of the client",
         required = true,
@@ -49,6 +53,7 @@ data class ClientDTO(
         example = "abc12345"
     )
     val password: String,
+
     @ApiModelProperty(
         "The address of the client",
         required = true,
@@ -56,12 +61,14 @@ data class ClientDTO(
         example = "rua abc"
     )
     val address: String,
+
     @ApiModelProperty(
         "The resource identifier for the image",
         required = false,
         readOnly = true
     )
     val photo: Boolean,
+
     @ApiModelProperty(
         "A list of appointments scheduled for the client",
         required = false,

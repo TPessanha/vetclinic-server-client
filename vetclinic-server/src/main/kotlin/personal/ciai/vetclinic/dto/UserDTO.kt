@@ -33,41 +33,43 @@ open class UserDTO(
         example = "1"
     )
     val id: Int = 0,
-    @ApiModelProperty("The User's Name", name = "name", required = true, readOnly = true)
-    @NotNull
-    @NotEmpty
-    val name: String,
+
+    @ApiModelProperty("The User's Name", name = "name", required = true)
+    val name: String = "",
+
     @ApiModelProperty("The User's Email", name = "email", required = true)
     @NotNull
-    @NotEmpty
     @Email
-    val email: String,
+    val email: String = "",
+
     @ApiModelProperty("The User's Phone Number", name = "phoneNumber", required = true)
-    @NotNull
-    @NotEmpty
     @Pattern(regexp = "(\\+351)?[0-9]{9}")
     val phoneNumber: Int,
-    @ApiModelProperty("The User's Username", name = "username", required = true)
+
+    @ApiModelProperty("The User's Username", name = "username", required = true, readOnly = true)
     @NotNull
     @NotEmpty
+    @Size(min = 6)
     val username: String,
-    @ApiModelProperty("The User's Password", name = "password", required = true)
+
+    @ApiModelProperty("The User's Password", name = "password", required = true, readOnly = true)
     @NotNull
     @NotEmpty
     @Size(min = 6)
     val password: String,
-    @ApiModelProperty("The User's Password again", name = "matching password", required = true)
-    val passwordRepeat: String,
-    @ApiModelProperty("The User's Address", name = "address", required = true)
-    @NotNull
-    @NotEmpty
-    val address: String,
+
+//    @ApiModelProperty("The User's Password again", name = "matching password", required = true)
+//    val passwordRepeat: String,
+    @ApiModelProperty("The User's Address", name = "address", required = false)
+    val address: String = "",
+
     @ApiModelProperty(
         "The resource identifier for the image",
         required = false,
         readOnly = true
     )
-    open val photo: String? = null
+    val photo: Boolean = false
+
 ) : Transferable {
     open fun toEntity(roleService: RoleService) = toEntity(this.id, roleService)
 

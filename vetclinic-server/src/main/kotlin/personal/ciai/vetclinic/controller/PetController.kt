@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
-import java.security.Principal
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -52,7 +51,7 @@ class PetController(
         ]
     )
     @GetMapping("")
-    @AccessControlRules.PetsRules.AllowedForGetPets
+    @AccessControlRules.PetsRules.AllowedForGetClientPets
     fun getAllClientPets(
         @ApiParam(value = "The ID of the client", required = true, defaultValue = "1") @PathVariable
         clientId: Int
@@ -101,13 +100,12 @@ class PetController(
         ]
     )
     @PostMapping("")
-    @AccessControlRules.PetsRules.IsPrincipalTheClient
+    @AccessControlRules.UserRules.IsPrincipalTheClient
     fun addPet(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
         @ApiParam(value = "Details of a pet to be created", required = true) @RequestBody
-        pet: PetDTO,
-        principal: Principal
+        pet: PetDTO
     ) = petService.addPet(pet.copy(owner = clientId))
 
     @ApiOperation(
@@ -129,15 +127,14 @@ class PetController(
         ]
     )
     @PutMapping("/{id:[0-9]+}")
-    @AccessControlRules.PetsRules.IsPetOwner
+    @AccessControlRules.PetsRules.AllowedForEditPet
     fun updatePet(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
         @ApiParam(value = "The ID of the pet", required = true) @PathVariable
         id: Int,
         @ApiParam(value = "Details of a pet to be updated", required = true) @RequestBody
-        pet: PetDTO,
-        principal: Principal
+        pet: PetDTO
     ) = petService.updatePet(pet, id = id)
 
     @ApiOperation(value = "Update photo of a pet")
@@ -155,15 +152,14 @@ class PetController(
         ]
     )
     @PutMapping("/{id:[0-9]+}/photo")
-    @AccessControlRules.PetsRules.IsPetOwner
+    @AccessControlRules.PetsRules.AllowedForEditPet
     fun savePhoto(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
         @ApiParam(value = "The ID of the pet", required = true) @PathVariable
         id: Int,
         @RequestParam("photo")
-        photo: MultipartFile,
-        principal: Principal
+        photo: MultipartFile
     ) = petService.updatePhoto(id, photo)
 
     @ApiOperation(
@@ -182,7 +178,7 @@ class PetController(
         ]
     )
     @GetMapping("/{id:[0-9]+}/photo")
-    @AccessControlRules.PetsRules.IsPetOwner
+    @AccessControlRules.PetsRules.AllowedForEditPet
     fun getPhoto(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
@@ -202,12 +198,11 @@ class PetController(
         ]
     )
     @DeleteMapping("/{id:[0-9]+}")
-    @AccessControlRules.PetsRules.IsPetOwner
+    @AccessControlRules.PetsRules.AllowedForEditPet
     fun deletePet(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
         @ApiParam(value = "The ID of the pet", required = true) @PathVariable
-        id: Int,
-        principal: Principal
+        id: Int
     ) = petService.deletePet(id)
 }

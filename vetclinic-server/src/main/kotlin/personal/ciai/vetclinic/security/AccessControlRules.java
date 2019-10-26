@@ -5,6 +5,17 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import java.lang.annotation.*;
 
 public class AccessControlRules {
+    public static class UserRules {
+        @Target({ElementType.METHOD, ElementType.TYPE})
+        @Retention(RetentionPolicy.RUNTIME)
+        @Inherited
+        @Documented
+        @PreAuthorize(IsPrincipalTheClient.condition)
+        public @interface IsPrincipalTheClient {
+            String condition = "@SecurityService.isPrincipalWithID(principal,#clientId)";
+        }
+    }
+
     public static class PetsRules {
         @Target({ElementType.METHOD, ElementType.TYPE})
         @Retention(RetentionPolicy.RUNTIME)
@@ -13,6 +24,16 @@ public class AccessControlRules {
         @PreAuthorize(IsPetOwner.condition)
         public @interface IsPetOwner {
             String condition = "@SecurityService.isPetOwner(principal,#id)";
+        }
+
+        @Target({ElementType.METHOD, ElementType.TYPE})
+        @Retention(RetentionPolicy.RUNTIME)
+        @Inherited
+        @Documented
+        @PreAuthorize(AllowedForEditPet.condition)
+        public @interface AllowedForEditPet {
+            String condition =
+                "hasRole('ADMIN') or " + IsPetOwner.condition + " and " + UserRules.IsPrincipalTheClient.condition;
         }
 
         @Target({ElementType.METHOD, ElementType.TYPE})
@@ -28,19 +49,9 @@ public class AccessControlRules {
         @Retention(RetentionPolicy.RUNTIME)
         @Inherited
         @Documented
-        @PreAuthorize(AllowedForGetPets.condition)
-        public @interface AllowedForGetPets {
-            String condition = "hasRole('ADMIN') or " + IsPrincipalTheClient.condition;
-        }
-
-
-        @Target({ElementType.METHOD, ElementType.TYPE})
-        @Retention(RetentionPolicy.RUNTIME)
-        @Inherited
-        @Documented
-        @PreAuthorize(IsPrincipalTheClient.condition)
-        public @interface IsPrincipalTheClient {
-            String condition = "@SecurityService.isPrincipalWithID(principal,#clientId)";
+        @PreAuthorize(AllowedForGetClientPets.condition)
+        public @interface AllowedForGetClientPets {
+            String condition = "hasRole('ADMIN') or hasRole('VET') or " + UserRules.IsPrincipalTheClient.condition;
         }
     }
 
@@ -72,7 +83,6 @@ public class AccessControlRules {
             String condition = "@SecurityService.isVeterinarianAccountOwner(principal,#vetId)";
         }
 
-
         @Target({ElementType.METHOD, ElementType.TYPE})
         @Retention(RetentionPolicy.RUNTIME)
         @Inherited
@@ -80,7 +90,7 @@ public class AccessControlRules {
         @PreAuthorize(AllowedForGetVeterinarian.condition)
         public @interface AllowedForGetVeterinarian {
             String condition = AllowedForAddVeterinarian.condition
-                    + " or " + AllowedForEditVeterinarian.condition;
+                + " or " + AllowedForEditVeterinarian.condition;
         }
     }
 
@@ -89,8 +99,8 @@ public class AccessControlRules {
         @Retention(RetentionPolicy.RUNTIME)
         @Inherited
         @Documented
-        @PreAuthorize(AllowedForDeleteAdministrador.condition)
-        public @interface AllowedForDeleteAdministrador {
+        @PreAuthorize(AllowedForDeleteAdministrator.condition)
+        public @interface AllowedForDeleteAdministrator {
             String condition = "hasRole('ADMIN')";
         }
 
@@ -109,7 +119,7 @@ public class AccessControlRules {
         @Documented
         @PreAuthorize(AllowedForGetAdministrador.condition)
         public @interface AllowedForGetAdministrador {
-            String condition = AllowedForDeleteAdministrador.condition;
+            String condition = AllowedForDeleteAdministrator.condition;
         }
     }
 
@@ -131,10 +141,6 @@ public class AccessControlRules {
         public @interface AllowedForGetSchedule {
             String condition = "hasRole('VET') or hasRole('CLIENT') or " + AllowedForEditSchedule.condition;
         }
-
-
     }
-
-
 }
 

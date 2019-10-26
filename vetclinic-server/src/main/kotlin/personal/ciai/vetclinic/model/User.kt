@@ -30,14 +30,13 @@ import personal.ciai.vetclinic.dto.UserDTO
 @Inheritance(strategy = InheritanceType.JOINED)
 open class User(
     id: Int,
-    @Column(nullable = false, unique = true)
+    @Column(nullable = true, unique = true)
     val email: String,
     @Column(nullable = false)
     val name: String,
-    @Column(nullable = false)
-    val phoneNumber: Int,
+    open val phoneNumber: Int,
     @NaturalId
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, updatable = false)
     val username: String,
     @Column(nullable = false)
     var password: String,
@@ -64,7 +63,7 @@ open class User(
             phoneNumber = this.phoneNumber,
             username = this.username,
             password = this.password,
-            passwordRepeat = this.password,
+//            passwordRepeat = this.password,
             address = this.address
         )
 

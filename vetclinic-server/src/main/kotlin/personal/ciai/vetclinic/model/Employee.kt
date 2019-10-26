@@ -9,14 +9,14 @@ import javax.persistence.Table
 @Table(name = "employees")
 abstract class Employee(
     id: Int,
-    @Column(unique = true, nullable = false)
-    var employeeId: Int,
     email: String,
     name: String,
-    phoneNumber: Int,
+    override var phoneNumber: Int,
     username: String,
     password: String,
     address: String,
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
+    var employeeId: Int,
+    @Column(unique = true, nullable = false)
     var photo: URI
 ) : User(id, email, name, phoneNumber, username, password, address)
