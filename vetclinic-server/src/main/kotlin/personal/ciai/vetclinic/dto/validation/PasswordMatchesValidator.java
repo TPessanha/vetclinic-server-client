@@ -1,6 +1,6 @@
 package personal.ciai.vetclinic.dto.validation;
 
-import personal.ciai.vetclinic.dto.UserDTO;
+//import personal.ciai.vetclinic.dto.UserDTO;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

@@ -126,8 +126,6 @@ data class VeterinarianDTO(
             address = this.address,
             photo = Paths.get(picturePath, this.id.toString()).toUri(),
             enabled = entity.enabled,
-//            appointments = entity.appointments,
-//            schedules = entity.schedules,
             appointments = arrayListOf(),
             schedules = arrayListOf()
         )

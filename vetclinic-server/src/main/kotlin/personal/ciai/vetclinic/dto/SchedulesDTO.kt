@@ -1,9 +1,9 @@
 package personal.ciai.vetclinic.dto
 
 import io.swagger.annotations.ApiModelProperty
-import java.util.Date
 import personal.ciai.vetclinic.model.ScheduleStatus
 import personal.ciai.vetclinic.model.Schedules
+import personal.ciai.vetclinic.model.TimeSlot
 import personal.ciai.vetclinic.model.Veterinarian
 
 /**
@@ -63,8 +63,7 @@ data class SchedulesDTO(
     fun toEntity(newId: Int, vet: Veterinarian) =
         Schedules(
             id = newId,
-            startDate = Date(startTime),
-            endDate = Date(endTime),
+            timeSlot = TimeSlot(startTime, endTime),
             status = status,
             veterinarian = vet
         )
