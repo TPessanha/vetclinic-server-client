@@ -71,9 +71,9 @@ class ScheduleController(
         @ApiParam(value = "The ID of the Veterinarian", required = true) @PathVariable
         vetId: Int,
         @ApiParam(value = "The year of the schedule", required = true)
-        @PathVariable(value = "year") year: Int,
+        @PathVariable year: Int,
         @ApiParam(value = "The month (1-12) of the schedule", required = true)
-        @PathVariable(value = "year") month: Int
+        @PathVariable month: Int
 
     ) = schedulesService.getVeterinarianScheduleByDate(vetId, year, month)
 
@@ -99,9 +99,9 @@ class ScheduleController(
         @ApiParam(value = "The ID of the Veterinarian", required = true) @PathVariable
         vetId: Int,
         @ApiParam(value = "The year of the schedule", required = true)
-        @PathVariable(value = "year") year: Int,
+        @PathVariable year: Int,
         @ApiParam(value = "The month (1-12) of the schedule", required = true)
-        @PathVariable(value = "year") month: Int,
+        @PathVariable month: Int,
         @ApiParam(
             value = "Details of an Schedule to be created",
             required = true

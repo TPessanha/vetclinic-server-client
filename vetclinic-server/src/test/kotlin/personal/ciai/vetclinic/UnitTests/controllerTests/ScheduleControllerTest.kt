@@ -98,10 +98,15 @@ class ScheduleControllerTest {
     @WithMockUser(username = "admin", password = "123", roles = ["ADMIN"])
     fun `Test PUT set Schedule`() {
 
-        val json = mapper.writeValueAsString(`schedule 1`.toDTO().copy(id = 1,vetId = 4))
+        val json = mapper.writeValueAsString(`schedule 1`.toDTO().copy(id = 1, vetId = 4, month = 4, year = 2019))
 
         `when`(scheduleService.setVetSchedule(nonNullAny(ScheduleDTO::class.java)))
-            .then { assertEquals(`schedule 1`.toDTO().copy(id = 1,vetId = 4), it.getArgument(0)) }
+            .then {
+                assertEquals(
+                    `schedule 1`.toDTO().copy(id = 1, vetId = 4, month = 4, year = 2019),
+                    it.getArgument(0)
+                )
+            }
 
         mvc.perform(
             put("${schedulesUrl}/2019/4")
