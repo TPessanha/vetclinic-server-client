@@ -39,13 +39,19 @@ class ScheduleService(
     }
 
     fun setVetSchedule(schedule: ScheduleDTO) {
-        val entity = schedule.toEntity(veterinarianService)
+        val newEntity = schedule.toEntity(veterinarianService)
         val oldSchedule = getScheduleEntityByVetIdAndMonth(schedule.vetId, schedule.year, schedule.month)
 
-        if (oldSchedule.isPresent)
-            checkNewScheduleConflicts(oldSchedule.get(), entity)
+        var toSave: ScheduleDTO
 
-        repository.save(entity)
+        if (oldSchedule.isPresent) {
+            checkNewScheduleConflicts(oldSchedule.get(), newEntity)
+            toSave = schedule.copy(id = oldSchedule.get().id)
+        } else
+            toSave = schedule.copy(id = 0)
+
+
+        repository.save(toSave.toEntity(veterinarianService))
     }
 
     private fun checkNewScheduleConflicts(old: Schedule, new: Schedule) {
