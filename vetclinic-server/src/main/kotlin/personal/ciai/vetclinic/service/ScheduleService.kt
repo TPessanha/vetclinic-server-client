@@ -1,21 +1,15 @@
 package personal.ciai.vetclinic.service
 
+import java.util.BitSet
 import java.util.Optional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import personal.ciai.vetclinic.dto.AppointmentDTO
 import personal.ciai.vetclinic.dto.ScheduleDTO
 import personal.ciai.vetclinic.exception.ConflictException
 import personal.ciai.vetclinic.exception.NotFoundException
-import personal.ciai.vetclinic.exception.PreconditionFailedException
-import personal.ciai.vetclinic.model.Veterinarian
 import personal.ciai.vetclinic.model.Schedule
-import personal.ciai.vetclinic.model.TimeSlot
+import personal.ciai.vetclinic.model.Veterinarian
 import personal.ciai.vetclinic.repository.ScheduleRepository
-import personal.ciai.vetclinic.util.now
-import java.util.BitSet
-import java.util.Calendar
-import java.util.Date
 
 @Service
 class ScheduleService(
@@ -36,7 +30,7 @@ class ScheduleService(
         repository.save(schedule)
     }
 
-    fun getVeterinarianSchedules(vetId: Int): List<ScheduleDTO> {
+    fun getVeterinarianSchedule(vetId: Int): List<ScheduleDTO> {
         return repository.findByVetId(vetId).map { it.toDTO() }
     }
 

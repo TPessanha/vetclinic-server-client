@@ -48,7 +48,7 @@ data class ScheduleDTO(
     var vetId: Int,
 
     @ApiModelProperty(
-        "The available slots",
+        "The status of schedule",
         required = true,
         readOnly = false,
         example = "1"
@@ -56,7 +56,7 @@ data class ScheduleDTO(
     val availableBlocks: List<Byte>,
 
     @ApiModelProperty(
-        "The booked slots",
+        "The status of schedule",
         required = true,
         readOnly = false,
         example = "1"

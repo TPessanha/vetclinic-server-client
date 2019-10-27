@@ -38,9 +38,9 @@ class ClientTests {
     }
 
     @Test
-    fun `test client add`(){
+    fun `test client add`() {
         clientService.repository.save(clientExample)
         val savedClient = clientService.getClientEntityById(1)
-        assertTrue(savedClient!=null)
+        assertTrue(savedClient != null)
     }
 }

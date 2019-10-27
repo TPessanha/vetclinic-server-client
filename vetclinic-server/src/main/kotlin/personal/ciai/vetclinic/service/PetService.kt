@@ -60,8 +60,8 @@ class PetService(
     }
 
     fun deletePet(pet: Pet) {
-        pet.enabled=false
-        val saved = repository.save(pet)
+        pet.enabled = false
+        repository.save(pet)
     }
 
     @CacheEvict("PetPicture", key = "#id")

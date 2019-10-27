@@ -13,7 +13,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.transaction.annotation.Transactional
 import personal.ciai.vetclinic.repository.VeterinarianRepository
 import personal.ciai.vetclinic.utils.VeterinarianUtils.`veterinarian 1`
-import personal.ciai.vetclinic.utils.VeterinarianUtils.`veterinarian 2`
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest

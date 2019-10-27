@@ -76,8 +76,7 @@ class VeterinarianController(
             )]
     )
     @GetMapping("")
-    fun getAllVeterinarian(
-    ) = veterinarianService.getAllVeterinarian().map { BasicSafeInfoDTO(it) }
+    fun getAllVeterinarian() = veterinarianService.getAllVeterinarian().map { BasicSafeInfoDTO(it) }
 
     @ApiOperation(value = "Add a new Veterinarian account")
     @ApiResponses(
@@ -92,10 +91,8 @@ class VeterinarianController(
     @AllowedForAddVeterinarian
     fun addVeterinarian(
         @ApiParam(required = true, value = "(Required) Veterinarian info necessary to created a new account")
-        @RequestBody vet: VeterinarianDTO,
-        @RequestParam("photo", required = true)
-        photo: MultipartFile
-    ) = veterinarianService.addVet(vet, photo)
+        @RequestBody vet: VeterinarianDTO
+    ) = veterinarianService.save(vet)
 
     @ApiOperation(value = "Edit Veterinarian information", consumes = "application/json")
     @ApiResponses(

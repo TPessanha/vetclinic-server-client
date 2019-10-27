@@ -20,10 +20,10 @@ class BasicSafeInfoDTO(
     @ApiModelProperty("The User's Username", name = "username", required = true, readOnly = true)
     val username: String
 ) {
-    constructor(admin: Administrator):this(admin.id,admin.name,admin.username)
-    constructor(vet: Veterinarian):this(vet.id,vet.name,vet.username)
-    constructor(client: Client):this(client.id,client.name,client.username)
-    constructor(admin: AdministratorDTO):this(admin.id,admin.name,admin.username)
-    constructor(vet: VeterinarianDTO):this(vet.id,vet.name,vet.username)
-    constructor(client: ClientDTO):this(client.id,client.name,client.username)
+    constructor(admin: Administrator) : this(admin.id, admin.name, admin.username)
+    constructor(vet: Veterinarian) : this(vet.id, vet.name, vet.username)
+    constructor(client: Client) : this(client.id, client.name, client.username)
+    constructor(admin: AdministratorDTO) : this(admin.id, admin.name, admin.username)
+    constructor(vet: VeterinarianDTO) : this(vet.id, vet.name, vet.username)
+    constructor(client: ClientDTO) : this(client.id, client.name, client.username)
 }

@@ -1,7 +1,5 @@
 package personal.ciai.vetclinic.service
 
-import java.util.Calendar
-import java.util.Date
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
@@ -11,16 +9,8 @@ import personal.ciai.vetclinic.dto.AppointmentDTO
 import personal.ciai.vetclinic.dto.VeterinarianDTO
 import personal.ciai.vetclinic.exception.ConflictException
 import personal.ciai.vetclinic.exception.NotFoundException
-import personal.ciai.vetclinic.exception.PreconditionFailedException
-import personal.ciai.vetclinic.model.AppointmentStatus.Accepted
-import personal.ciai.vetclinic.model.AppointmentStatus.Completed
-import personal.ciai.vetclinic.model.AppointmentStatus.Refused
-import personal.ciai.vetclinic.model.AppointmentStatus.valueOf
-import personal.ciai.vetclinic.model.TimeSlot
 import personal.ciai.vetclinic.model.Veterinarian
-import personal.ciai.vetclinic.repository.AppointmentRepository
 import personal.ciai.vetclinic.repository.VeterinarianRepository
-import personal.ciai.vetclinic.util.now
 
 @Service
 class VeterinarianService(
@@ -29,9 +19,6 @@ class VeterinarianService(
     @Autowired val userService: UserService,
     @Autowired val imageService: ImageService
 ) {
-    fun existByUserName(userName: String) = vetRepository.existsByUsername(userName)
-
-    fun existsById(id: Int): Boolean = vetRepository.existsById(id)
 
     fun getAllVeterinarian(): List<VeterinarianDTO> = vetRepository.findAllByEnabled(true)
         .map { it.toDTO() }
@@ -66,7 +53,6 @@ class VeterinarianService(
         return getVeterinarianEntity(vetId).appointments.map { it.toDTO() }
     }
 
-
     fun getPhoto(id: Int): ByteArray {
         val vet = getVeterinarianEntity(id)
         return imageService.getUserPhoto(vet.photo)
@@ -76,10 +62,5 @@ class VeterinarianService(
         val vet = getVeterinarianEntity(id)
         vet.photo = imageService.updateUserPhoto(vet.id, photo)
         update(vet.toDTO())
-    }
-
-    fun addVet(vet: VeterinarianDTO, photo: MultipartFile) {
-        save(vet)
-        imageService.updateUserPhoto(vet.id,photo)
     }
 }

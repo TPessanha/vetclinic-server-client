@@ -10,7 +10,6 @@ object VeterinarianUtils {
 
     val `veterinarian 1` = Veterinarian(
         id = 1,
-        employeeId = -1,
         email = "vet1@vetclinic.pt",
         name = "Joao Han",
         phoneNumber = 954223134,
@@ -19,13 +18,11 @@ object VeterinarianUtils {
         address = "Rua de Cima 44, 4243-432, Lisboa",
         photo = URI.create("vets/1"),
         enabled = true,
-        schedules = arrayListOf(),
-        appointments = arrayListOf()
+        employeeId = 4
     )
 
     val `veterinarian 2` = Veterinarian(
         id = 2,
-        employeeId = -1,
         email = "vet2@vetclinic.pt",
         name = "Ash Ketchum",
         phoneNumber = 925653938,
@@ -34,8 +31,7 @@ object VeterinarianUtils {
         address = "Rua da Linha 3, Lisboa",
         photo = URI.create("vets2/2"),
         enabled = true,
-        appointments = arrayListOf(),
-        schedules = arrayListOf()
+        employeeId = 3
 
     )
 

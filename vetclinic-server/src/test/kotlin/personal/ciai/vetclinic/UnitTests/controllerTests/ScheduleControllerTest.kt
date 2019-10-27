@@ -22,67 +22,70 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import personal.ciai.vetclinic.ExampleObjects.exampleObjects.vet1
-import personal.ciai.vetclinic.ExampleObjects.exampleObjects.vet2
-import personal.ciai.vetclinic.ExampleObjects.exampleObjects.vetDTOList
 import personal.ciai.vetclinic.IntegrationTests.VeterinarianTests
-import personal.ciai.vetclinic.dto.BasicSafeInfoDTO
-import personal.ciai.vetclinic.dto.VeterinarianDTO
+import personal.ciai.vetclinic.dto.ScheduleDTO
 import personal.ciai.vetclinic.exception.NotFoundException
-import personal.ciai.vetclinic.service.VeterinarianService
-import personal.ciai.vetclinic.utils.VeterinarianUtils.`veterinarian 1`
+import personal.ciai.vetclinic.repository.VeterinarianRepository
+import personal.ciai.vetclinic.service.ScheduleService
+import personal.ciai.vetclinic.utils.ScheduleUtils.`schedule 1`
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
 @AutoConfigureMockMvc
-class VeterinarianControllerTests {
+class ScheduleControllerTest {
 
     @Autowired
     lateinit var mvc: MockMvc
 
     @MockBean
-    lateinit var vets: VeterinarianService
+    lateinit var scheduleService: ScheduleService
+    @Autowired
+    lateinit var veterinarianRepository: VeterinarianRepository
 
     companion object {
         val mapper = ObjectMapper().registerModule(KotlinModule())
 
-        val vetsURL = "/veterinarians"
+        val veterinarianURL = "/veterinarians/"
+        val scheduleURL = "/schedules"
     }
 
     @Test
-    fun `Test GET all Veterinarian`() {
-        `when`(vets.getAllVeterinarian()).thenReturn(vetDTOList)
+    @WithMockUser(username = "admin", password = "123", roles = ["ADMIN"])
+    fun `Test GET all Schedule`() {
 
-        val result = mvc.perform(get(vetsURL))
+        `when`(scheduleService.getVeterinarianSchedule(1)).thenReturn(listOf(`schedule 1`.toDTO()))
+
+        val result = mvc.perform(get(veterinarianURL + 1 + scheduleURL))
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$", hasSize<Any>(vetDTOList.size)))
+            .andExpect(jsonPath("$", hasSize<Any>(1)))
             .andReturn()
 
         val responseString = result.response.contentAsString
-        val responseDTO = mapper.readValue<List<BasicSafeInfoDTO>>(responseString)
-        assertEquals(responseDTO.size, vetDTOList.size)
+        val responseDTO = mapper.readValue<List<ScheduleDTO>>(responseString)
+        assertEquals(responseDTO.size, 1)
     }
 
     @Test
     @WithMockUser(username = "admin", password = "123", roles = ["ADMIN"])
     fun `Test GET One Veterinarian`() {
-        `when`(vets.getVeterinarianById(1)).thenReturn(vet1.toDTO())
+        `when`(scheduleService.getOneScheduleById(1)).thenReturn(`schedule 1`)
 
-        val result = mvc.perform(get("$vetsURL/1"))
+        val result = mvc.perform(get(veterinarianURL + 1 + scheduleURL))
             .andExpect(status().isOk)
             .andReturn()
 
         val responseString = result.response.contentAsString
-        val responseDTO = mapper.readValue<VeterinarianDTO>(responseString)
-        assertEquals(responseDTO, vetDTOList[0])
+        val responseDTO = mapper.readValue<ScheduleDTO>(responseString)
+        assertEquals(responseDTO.month, `schedule 1`.month)
+        assertEquals(responseDTO.vetId, `schedule 1`.veterinarian.id)
     }
 
     @Test
     @WithMockUser(username = "admin", password = "123", roles = ["ADMIN"])
     fun `TEST - GET One Veterinarian (Not Found)`() {
-        `when`(vets.getVeterinarianById(2)).thenThrow(NotFoundException("not found"))
+        `when`(scheduleService.getOneScheduleById(5)).thenThrow(NotFoundException("not found"))
 
-        mvc.perform(get("$vetsURL/2"))
+        mvc.perform(get(veterinarianURL + "5" + scheduleURL))
             .andExpect(status().is4xxClientError)
     }
 
@@ -90,18 +93,18 @@ class VeterinarianControllerTests {
 
     @Test
     @WithMockUser(username = "admin", password = "123", roles = ["ADMIN"])
-    fun `Test POST One Veterinarian`() {
+    fun `Test POST One Schedule`() {
 
-        val vetsJSON = mapper.writeValueAsString(`veterinarian 1`.toDTO())
+        val json = mapper.writeValueAsString(`schedule 1`.toDTO())
 
-        `when`(vets.save(nonNullAny(VeterinarianDTO::class.java)))
-            .then { assertEquals(vet2.toDTO(), it.getArgument(0)) }
+        `when`(scheduleService.setVetSchedule(nonNullAny(ScheduleDTO::class.java)))
+            .then { assertEquals(`schedule 1`.toDTO(), it.getArgument(0)) }
 
         mvc.perform(
-            post(vetsURL)
+            post(veterinarianURL + "1" + scheduleURL)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(vetsJSON)
+                .content(json)
         )
             .andExpect(status().isOk)
 

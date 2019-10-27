@@ -21,9 +21,7 @@ class Client(
     @OneToMany(mappedBy = "client")
     var appointments: MutableList<Appointment> = arrayListOf(),
     @OneToMany(mappedBy = "owner")
-    var pets: MutableList<Pet> = arrayListOf(),
-    @OneToMany(mappedBy = "client")
-    var notification: MutableList<Notification> = arrayListOf()
+    var pets: MutableList<Pet> = arrayListOf()
 ) : User(id, email, name, phoneNumber, username, password, address, arrayListOf()) {
     override fun toDTO(): ClientDTO =
         ClientDTO(

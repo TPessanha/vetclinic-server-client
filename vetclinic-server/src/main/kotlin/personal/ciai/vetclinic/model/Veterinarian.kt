@@ -22,9 +22,6 @@ class Veterinarian(
     @OneToMany(mappedBy = "veterinarian")
     var appointments: MutableList<Appointment> = arrayListOf(),
 
-//    @OneToMany(mappedBy = "veterinarian")
-//    var schedules: MutableList<Schedules> = arrayListOf(),
-
     employeeId: Int,
 
     @OneToMany(mappedBy = "veterinarian")
@@ -37,7 +34,7 @@ class Veterinarian(
         name = name,
         username = username,
         email = email,
-        password = "", // TODO n sei muito bem como tratar isto mas vou ver na aula de terca se o stor diz alguma coisa
+        password = "",
         phoneNumber = phoneNumber,
         address = address,
         employeeId = employeeId,

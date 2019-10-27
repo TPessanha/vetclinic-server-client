@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.context.WebApplicationContext
-import personal.ciai.vetclinic.ExampleObjects.exampleObjects.vet2
+import personal.ciai.vetclinic.dto.BasicSafeInfoDTO
 import personal.ciai.vetclinic.dto.VeterinarianDTO
 import personal.ciai.vetclinic.service.VeterinarianService
 import personal.ciai.vetclinic.utils.VeterinarianUtils.`veterinarian 1`
@@ -47,15 +47,15 @@ class VeterinarianTests {
         // see: https://discuss.kotlinlang.org/t/data-class-and-jackson-annotation-conflict/397/6
         val mapper = ObjectMapper().registerModule(KotlinModule())
 
-        val veterinarianURL = "/employees/1/veterinarians"
+        val veterinarianURL = "/veterinarians"
     }
 
     @Test
     @Transactional
-    @WithMockUser(username = "admin", password = "password", roles = [ "VET", "ADMIN"])
+    @WithMockUser(username = "admin", password = "password", roles = ["VET", "ADMIN"])
     fun `Add a new Veterinarian`() {
         val nVets = vetService.getAllVeterinarian().size
-        val vetJSON = AdministratorTests.mapper.writeValueAsString(`veterinarian 1`)
+        val vetJSON = AdministratorTests.mapper.writeValueAsString(`veterinarian 1`.toDTO())
         mvc.perform(
             MockMvcRequestBuilders
                 .post(veterinarianURL)
@@ -74,10 +74,11 @@ class VeterinarianTests {
             .andReturn()
 
         val res = resultList.response.contentAsString
-        val allVet = mapper.readValue<List<VeterinarianDTO>>(res)
+        val allVet = mapper.readValue<List<BasicSafeInfoDTO>>(res)
+        val vet = allVet.filter { it.username == `veterinarian 1`.username }
         val result = mvc.perform(
             MockMvcRequestBuilders
-                .get("$veterinarianURL/" + allVet[nVets].id)
+                .get("$veterinarianURL/" + vet.first().id)
         )
             .andExpect(status().isOk)
             .andReturn()
@@ -85,18 +86,18 @@ class VeterinarianTests {
         val responseString = result.response.contentAsString
         val persistentVet = mapper.readValue<VeterinarianDTO>(responseString)
 
-        assertNotEquals(vet2.id, persistentVet.id)
-        assertEquals(vet2.name, persistentVet.name)
-        assertEquals(vet2.username, persistentVet.username)
-        assertEquals(vet2.email, persistentVet.email)
-        assertEquals(vet2.address, persistentVet.address)
+        assertNotEquals(`veterinarian 1`.id, persistentVet.id)
+        assertEquals(`veterinarian 1`.name, persistentVet.name)
+        assertEquals(`veterinarian 1`.username, persistentVet.username)
+        assertEquals(`veterinarian 1`.email, persistentVet.email)
+        assertEquals(`veterinarian 1`.address, persistentVet.address)
 
         mvc.perform(
             MockMvcRequestBuilders
-                .delete("$veterinarianURL/" + allVet[nVets].id)
+                .delete("$veterinarianURL/" + vet.first().id)
         )
             .andExpect(status().isOk)
 
-        assertTrue(vetService.getAllVeterinarian().size == nVets + 1)
+        assertTrue(vetService.getAllVeterinarian().size == nVets)
     }
 }

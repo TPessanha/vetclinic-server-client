@@ -8,7 +8,6 @@ import personal.ciai.vetclinic.dto.AdministratorDTO
 import personal.ciai.vetclinic.exception.AccessForbiddenException
 import personal.ciai.vetclinic.exception.ConflictException
 import personal.ciai.vetclinic.exception.NotFoundException
-import personal.ciai.vetclinic.exception.UnauthorizedException
 import personal.ciai.vetclinic.model.Administrator
 import personal.ciai.vetclinic.repository.AdministratorRepository
 
@@ -41,8 +40,8 @@ class AdministratorService(
     }
 
     fun delete(id: Int) {
-        if (id==1)
-            throw UnauthorizedException("This administrator cannot be deleted")
+        if (id == 1)
+            throw AccessForbiddenException("This administrator cannot be deleted")
         val admin: Administrator = getAdministratorEntity(id)
 
         adminRepository.delete(admin)
@@ -62,10 +61,5 @@ class AdministratorService(
         val admin = getAdministratorEntity(id)
         admin.photo = imageService.updateUserPhoto(admin.id, photo)
         update(admin.toDTO())
-    }
-
-    fun add(admin: AdministratorDTO, photo: MultipartFile){
-        save(admin)
-        imageService.updateUserPhoto(admin.id,photo)
     }
 }

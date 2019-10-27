@@ -1,5 +1,7 @@
 package personal.ciai.vetclinic.service
 
+import java.util.Calendar
+import java.util.Date
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
@@ -13,8 +15,6 @@ import personal.ciai.vetclinic.model.AppointmentStatus
 import personal.ciai.vetclinic.model.TimeSlot
 import personal.ciai.vetclinic.repository.AppointmentRepository
 import personal.ciai.vetclinic.util.now
-import java.util.Calendar
-import java.util.Date
 
 @Service
 class AppointmentService(
@@ -39,9 +39,6 @@ class AppointmentService(
 
     @CacheEvict("PetAppointments", key = "#appointmentDTO.pet.id")
     private fun saveAppointment(appointmentDTO: AppointmentDTO, id: Int = 0) {
-        if(appointmentStartDate(appointmentDTO).before(now()))
-            throw PreconditionFailedException("Cannot create an appointment in the past")
-
         val pet = petService.getPetEntityById(appointmentDTO.pet)
         if (!pet.enabled)
             throw PreconditionFailedException("Cannot book appointments for disabled pets")
@@ -59,8 +56,7 @@ class AppointmentService(
             schedule.get().bookAppointment(TimeSlot(appointmentDTO.startTime, appointmentDTO.endTime))
             scheduleService.saveSchedule(schedule.get())
             repository.save(newAppointment)
-        }
-        else
+        } else
             throw PreconditionFailedException("The veterinarian is does not have a schedule for that time")
     }
 
@@ -109,7 +105,6 @@ class AppointmentService(
 
         if (appointmentDTO.justification.isEmpty())
             throw PreconditionFailedException("A justification is needed")
-
     }
 
     private fun acceptAppointment(appointmentDTO: AppointmentDTO) {
