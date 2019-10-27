@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.dto.AppointmentDTO
 import personal.ciai.vetclinic.dto.ClientDTO
+import personal.ciai.vetclinic.security.AccessControlRules
 import personal.ciai.vetclinic.service.ClientService
 
 @Api(
@@ -30,6 +31,27 @@ import personal.ciai.vetclinic.service.ClientService
 class ClientController(
     @Autowired val clientService: ClientService
 ) {
+
+    @ApiOperation(
+        value = "View the list of clients",
+        produces = "application/json",
+        responseContainer = "List",
+        response = ClientDTO::class
+    )
+    @ApiResponses(
+        value = [
+            (ApiResponse(code = 200, message = "Successfully retrieved the list of appointments")),
+            (ApiResponse(code = 401, message = "You are not authorized to view the resource")),
+            (ApiResponse(
+                code = 403,
+                message = "Accessing the resource you were tyring to reach is forbidden"
+            ))
+        ]
+    )
+    @GetMapping("")
+    @AccessControlRules.ClientRules.AllowedForGetAllClientDetails
+    fun getAllClients(
+    ) = clientService.getAllClients()
 
     @ApiOperation(
         value = "View the list of client appointments",
@@ -48,7 +70,8 @@ class ClientController(
         ]
     )
     @GetMapping("{clientId}/appointments")
-    fun getAllAppointments(
+    @AccessControlRules.ClientRules.AllowedForGetClientAppointments
+    fun getAllClientAppointments(
         @ApiParam(value = "The ID of the client", required = true, defaultValue = "1") @PathVariable
         clientId: Int
     ) = clientService.checkAppointments(clientId)
@@ -69,6 +92,7 @@ class ClientController(
         ]
     )
     @GetMapping("{clientId:[0-9]+}")
+    @AccessControlRules.ClientRules.AllowedForGetClientDetails
     fun getClientInfo(
         @ApiParam(value = "The ID of the client", required = true, defaultValue = "1") @PathVariable
         clientId: Int
@@ -93,7 +117,8 @@ class ClientController(
         ]
     )
     @PutMapping("/{clientId:[0-9]+}")
-    fun updatePet(
+    @AccessControlRules.ClientRules.AllowedForEditClientDetails
+    fun updateClient(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
         @ApiParam(value = "Details of a client to be updated", required = true) @RequestBody
@@ -115,6 +140,7 @@ class ClientController(
         ]
     )
     @PutMapping("/{clientId:[0-9]+}/photo")
+    @AccessControlRules.ClientRules.AllowedForEditClientDetails
     fun savePhoto(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,

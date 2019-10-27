@@ -92,8 +92,10 @@ class VeterinarianController(
     @AllowedForAddVeterinarian
     fun addVeterinarian(
         @ApiParam(required = true, value = "(Required) Veterinarian info necessary to created a new account")
-        @RequestBody vet: VeterinarianDTO
-    ) = veterinarianService.save(vet)
+        @RequestBody vet: VeterinarianDTO,
+        @RequestParam("photo", required = true)
+        photo: MultipartFile
+    ) = veterinarianService.addVet(vet, photo)
 
     @ApiOperation(value = "Edit Veterinarian information", consumes = "application/json")
     @ApiResponses(

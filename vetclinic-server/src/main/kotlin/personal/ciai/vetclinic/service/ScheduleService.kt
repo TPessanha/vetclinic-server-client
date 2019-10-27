@@ -44,8 +44,6 @@ class ScheduleService(
         return repository.findByVetIdAndYearAndMonth(vetId, year, month).get().toDTO()
     }
 
-
-
     fun setVetSchedule(schedule: ScheduleDTO) {
         val entity = schedule.toEntity(veterinarianService)
         val oldSchedule = getScheduleEntityByVetIdAndMonth(schedule.vetId, schedule.year, schedule.month)

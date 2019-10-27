@@ -39,6 +39,9 @@ class AppointmentService(
 
     @CacheEvict("PetAppointments", key = "#appointmentDTO.pet.id")
     private fun saveAppointment(appointmentDTO: AppointmentDTO, id: Int = 0) {
+        if(appointmentStartDate(appointmentDTO).before(now()))
+            throw PreconditionFailedException("Cannot create an appointment in the past")
+
         val pet = petService.getPetEntityById(appointmentDTO.pet)
         if (!pet.enabled)
             throw PreconditionFailedException("Cannot book appointments for disabled pets")

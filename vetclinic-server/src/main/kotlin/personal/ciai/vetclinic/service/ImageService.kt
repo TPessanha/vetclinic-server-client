@@ -11,7 +11,10 @@ import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.config.ConfigurationProperties
 import personal.ciai.vetclinic.exception.NotFoundException
+import personal.ciai.vetclinic.exception.ServerErrorException
 import personal.ciai.vetclinic.exception.UnsupportedMediaTypeException
+import java.lang.Exception
+import java.nio.file.Path
 
 @Service
 class ImageService(
@@ -35,10 +38,7 @@ class ImageService(
             configurationProperties.fullPathToPetPhotos, "$petId.jpg"
         )
 
-        val directory = File(configurationProperties.fullPathToPetPhotos)
-        if (!directory.exists())
-            directory.mkdirs()
-        Files.write(path, photo.bytes)
+        writeToFileSystem(path, photo.bytes, File(configurationProperties.fullPathToPetPhotos))
 
         return path.toUri()
     }
@@ -47,7 +47,7 @@ class ImageService(
         if (photoURI == null)
             throw NotFoundException("Pet does not have a profile photo")
         else
-            return File(photoURI).readBytes()
+            return readFromFileSystem(File(photoURI))
     }
 
     /*** Users ***/
@@ -60,10 +60,17 @@ class ImageService(
             configurationProperties.fullPathToUserPhotos, "$userId.jpg"
         )
 
-        val directory = File(configurationProperties.fullPathToUserPhotos)
-        if (!directory.exists())
-            directory.mkdirs()
-        Files.write(path, photo.bytes)
+        writeToFileSystem(path, photo.bytes, File(configurationProperties.fullPathToUserPhotos))
+
+        return path.toUri() // TODO set owner
+    }
+
+    fun unsafeUpdateUserPhoto(userId: Int, photo: File): URI {
+        val path = Paths.get(
+            configurationProperties.fullPathToUserPhotos, "$userId.jpg"
+        )
+
+        writeToFileSystem(path, photo.readBytes(), File(configurationProperties.fullPathToUserPhotos))
 
         return path.toUri() // TODO set owner
     }
@@ -72,6 +79,25 @@ class ImageService(
         if (photoURI == null)
             throw NotFoundException("User does not have a profile photo")
         else
-            return File(photoURI).readBytes()
+            return readFromFileSystem(File(photoURI))
+    }
+
+    private fun writeToFileSystem(path: Path, bytes: ByteArray, directory: File) {
+        try {
+            if (!directory.exists())
+                directory.mkdirs()
+
+            Files.write(path, bytes)
+        } catch (e: Exception) {
+            throw ServerErrorException("An error occurred trying to save image to file system")
+        }
+    }
+
+    private fun readFromFileSystem(file: File): ByteArray {
+        try {
+            return file.readBytes()
+        } catch (e: Exception) {
+            throw ServerErrorException("An error occurred trying to read image from file system")
+        }
     }
 }

@@ -87,4 +87,8 @@ class ClientService(
     fun getClientWithPets(id: Int): Client =
         repository.findByIdWithPets(id)
             .orElseThrow { NotFoundException("Client with id ($id) not found") }
+
+    fun getAllClients(): List<ClientDTO> {
+        return repository.findAll().map { it.toDTO() }
+    }
 }
