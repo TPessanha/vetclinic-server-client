@@ -18,7 +18,7 @@ class Administrator(
     password: String,
     address: String,
     photo: URI,
-    employeeId: Int
+    employeeId: Int = -1
 
 ) : Employee(id, email, name, phoneNumber, username, password, address, employeeId, photo) {
 
