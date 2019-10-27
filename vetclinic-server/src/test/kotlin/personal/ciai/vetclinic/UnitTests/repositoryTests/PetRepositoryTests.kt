@@ -3,6 +3,7 @@ package personal.ciai.vetclinic.UnitTests.repositoryTests
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -26,6 +27,7 @@ class PetRepositoryTests {
 
     @Test
     @Transactional
+    @Disabled
     fun `basic test on findAll`() {
         assertTrue(pets.findAll().toList().isNotEmpty())
     }

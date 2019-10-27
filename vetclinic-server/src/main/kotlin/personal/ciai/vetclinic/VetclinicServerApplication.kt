@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.cache.annotation.EnableCaching
 import org.springframework.context.event.EventListener
+import org.springframework.core.io.ResourceLoader
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Component
 import personal.ciai.vetclinic.config.ConfigurationProperties
@@ -26,6 +27,7 @@ import personal.ciai.vetclinic.repository.PetRepository
 import personal.ciai.vetclinic.repository.RoleRepository
 import personal.ciai.vetclinic.repository.ScheduleRepository
 import personal.ciai.vetclinic.repository.VeterinarianRepository
+import personal.ciai.vetclinic.service.ImageService
 
 @SpringBootApplication
 @EnableCaching
@@ -49,11 +51,15 @@ class Init(
     @Autowired
     val roleRepository: RoleRepository,
     @Autowired
-    val scheduleRepository: ScheduleRepository
+    val scheduleRepository: ScheduleRepository,
+    @Autowired
+    val imageService: ImageService,
+    @Autowired
+    val resourceLoader: ResourceLoader
 ) {
     @EventListener
     fun appReady(event: ApplicationReadyEvent) {
-        val debug = true
+        val debug = false
 
         val roles = addRoles()
         addAdmin(roles)
@@ -145,6 +151,12 @@ class Init(
     }
 
     private fun addAdmin(roles: List<Role>) {
+        val defaultImageResource = resourceLoader.getResource(
+            "classpath:static/profilePictures/DefaultProfilePicture.png"
+        )
+
+        val uri= imageService.unsafeUpdateUserPhoto(1, defaultImageResource.file)
+
         val admin = Administrator(
             id = 0,
             employeeId = 1,
@@ -154,7 +166,7 @@ class Init(
             username = "admin",
             password = BCryptPasswordEncoder().encode("password"),
             address = "Rua da direita",
-            photo = URI("emptyForDegub")
+            photo = uri
         )
         admin.roles.add(roles[0])
         admin.roles.add(roles[2])
