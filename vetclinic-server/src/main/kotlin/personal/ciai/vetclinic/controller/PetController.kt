@@ -100,7 +100,7 @@ class PetController(
         ]
     )
     @PostMapping("")
-    @AccessControlRules.UserRules.IsPrincipalTheClient
+    @AccessControlRules.UserRules.IsPrincipalAccountOwner
     fun addPet(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,

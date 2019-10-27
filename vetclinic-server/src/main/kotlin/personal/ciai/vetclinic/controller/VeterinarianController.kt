@@ -56,6 +56,7 @@ class VeterinarianController(
             )]
     )
     @GetMapping("/{vetId:[0-9]+}")
+    @AllowedForGetVeterinarian
     fun getVeterinarian(
         @ApiParam(name = "vetId", required = true, value = "(Required) Veterinarian identificator (id)")
         @PathVariable(value = "vetId", required = true) vetId: Int
