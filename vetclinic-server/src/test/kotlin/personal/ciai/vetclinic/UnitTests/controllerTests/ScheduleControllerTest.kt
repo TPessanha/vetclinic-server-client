@@ -18,7 +18,7 @@ import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import personal.ciai.vetclinic.dto.ScheduleDTO
@@ -101,7 +101,7 @@ class ScheduleControllerTest {
             .then { assertEquals(`schedule 1`.toDTO().copy(id = 1), it.getArgument(0)) }
 
         mvc.perform(
-            post(schedulesUrl)
+            put("$schedulesUrl/2019/11")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)

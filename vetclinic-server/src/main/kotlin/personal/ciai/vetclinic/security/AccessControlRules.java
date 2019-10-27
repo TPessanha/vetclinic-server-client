@@ -133,21 +133,12 @@ public class AccessControlRules {
     }
 
     public static class ScheduleRules {
-        @Target({ElementType.METHOD, ElementType.TYPE})
+          @Target({ElementType.METHOD, ElementType.TYPE})
         @Retention(RetentionPolicy.RUNTIME)
         @Inherited
         @Documented
-        @PreAuthorize(AllowedForAddSchedule.condition)
+        @PreAuthorize(AllowedForEditSchedule.condition)
         public @interface AllowedForEditSchedule {
-            String condition = AllowedForAddSchedule.condition + " or " + "@SecurityService.isVeterinarianAccountOwner(principal,#veterinarianId)";
-        }
-
-        @Target({ElementType.METHOD, ElementType.TYPE})
-        @Retention(RetentionPolicy.RUNTIME)
-        @Inherited
-        @Documented
-        @PreAuthorize(AllowedForAddSchedule.condition)
-        public @interface AllowedForAddSchedule {
             String condition = "hasRole('ADMIN')";
         }
 
@@ -157,7 +148,7 @@ public class AccessControlRules {
         @Documented
         @PreAuthorize(AllowedForGetSchedule.condition)
         public @interface AllowedForGetSchedule {
-            String condition = "hasRole('VET') or hasRole('CLIENT') or " + AllowedForAddSchedule.condition;
+            String condition = "hasRole('VET') or hasRole('CLIENT') or " + AllowedForEditSchedule.condition;
         }
     }
 
