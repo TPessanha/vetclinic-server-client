@@ -7,7 +7,6 @@ import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.any
 import org.mockito.Mockito.anyInt
@@ -70,7 +69,7 @@ class ScheduleControllerTest {
         val dto = `schedule 1`.toDTO()
         `when`(scheduleService.getVeterinarianScheduleByDate(anyInt(), anyInt(), anyInt())).thenReturn(dto)
 
-        val result = mvc.perform(get("${schedulesUrl}/2019/4"))
+        val result = mvc.perform(get("$schedulesUrl/2019/4"))
             .andExpect(status().isOk)
             .andReturn()
 
@@ -88,7 +87,7 @@ class ScheduleControllerTest {
             NotFoundException("not found")
         )
 
-        mvc.perform(get("${schedulesUrl}/2019/4"))
+        mvc.perform(get("$schedulesUrl/2019/4"))
             .andExpect(status().is4xxClientError)
     }
 
@@ -109,7 +108,7 @@ class ScheduleControllerTest {
             }
 
         mvc.perform(
-            put("${schedulesUrl}/2019/4")
+            put("$schedulesUrl/2019/4")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)

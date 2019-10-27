@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import personal.ciai.vetclinic.dto.AppointmentDTO
-import personal.ciai.vetclinic.security.AccessControlRules.PetsRules.AllowedForGetPetAppointments
-import personal.ciai.vetclinic.security.AccessControlRules.AppointmentRules.AllowedForGetOneAppointment
 import personal.ciai.vetclinic.security.AccessControlRules.AppointmentRules.AllowedForAddAppointment
+import personal.ciai.vetclinic.security.AccessControlRules.AppointmentRules.AllowedForGetOneAppointment
+import personal.ciai.vetclinic.security.AccessControlRules.PetsRules.AllowedForGetPetAppointments
 import personal.ciai.vetclinic.service.AppointmentService
 
 @Api(

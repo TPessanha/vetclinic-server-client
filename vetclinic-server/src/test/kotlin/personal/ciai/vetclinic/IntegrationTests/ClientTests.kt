@@ -10,26 +10,16 @@ import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.http.MediaType
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.test.context.TestSecurityContextHolder
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
 import personal.ciai.vetclinic.TestUtils
 import personal.ciai.vetclinic.dto.ClientDTO
-import personal.ciai.vetclinic.dto.PetDTO
 import personal.ciai.vetclinic.model.Client
-import personal.ciai.vetclinic.security.SecurityService
 import personal.ciai.vetclinic.service.ClientService
-import java.security.Principal
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
@@ -64,7 +54,7 @@ class ClientTests {
         val token = TestUtils.generateTestToken("user2", listOf("ROLE_CLIENT"))
 
         val result = mvc.perform(
-            get("${clientsURL}/2").header("Authorization", token)
+            get("$clientsURL/2").header("Authorization", token)
         )
             .andExpect(status().isOk)
             .andReturn()
@@ -72,7 +62,7 @@ class ClientTests {
         val responseString = result.response.contentAsString
         val persistentClient = mapper.readValue<ClientDTO>(responseString)
 
-        assertEquals("user2",persistentClient.username)
+        assertEquals("user2", persistentClient.username)
     }
 
     @Test
@@ -83,7 +73,7 @@ class ClientTests {
         val token = TestUtils.generateTestToken("user3", listOf("ROLE_CLIENT"))
 
         mvc.perform(
-            get("${clientsURL}/2").header("Authorization", token)
+            get("$clientsURL/2").header("Authorization", token)
         )
             .andExpect(status().isForbidden)
     }

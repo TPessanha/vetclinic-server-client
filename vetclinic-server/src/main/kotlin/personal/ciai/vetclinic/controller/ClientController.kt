@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.dto.AppointmentDTO
 import personal.ciai.vetclinic.dto.ClientDTO
+import personal.ciai.vetclinic.security.AccessControlRules.ClientRules.AllowedForEditClientDetails
 import personal.ciai.vetclinic.security.AccessControlRules.ClientRules.AllowedForGetAllClientDetails
 import personal.ciai.vetclinic.security.AccessControlRules.ClientRules.AllowedForGetClientAppointments
-import personal.ciai.vetclinic.security.AccessControlRules.ClientRules.AllowedForEditClientDetails
 import personal.ciai.vetclinic.security.AccessControlRules.ClientRules.AllowedForGetClientDetails
 import personal.ciai.vetclinic.service.ClientService
 
@@ -53,8 +53,7 @@ class ClientController(
     )
     @GetMapping("")
     @AllowedForGetAllClientDetails
-    fun getAllClients(
-    ) = clientService.getAllClients()
+    fun getAllClients() = clientService.getAllClients()
 
     @ApiOperation(
         value = "View the list of client appointments",
@@ -126,7 +125,7 @@ class ClientController(
         clientId: Int,
         @ApiParam(value = "Details of a client to be updated", required = true) @RequestBody
         client: ClientDTO
-    ) = clientService.updateClient(client,clientId)
+    ) = clientService.updateClient(client, clientId)
 
     @ApiOperation(value = "Update photo of a client")
     @ApiResponses(

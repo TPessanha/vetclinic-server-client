@@ -7,8 +7,6 @@ import java.security.Principal
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
@@ -20,7 +18,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
@@ -51,14 +48,12 @@ class PetTests {
         val mapper = ObjectMapper().registerModule(KotlinModule())
 
         val petsURL = "/clients/2/pets"
-
     }
 
     @Test
     @Transactional
     fun `Client add a new pet`() {
         val token = TestUtils.generateTestToken("user2", listOf("ROLE_CLIENT"))
-
 
         val DTO = PetDTO(0, "cat", 2, 2)
 
@@ -105,7 +100,6 @@ class PetTests {
         )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$", hasSize<Any>(2)))
-
     }
 
     fun <T> nonNullAny(t: Class<T>): T = Mockito.any(t)

@@ -13,7 +13,14 @@ object ScheduleUtils {
     val blocks = BitSet(720)
     val booked = BitSet(720)
 
-    val `schedule 1` = Schedule(1, 11, 2019, `veterinarian 1`, blocks.toByteArray(), booked.toByteArray())
+    val `schedule 1` = Schedule(
+        id = 1,
+        month = 11,
+        year = 2019,
+        veterinarian = `veterinarian 1`,
+        availableBlocks = blocks.toByteArray(),
+        bookedBlocks = booked.toByteArray()
+    )
 
     val `schedule 2` = Schedule(
         1, 11, 2019, `veterinarian 2`, blocks.toByteArray(), booked.toByteArray()

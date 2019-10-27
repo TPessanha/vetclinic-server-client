@@ -34,7 +34,7 @@ private class WebSecurityConfig(
             .antMatchers("/console/**").permitAll()
             .antMatchers(HttpMethod.POST, "/login").permitAll()
             .antMatchers(HttpMethod.POST, "/signup").permitAll()
-            .antMatchers(HttpMethod.GET,"/administrators").permitAll()
+            .antMatchers(HttpMethod.GET, "/administrators").permitAll()
             .antMatchers(HttpMethod.GET, "/veterinarians").permitAll()
 //            .antMatchers("/clients/*").hasRole("CLIENT")
 //            .antMatchers(HttpMethod.GET, "/clients*").hasRole("ADMIN")

@@ -5,7 +5,6 @@ import java.util.Date
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
-import org.springframework.security.access.annotation.Secured
 import org.springframework.stereotype.Service
 import personal.ciai.vetclinic.dto.AppointmentDTO
 import personal.ciai.vetclinic.exception.NotFoundException

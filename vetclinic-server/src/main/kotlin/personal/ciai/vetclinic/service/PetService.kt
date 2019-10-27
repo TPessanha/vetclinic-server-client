@@ -51,7 +51,7 @@ class PetService(
 
     fun getClientPets(clientId: Int): List<PetDTO> {
         val client = clientService.getClientWithPets(clientId)
-        return client.pets.filter { it.enabled }.map { it.toDTO() } //should not have to filer but no time to fix query
+        return client.pets.filter { it.enabled }.map { it.toDTO() } // should not have to filer but no time to fix query
     }
 
     fun deletePet(id: Int) {

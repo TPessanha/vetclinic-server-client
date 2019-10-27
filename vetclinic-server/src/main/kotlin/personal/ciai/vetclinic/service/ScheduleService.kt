@@ -50,7 +50,6 @@ class ScheduleService(
         } else
             toSave = schedule.copy(id = 0)
 
-
         repository.save(toSave.toEntity(veterinarianService))
     }
 
