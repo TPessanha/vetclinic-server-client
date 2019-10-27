@@ -55,7 +55,7 @@ class ExampleObjects {
             password = "1234",
             address = "Rua de Pina 23, 2341-323, Lisboa",
             photo = URI.create("admin/1"),
-            employeeId = 12
+            employeeId = 111
         )
         val admin2 = Administrator(
             id = 2,
@@ -66,11 +66,11 @@ class ExampleObjects {
             password = "1234",
             address = "Grand Line 3, Lisboa",
             photo = URI.create("admin/2"),
-            employeeId = 12
+            employeeId = 112
         )
         val admin3 = Administrator(
             id = -1,
-            employeeId = 12,
+            employeeId = 113,
             email = "admin2@vetclinic.pt",
             name = "Homer Simpson",
             phoneNumber = 936925673,

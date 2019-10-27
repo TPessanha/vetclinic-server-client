@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import java.lang.IllegalArgumentException
 import java.util.Base64
 import java.util.Date
+import java.util.concurrent.TimeUnit
 import javax.servlet.FilterChain
 import javax.servlet.ServletRequest
 import javax.servlet.ServletResponse
@@ -23,14 +25,12 @@ import personal.ciai.vetclinic.dto.UserDTO
 import personal.ciai.vetclinic.exception.ConflictException
 import personal.ciai.vetclinic.model.User
 import personal.ciai.vetclinic.service.UserService
-import java.lang.IllegalArgumentException
-import java.util.concurrent.TimeUnit
 
 object JWTSecret {
     private const val passphrase = "este é um grande segredo que tem que ser mantido escondido"
     val KEY: String = Base64.getEncoder().encodeToString(passphrase.toByteArray())
     const val SUBJECT = "JSON Web Token for CIAI 2019/20"
-    val VALIDITY = TimeUnit.MINUTES.toMillis(10).toInt() //10 minutos in milliseconds
+    val VALIDITY = TimeUnit.MINUTES.toMillis(10).toInt() // 10 minutos in milliseconds
 }
 
 private fun addResponseToken(authentication: Authentication, response: HttpServletResponse) {
@@ -181,8 +181,7 @@ class UserPasswordSignUpFilterToJWT(
         } catch (e: ConflictException) {
             (response as HttpServletResponse).sendError(HttpServletResponse.SC_CONFLICT)
             return null
-        } catch (e: IllegalArgumentException)
-        {
+        } catch (e: IllegalArgumentException) {
             (response as HttpServletResponse).sendError(HttpServletResponse.SC_EXPECTATION_FAILED)
             return null
         }

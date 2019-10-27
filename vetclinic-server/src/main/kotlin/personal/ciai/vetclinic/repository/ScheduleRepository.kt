@@ -1,11 +1,11 @@
 package personal.ciai.vetclinic.repository
 
-import org.springframework.data.jpa.repository.Query
 import java.util.Optional
+import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.query.Param
-import personal.ciai.vetclinic.model.Veterinarian
 import personal.ciai.vetclinic.model.Schedule
+import personal.ciai.vetclinic.model.Veterinarian
 
 interface ScheduleRepository : CrudRepository<Schedule, Int> {
     fun findByVeterinarianAndYearAndMonth(vet: Veterinarian, year: Int, month: Int): Optional<Schedule>

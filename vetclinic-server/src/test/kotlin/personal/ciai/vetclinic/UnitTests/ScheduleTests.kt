@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import personal.ciai.vetclinic.exception.ConflictException
 import personal.ciai.vetclinic.exception.PreconditionFailedException
-import personal.ciai.vetclinic.model.Veterinarian
 import personal.ciai.vetclinic.model.Schedule
+import personal.ciai.vetclinic.model.Veterinarian
 
 class ScheduleTests {
     @Test

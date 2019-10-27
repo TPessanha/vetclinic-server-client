@@ -1,24 +1,8 @@
 package personal.ciai.vetclinic.UnitTests.serviceTests
 
-import java.time.LocalDateTime
-import java.time.ZoneOffset
-import java.util.Optional
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertThrows
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.ArgumentMatchers.any
-import org.mockito.ArgumentMatchers.anyListOf
-import org.mockito.Mockito.`when`
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import personal.ciai.vetclinic.exception.NotFoundException
-import personal.ciai.vetclinic.repository.ScheduleRepository
-import personal.ciai.vetclinic.repository.VeterinarianRepository
-import personal.ciai.vetclinic.service.ScheduleService
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest

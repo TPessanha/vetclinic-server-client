@@ -5,7 +5,6 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -24,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.context.WebApplicationContext
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.admin1
 import personal.ciai.vetclinic.dto.AdministratorDTO
+import personal.ciai.vetclinic.dto.BasicSafeInfoDTO
 import personal.ciai.vetclinic.security.SecurityService
 import personal.ciai.vetclinic.service.AdministratorService
 
@@ -51,7 +51,7 @@ class AdministratorTests {
         // see: https://discuss.kotlinlang.org/t/data-class-and-jackson-annotation-conflict/397/6
         val mapper = ObjectMapper().registerModule(KotlinModule())
 
-        val adminsURL = "/employees/1/administrators"
+        val adminsURL = "/administrators"
     }
 
     @Test
@@ -79,11 +79,11 @@ class AdministratorTests {
             .andReturn()
 
         val res = resultList.response.contentAsString
-        val allAdmin = mapper.readValue<List<AdministratorDTO>>(res)
-
+        val allAdmin = mapper.readValue<List<BasicSafeInfoDTO>>(res)
+        val admin = allAdmin.filter { it.username == admin1.username }.first()
         val result = mvc.perform(
             MockMvcRequestBuilders
-                .get("$adminsURL/" + allAdmin[1].id)
+                .get("$adminsURL/" + admin.id)
         )
             .andExpect(status().isOk)
             .andReturn()
@@ -91,7 +91,7 @@ class AdministratorTests {
         val responseString = result.response.contentAsString
         val persistentAdmin = mapper.readValue<AdministratorDTO>(responseString)
 
-        assertNotEquals(admin1.id, persistentAdmin.id)
+        assertEquals(admin.id, persistentAdmin.id)
         assertEquals(admin1.name, persistentAdmin.name)
         assertEquals(admin1.username, persistentAdmin.username)
         assertEquals(admin1.email, persistentAdmin.email)

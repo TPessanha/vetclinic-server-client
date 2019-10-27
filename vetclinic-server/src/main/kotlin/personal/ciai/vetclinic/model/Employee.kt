@@ -3,10 +3,13 @@ package personal.ciai.vetclinic.model
 import java.net.URI
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.Inheritance
+import javax.persistence.InheritanceType
 import javax.persistence.Table
 
 @Entity
 @Table(name = "employees")
+@Inheritance(strategy = InheritanceType.JOINED)
 abstract class Employee(
     id: Int,
     email: String,

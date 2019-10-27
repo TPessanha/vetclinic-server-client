@@ -10,26 +10,22 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.cache.annotation.EnableCaching
 import org.springframework.context.event.EventListener
-import org.springframework.core.io.ResourceLoader
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Component
-import org.springframework.web.multipart.MultipartFile
-import org.springframework.web.multipart.commons.CommonsMultipartFile
 import personal.ciai.vetclinic.config.ConfigurationProperties
 import personal.ciai.vetclinic.model.Administrator
 import personal.ciai.vetclinic.model.Client
 import personal.ciai.vetclinic.model.Pet
 import personal.ciai.vetclinic.model.Role
 import personal.ciai.vetclinic.model.Role.RoleName
-import personal.ciai.vetclinic.model.Veterinarian
 import personal.ciai.vetclinic.model.Schedule
+import personal.ciai.vetclinic.model.Veterinarian
 import personal.ciai.vetclinic.repository.AdministratorRepository
 import personal.ciai.vetclinic.repository.ClientRepository
-import personal.ciai.vetclinic.repository.ScheduleRepository
 import personal.ciai.vetclinic.repository.PetRepository
 import personal.ciai.vetclinic.repository.RoleRepository
+import personal.ciai.vetclinic.repository.ScheduleRepository
 import personal.ciai.vetclinic.repository.VeterinarianRepository
-import personal.ciai.vetclinic.service.ImageService
 
 @SpringBootApplication
 @EnableCaching
@@ -53,24 +49,15 @@ class Init(
     @Autowired
     val roleRepository: RoleRepository,
     @Autowired
-    val scheduleRepository: ScheduleRepository,
-    @Autowired
-    val imageService: ImageService,
-    @Autowired
-    val resourceLoader: ResourceLoader
+    val scheduleRepository: ScheduleRepository
 ) {
     @EventListener
     fun appReady(event: ApplicationReadyEvent) {
-        val debug = true
-
         val roles = addRoles()
         addAdmin(roles)
-        if (debug)
-        {
         val clients = addClients(roles)
-            addPets(clients)
-            addVets()
-        }
+        addPets(clients)
+        addVets()
     }
 
     private fun addVets() {
@@ -148,12 +135,6 @@ class Init(
     }
 
     private fun addAdmin(roles: List<Role>) {
-        val defaultImageResource = resourceLoader.getResource(
-            "classpath:static/profilePictures/DefaultProfilePicture.png"
-        )
-
-        val uri= imageService.unsafeUpdateUserPhoto(1, defaultImageResource.file)
-
         val admin = Administrator(
             id = 0,
             employeeId = 1,
@@ -163,7 +144,7 @@ class Init(
             username = "admin",
             password = BCryptPasswordEncoder().encode("password"),
             address = "Rua da direita",
-            photo = uri
+            photo = URI("emptyForDegub")
         )
         admin.roles.add(roles[0])
         admin.roles.add(roles[2])

@@ -1,15 +1,5 @@
 package personal.ciai.vetclinic.utils
 
-import java.time.LocalDateTime
-import java.time.ZoneOffset
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.assertAll
-import personal.ciai.vetclinic.model.Schedule
-import personal.ciai.vetclinic.model.ScheduleStatus
-import personal.ciai.vetclinic.model.TimeSlot
-import personal.ciai.vetclinic.model.Veterinarian
-import personal.ciai.vetclinic.utils.VeterinarianUtils.`veterinarian 1`
-
 object ScheduleUtils {
 
 //    // Veterinarian

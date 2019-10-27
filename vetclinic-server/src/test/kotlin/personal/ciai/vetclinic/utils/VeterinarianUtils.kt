@@ -17,7 +17,8 @@ object VeterinarianUtils {
         password = "1234",
         address = "Rua de Cima 44, 4243-432, Lisboa",
         photo = URI.create("vets/1"),
-        enabled = true
+        enabled = true,
+        employeeId = 4
     )
 
     val `veterinarian 2` = Veterinarian(
@@ -29,7 +30,8 @@ object VeterinarianUtils {
         password = "1234",
         address = "Rua da Linha 3, Lisboa",
         photo = URI.create("vets2/2"),
-        enabled = true
+        enabled = true,
+        employeeId = 3
 
     )
 

@@ -100,7 +100,7 @@ class PetController(
         ]
     )
     @PostMapping("")
-    @AccessControlRules.UserRules.IsPrincipalAccountOwner
+    @AccessControlRules.UserRules.IsPrincipalTheClient
     fun addPet(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
@@ -178,6 +178,7 @@ class PetController(
         ]
     )
     @GetMapping("/{id:[0-9]+}/photo")
+    @AccessControlRules.PetsRules.AllowedForEditPet
     fun getPhoto(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,

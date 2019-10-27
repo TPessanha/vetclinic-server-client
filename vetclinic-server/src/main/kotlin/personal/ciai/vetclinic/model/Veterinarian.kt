@@ -23,7 +23,7 @@ class Veterinarian(
     var appointments: MutableList<Appointment> = arrayListOf(),
 
 //    @OneToMany(mappedBy = "veterinarian")
-//    var schedules: MutableList<Schedules> = arrayListOf(),
+//    var schedules: MutableList<Schedule> = arrayListOf(),
 
     employeeId: Int,
 

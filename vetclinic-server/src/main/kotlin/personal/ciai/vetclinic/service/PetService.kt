@@ -60,7 +60,7 @@ class PetService(
     }
 
     fun deletePet(pet: Pet) {
-        pet.enabled=false
+        pet.enabled = false
         repository.save(pet)
     }
 

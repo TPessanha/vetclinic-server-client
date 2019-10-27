@@ -1,8 +1,10 @@
 package personal.ciai.vetclinic.service
 
 import java.io.File
+import java.lang.Exception
 import java.net.URI
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.Paths
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.CacheManager
@@ -13,8 +15,6 @@ import personal.ciai.vetclinic.config.ConfigurationProperties
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.exception.ServerErrorException
 import personal.ciai.vetclinic.exception.UnsupportedMediaTypeException
-import java.lang.Exception
-import java.nio.file.Path
 
 @Service
 class ImageService(

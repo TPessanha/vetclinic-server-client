@@ -1,6 +1,5 @@
 package personal.ciai.vetclinic.model
 
-import personal.ciai.vetclinic.dto.ScheduleDTO
 import java.time.YearMonth
 import java.util.BitSet
 import javax.persistence.Column
@@ -9,7 +8,7 @@ import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.Table
 import javax.persistence.UniqueConstraint
-import personal.ciai.vetclinic.dto.Transferable
+import personal.ciai.vetclinic.dto.ScheduleDTO
 import personal.ciai.vetclinic.exception.ConflictException
 import personal.ciai.vetclinic.exception.PreconditionFailedException
 

@@ -99,10 +99,8 @@ class AdministratorController(
     @AllowedForAddAdministrator
     fun addAdministrator(
         @ApiParam(required = true, value = "(Required) Administrator info necessary to created a new account")
-        @RequestBody admin: AdministratorDTO,
-        @RequestParam("photo", required = true)
-        photo: MultipartFile
-    ) = administratorService.add(admin,photo)
+        @RequestBody admin: AdministratorDTO
+    ) = administratorService.save(admin)
 
     @ApiOperation(value = "Edit Administrator information", consumes = "application/json")
     @ApiResponses(
@@ -163,7 +161,7 @@ class AdministratorController(
             required = true,
             value = "(Required) Administrator identification (id)"
         ) @PathVariable adminId: Int,
-        @RequestParam("photo", required = true)
+        @RequestParam("photo")
         photo: MultipartFile
     ) = administratorService.updatePhoto(adminId, photo)
 

@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import personal.ciai.vetclinic.dto.ScheduleDTO
-import personal.ciai.vetclinic.security.AccessControlRules
-import personal.ciai.vetclinic.security.AccessControlRules.SchedulesRules.AllowedForEditSchedule
-import personal.ciai.vetclinic.security.AccessControlRules.SchedulesRules.AllowedForGetAllSchedules
-import personal.ciai.vetclinic.security.AccessControlRules.SchedulesRules.AllowedForGetSchedule
+import personal.ciai.vetclinic.security.AccessControlRules.ScheduleRules.AllowedForEditSchedule
+import personal.ciai.vetclinic.security.AccessControlRules.ScheduleRules.AllowedForGetSchedule
 import personal.ciai.vetclinic.service.ScheduleService
 
 @Api(
@@ -30,14 +28,14 @@ class ScheduleController(
     @Autowired private val schedulesService: ScheduleService
 ) {
     @ApiOperation(
-        value = "View a list of Schedules for the Veterinarian",
+        value = "View a list of Schedule for the Veterinarian",
         produces = "application/json",
         responseContainer = "List",
         response = ScheduleDTO::class
     )
     @ApiResponses(
         value = [
-            (ApiResponse(code = 200, message = "Successfully retrieved the list of Schedules of the Veterinarian")),
+            (ApiResponse(code = 200, message = "Successfully retrieved the list of Schedule of the Veterinarian")),
             (ApiResponse(code = 401, message = "You are not authorized to view the resource")),
             (ApiResponse(
                 code = 403,
@@ -46,12 +44,12 @@ class ScheduleController(
         ]
     )
     @GetMapping("")
-    @AllowedForGetAllSchedules
-    fun getVeterinarianSchedules(
+    @AllowedForGetSchedule
+    fun getVeterinarianSchedule(
         @ApiParam(value = "The ID of the Veterinarian", required = true) @PathVariable
         veterinarianId: Int
 
-    ) = schedulesService.getVeterinarianSchedules(veterinarianId)
+    ) = schedulesService.getVeterinarianSchedule(veterinarianId)
 
     @ApiOperation(
         value = "View the schedule for the given year and month",
@@ -60,7 +58,7 @@ class ScheduleController(
     )
     @ApiResponses(
         value = [
-            (ApiResponse(code = 200, message = "Successfully retrieved the list of Schedules of the Veterinarian")),
+            (ApiResponse(code = 200, message = "Successfully retrieved the list of Schedule of the Veterinarian")),
             (ApiResponse(code = 401, message = "You are not authorized to view the resource")),
             (ApiResponse(
                 code = 403,
@@ -109,6 +107,8 @@ class ScheduleController(
             value = "Details of an Schedule to be created",
             required = true
         ) @RequestBody schedule: ScheduleDTO
-    ) = schedulesService.setVetSchedule(schedule.copy(vetId = vetId,year=year,month=month,bookedBlocks = emptyList()))
-
+    ) = schedulesService.setVetSchedule(
+        schedule
+            .copy(vetId = vetId, year = year, month = month, bookedBlocks = emptyList())
+    )
 }

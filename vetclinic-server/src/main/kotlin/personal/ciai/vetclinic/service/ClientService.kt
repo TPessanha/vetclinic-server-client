@@ -9,7 +9,6 @@ import personal.ciai.vetclinic.dto.AppointmentDTO
 import personal.ciai.vetclinic.dto.ClientDTO
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.exception.PreconditionFailedException
-import personal.ciai.vetclinic.model.Appointment
 // import personal.ciai.vetclinic.model.Appointment
 import personal.ciai.vetclinic.model.Client
 import personal.ciai.vetclinic.repository.AppointmentRepository

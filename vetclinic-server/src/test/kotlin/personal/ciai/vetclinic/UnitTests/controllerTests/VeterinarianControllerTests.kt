@@ -26,6 +26,7 @@ import personal.ciai.vetclinic.ExampleObjects.exampleObjects.vet1
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.vet2
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.vetDTOList
 import personal.ciai.vetclinic.IntegrationTests.VeterinarianTests
+import personal.ciai.vetclinic.dto.BasicSafeInfoDTO
 import personal.ciai.vetclinic.dto.VeterinarianDTO
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.service.VeterinarianService
@@ -45,7 +46,7 @@ class VeterinarianControllerTests {
     companion object {
         val mapper = ObjectMapper().registerModule(KotlinModule())
 
-        val vetsURL = "/employees/1/veterinarians"
+        val vetsURL = "/veterinarians"
     }
 
     @Test
@@ -58,12 +59,12 @@ class VeterinarianControllerTests {
             .andReturn()
 
         val responseString = result.response.contentAsString
-        val responseDTO = mapper.readValue<List<VeterinarianDTO>>(responseString)
-        assertEquals(responseDTO, vetDTOList)
+        val responseDTO = mapper.readValue<List<BasicSafeInfoDTO>>(responseString)
+        assertEquals(responseDTO.size, vetDTOList.size)
     }
 
     @Test
-    @WithMockUser(username = "vet", password = "123", roles = ["VET"])
+    @WithMockUser(username = "admin", password = "123", roles = ["ADMIN"])
     fun `Test GET One Veterinarian`() {
         `when`(vets.getVeterinarianById(1)).thenReturn(vet1.toDTO())
 
@@ -77,8 +78,8 @@ class VeterinarianControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "vet", password = "123", roles = ["VET"])
-    fun `Test GET One Veterinarian (Not Found)`() {
+    @WithMockUser(username = "admin", password = "123", roles = ["ADMIN"])
+    fun `TEST - GET One Veterinarian (Not Found)`() {
         `when`(vets.getVeterinarianById(2)).thenThrow(NotFoundException("not found"))
 
         mvc.perform(get("$vetsURL/2"))
