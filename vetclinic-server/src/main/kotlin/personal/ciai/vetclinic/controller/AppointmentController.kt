@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import personal.ciai.vetclinic.dto.AppointmentDTO
+import personal.ciai.vetclinic.security.AccessControlRules
 import personal.ciai.vetclinic.service.AppointmentService
 
 @Api(
@@ -43,6 +44,7 @@ class AppointmentController(
         ]
     )
     @GetMapping("")
+    @AccessControlRules.PetsRules.AllowedForGetPetAppointments
     fun getPetAppointments(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
@@ -67,6 +69,7 @@ class AppointmentController(
         ]
     )
     @GetMapping("/{id:[0-9]+}")
+    @AccessControlRules.AppointmentRules.AllowedForGetOneAppointment
     fun getOneAppointment(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
@@ -89,6 +92,7 @@ class AppointmentController(
         ]
     )
     @PostMapping("")
+    @AccessControlRules.AppointmentRules.AllowedForAddAppointment
     fun addAppointment(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
@@ -99,10 +103,5 @@ class AppointmentController(
             required = true
         ) @RequestBody
         appointment: AppointmentDTO
-//        TODO add vet and client
-//        @ApiParam(value = "The username of the client", required = true) @PathVariable(value = "clientId")
-//        clientId: Int,
-//        @ApiParam(value = "The ID of the vet", required = true) @PathVariable(value = "vetId")
-//        vetId: Int
     ) = appointmentService.addAppointment(appointment.copy(pet = petId, client = clientId))
 }

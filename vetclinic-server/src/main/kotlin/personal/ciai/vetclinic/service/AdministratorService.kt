@@ -62,4 +62,9 @@ class AdministratorService(
         admin.photo = imageService.updateUserPhoto(admin.id, photo)
         update(admin.toDTO())
     }
+
+    fun add(admin: AdministratorDTO, photo: MultipartFile){
+        save(admin)
+        imageService.updateUserPhoto(admin.id,photo)
+    }
 }

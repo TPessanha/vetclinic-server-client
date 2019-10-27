@@ -77,4 +77,9 @@ class VeterinarianService(
         vet.photo = imageService.updateUserPhoto(vet.id, photo)
         update(vet.toDTO())
     }
+
+    fun addVet(vet: VeterinarianDTO, photo: MultipartFile) {
+        save(vet)
+        imageService.updateUserPhoto(vet.id,photo)
+    }
 }

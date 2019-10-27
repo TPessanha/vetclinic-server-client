@@ -33,10 +33,11 @@ class SecurityService(
 //        return pet.owner.username == principal.name
 //    }
 
-    fun isPrincipalWithID(principal: Principal, id: Int): Boolean {
-        val user = userService.getUserEntityById(id)
-        return user.username == principal.name
-    }
+    fun isPrincipalAccountOwner(principal: Principal, id: Int): Boolean =
+        userService.getUserEntityById(id).username == principal.name
+
+    fun isClientAccountOwner(principal: Principal, id: Int): Boolean =
+        userService.getUserEntityById(id).username == principal.name
 
     fun isVeterinarianAccountOwner(principal: Principal, vetId: Int): Boolean =
         principal.name == veterinarianService.getVeterinarianById(vetId).username
