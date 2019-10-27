@@ -155,7 +155,7 @@ class Init(
             "classpath:static/profilePictures/DefaultProfilePicture.png"
         )
 
-        val uri= imageService.unsafeUpdateUserPhoto(1, defaultImageResource.file)
+        val uri = imageService.unsafeUpdateUserPhoto(1, defaultImageResource.file)
 
         val admin = Administrator(
             id = 0,
