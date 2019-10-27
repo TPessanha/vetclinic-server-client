@@ -161,31 +161,4 @@ class ScheduleController(
         ) @RequestBody schedule: ScheduleDTO
     ) = schedulesService.setVetSchedule(schedule.copy(vetId = vetId,year=year,month=month,bookedBlocks = emptyList()))
 
-//    @ApiOperation(
-//        value = "Update the Schedule of Veterinarian",
-//        consumes = "application/json"
-//    )
-//    @ApiResponses(
-//        value = [
-//            (ApiResponse(code = 200, message = "Successfully upade the Schedule")),
-//            (ApiResponse(code = 401, message = "You are not authorized to create the resource")),
-//            (ApiResponse(
-//                code = 403,
-//                message = "Accessing the resource you were tyring to reach is forbidden"
-//            )),
-//            (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
-//        ]
-//    )
-//    @PutMapping("/{scheduleId:[0-9]+}")
-//    @AllowedForEditSchedule
-//    fun updateSchedule(
-//        @ApiParam(value = "The ID of the Veterinarian", required = true) @PathVariable
-//        vetId: Int,
-//        @ApiParam(value = "The ID of the Schedule", required = true) @PathVariable
-//        scheduleId: Int,
-//        @ApiParam(
-//            value = "Details of an Schedule to be created",
-//            required = true
-//        ) @RequestBody schedule: ScheduleDTO
-//    ) = schedulesService.updateSchedule(schedule.copy(id = scheduleId, vetId = vetId))
 }

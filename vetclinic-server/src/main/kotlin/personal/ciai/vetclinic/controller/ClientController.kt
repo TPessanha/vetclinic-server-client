@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.dto.AppointmentDTO
 import personal.ciai.vetclinic.dto.ClientDTO
-import personal.ciai.vetclinic.dto.PetDTO
-import personal.ciai.vetclinic.security.AccessControlRules
 import personal.ciai.vetclinic.service.ClientService
 
 @Api(
