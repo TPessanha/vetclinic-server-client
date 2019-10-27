@@ -102,7 +102,7 @@ class ScheduleRepositoryTests {
 
     @Test
     @Transactional
-    fun `Test - Get Schedule by Veterinarian Id and Start Date`() {
+    fun `Test - Get Schedule by Veterinarian Id and Date`() {
         val vet01 = `veterinarian repository`.save(`veterinarian 1`)
 
         `schedule 1`.veterinarian = vet01
@@ -112,11 +112,11 @@ class ScheduleRepositoryTests {
         assertTrue(schedules.size >= 1)
 
         assertScheduleEquals(
-            `schedules repository`.findByVetIdAndYearAndMonth(vet01.id, 11, 2019).get(), sche
+            `schedules repository`.findByVetIdAndYearAndMonth(vet01.id, 2019,11 ).get(), sche
         )
 
         `schedules repository`.delete(schedules.first())
-        assertTrue(`schedules repository`.findAll().toList().isEmpty())
+        assertTrue(`schedules repository`.findAll().toList().isNotEmpty())
 
         // Reset
         `schedule 1`.veterinarian = `veterinarian 1`
