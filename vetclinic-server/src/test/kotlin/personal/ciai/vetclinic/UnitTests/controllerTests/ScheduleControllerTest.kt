@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.any
+import org.mockito.Mockito.anyInt
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -24,7 +25,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import personal.ciai.vetclinic.dto.ScheduleDTO
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.repository.VeterinarianRepository
-import personal.ciai.vetclinic.security.SecurityService
 import personal.ciai.vetclinic.service.ScheduleService
 import personal.ciai.vetclinic.utils.ScheduleUtils.`schedule 1`
 
@@ -35,8 +35,6 @@ class ScheduleControllerTest {
 
     @Autowired
     lateinit var mvc: MockMvc
-    @MockBean
-    lateinit var securityService: SecurityService
 
     @MockBean
     lateinit var scheduleService: ScheduleService
@@ -46,27 +44,16 @@ class ScheduleControllerTest {
     companion object {
         val mapper = ObjectMapper().registerModule(KotlinModule())
 
-        val schedulesUrl = "/veterinarians/1/schedules"
+        val schedulesUrl = "/veterinarians/4/schedules"
     }
-
-    @Test
-    @WithMockUser(username = "admin", password = "123", roles = ["ADMIN"])
-    fun `TEST - GET One Schedule (Not Found)`() {
-        `when`(scheduleService.getOneScheduleById(1)).thenThrow(NotFoundException("not found"))
-
-        mvc.perform(get("$schedulesUrl/1"))
-            .andExpect(status().is4xxClientError)
-    }
-
-    fun <T> nonNullAny(t: Class<T>): T = any(t)
 
     @Test
     @WithMockUser(username = "admin", password = "123", roles = ["ADMIN"])
     fun `Test GET all Schedule`() {
 
-        `when`(scheduleService.getVeterinarianSchedule(1)).thenReturn(listOf(`schedule 1`.toDTO()))
+        `when`(scheduleService.getVeterinarianSchedule(anyInt())).thenReturn(listOf(`schedule 1`.toDTO()))
 
-        val result = mvc.perform(get("$schedulesUrl").contentType(MediaType.APPLICATION_JSON))
+        val result = mvc.perform(get(schedulesUrl))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$", hasSize<Any>(1)))
             .andReturn()
@@ -78,20 +65,50 @@ class ScheduleControllerTest {
 
     @Test
     @WithMockUser(username = "admin", password = "123", roles = ["ADMIN"])
-    fun `Test POST One Schedule`() {
+    fun `Test GET One Schedule`() {
+        val dto = `schedule 1`.toDTO()
+        `when`(scheduleService.getVeterinarianScheduleByDate(anyInt(), anyInt(), anyInt())).thenReturn(dto)
 
-        val json = mapper.writeValueAsString(`schedule 1`.toDTO())
+        val result = mvc.perform(get("$schedulesUrl/2019/4"))
+            .andExpect(status().isOk)
+            .andReturn()
+
+        val responseString = result.response.contentAsString
+        val responseDTO = mapper.readValue<ScheduleDTO>(responseString)
+        assertEquals(responseDTO.month, `schedule 1`.month)
+        assertEquals(responseDTO.year, `schedule 1`.year)
+        assertEquals(responseDTO.vetId, `schedule 1`.veterinarian.id)
+    }
+
+    @Test
+    @WithMockUser(username = "admin", password = "123", roles = ["ADMIN"])
+    fun `TEST - GET One Veterinarian (Not Found)`() {
+        `when`(scheduleService.getVeterinarianScheduleByDate(anyInt(), anyInt(), anyInt())).thenThrow(
+            NotFoundException("not found")
+        )
+
+        mvc.perform(get("$schedulesUrl/2019/4"))
+            .andExpect(status().is4xxClientError)
+    }
+
+    fun <T> nonNullAny(t: Class<T>): T = any(t)
+
+    @Test
+    @WithMockUser(username = "admin", password = "123", roles = ["ADMIN"])
+    fun `Test PUT set Schedule`() {
+
+        val json = mapper.writeValueAsString(`schedule 1`.toDTO().copy(id = 1, vetId = 4, month = 4, year = 2019))
 
         `when`(scheduleService.setVetSchedule(nonNullAny(ScheduleDTO::class.java)))
             .then {
-                val schedule: ScheduleDTO = it.getArgument(0)
-                assertEquals(`schedule 1`.veterinarian.id, schedule.vetId)
-                assertEquals(`schedule 1`.year, schedule.year)
-//                assertEquals(`schedule 1`.month, schedule.month)
+                assertEquals(
+                    `schedule 1`.toDTO().copy(id = 1, vetId = 4, month = 4, year = 2019),
+                    it.getArgument(0)
+                )
             }
 
         mvc.perform(
-            put("$schedulesUrl/2019/11")
+            put("$schedulesUrl/2019/4")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
