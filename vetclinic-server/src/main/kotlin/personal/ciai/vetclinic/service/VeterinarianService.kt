@@ -28,7 +28,7 @@ class VeterinarianService(
 ) {
     fun existsById(id: Int): Boolean = vetRepository.existsById(id)
 
-    fun getAllVeterinarian(): List<VeterinarianDTO> = vetRepository.findAll()
+    fun getAllVeterinarian(): List<VeterinarianDTO> = vetRepository.findAllByEnabled(true)
         .map { it.toDTO() }
 
     fun getVeterinarianById(vetId: Int): VeterinarianDTO {

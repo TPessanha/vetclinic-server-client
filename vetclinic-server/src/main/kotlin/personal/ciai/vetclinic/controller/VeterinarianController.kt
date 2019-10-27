@@ -26,7 +26,7 @@ import personal.ciai.vetclinic.service.VeterinarianService
 )
 
 @RestController
-@RequestMapping("employees/{employeeId:[0-9]+}/veterinarians")
+@RequestMapping("/veterinarians")
 class VeterinarianController(
     @Autowired private val veterinarianService: VeterinarianService,
     @Autowired private val appointmentService: AppointmentService
@@ -49,11 +49,6 @@ class VeterinarianController(
     )
     @GetMapping("/{vetId:[0-9]+}")
     fun getVeterinarian(
-        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
-            value = "employeeId",
-            required = true
-        )
-        employeeId: Int,
         @ApiParam(name = "vetId", required = true, value = "(Required) Veterinarian identificator (id)")
         @PathVariable(value = "vetId", required = true) vetId: Int
     ) = veterinarianService.getVeterinarianById(vetId)
@@ -74,11 +69,6 @@ class VeterinarianController(
     )
     @GetMapping("")
     fun getAllVeterinarian(
-        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
-            value = "employeeId",
-            required = true
-        )
-        employeeId: Int
     ) = veterinarianService.getAllVeterinarian()
 
     @ApiOperation(value = "Add a new Veterinarian account")
@@ -93,11 +83,6 @@ class VeterinarianController(
     @PostMapping("")
     @AccessControlRules.VeterinariansRules.AllowedForAddVeterinarian
     fun addVeterinarian(
-        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
-            value = "employeeId",
-            required = true
-        )
-        employeeId: Int,
         @ApiParam(required = true, value = "(Required) Veterinarian info necessary to created a new account")
         @RequestBody vet: VeterinarianDTO
     ) = veterinarianService.save(vet)
@@ -114,13 +99,7 @@ class VeterinarianController(
     )
     @PutMapping("/{vetId:[0-9]+}")
     @AccessControlRules.VeterinariansRules.AllowedForEditVeterinarian
-
     fun updateVeterinarian(
-        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
-            value = "employeeId",
-            required = true
-        )
-        employeeId: Int,
         @ApiParam(name = "vetId", required = true, value = "(Required) Veterinarian identificator (id)")
         @PathVariable(value = "vetId", required = true) vetId: Int,
         @ApiParam(required = true, value = "(Required) Veterinarian information to be changed")
@@ -140,10 +119,6 @@ class VeterinarianController(
     @DeleteMapping("/{vetId:[0-9]+}")
     @AccessControlRules.VeterinariansRules.AllowedForDeleteVeterinarian
     fun deleteVeterinarian(
-        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
-            value = "employeeId",
-            required = true
-        ) employeeId: Int,
         @ApiParam(name = "vetId", required = true, value = "(Required) Veterinarian identificator (id)")
         @PathVariable(value = "vetId", required = true) vetId: Int
     ) = veterinarianService.delete(vetId)
@@ -166,11 +141,6 @@ class VeterinarianController(
     @GetMapping("/{vetId:[0-9]+}/appointments/{appointmentId:[0-9]+}")
     @AccessControlRules.VeterinariansRules.AllowedForGetVeterinarian
     fun getVeterinarianAppointment(
-        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
-            value = "employeeId",
-            required = true
-        )
-        employeeId: Int,
         @ApiParam(name = "vetId", required = true, value = "(Required) Veterinarian identificator (id)")
         @PathVariable(value = "vetId", required = true) vetId: Int,
         @ApiParam(name = "appointmentId", required = true, value = "(Required) Appointment identificator (id)")
@@ -194,7 +164,7 @@ class VeterinarianController(
     )
     @GetMapping("/{vetId:[0-9]+}/appointments")
     @AccessControlRules.VeterinariansRules.AllowedForGetVeterinarian
-    fun getVeterinarianAppointment(
+    fun getVeterinarianAppointments(
         @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
             value = "employeeId",
             required = true
@@ -221,11 +191,6 @@ class VeterinarianController(
     @PutMapping("/{vetId:[0-9]+}/appointments/{appointmentId:[0-9]+}")
     @AccessControlRules.VeterinariansRules.AllowedForEditVeterinarian
     fun changeVeterinarianAppointment(
-        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
-            value = "employeeId",
-            required = true
-        )
-        employeeId: Int,
         @ApiParam(name = "vetId", required = true, value = "(Required) Veterinarian identificator (id)")
         @PathVariable(value = "vetId", required = true) vetId: Int,
         @ApiParam(name = "appointmentId", required = true, value = "(Required) Appointment identificator (id)")

@@ -39,6 +39,10 @@ class AppointmentService(
 
     @CacheEvict("PetAppointments", key = "#appointmentDTO.pet.id")
     private fun saveAppointment(appointmentDTO: AppointmentDTO, id: Int = 0) {
+        val pet = petService.getPetEntityById(appointmentDTO.pet)
+        if (!pet.enabled)
+            throw PreconditionFailedException("Cannot book appointments for disabled pets")
+
         val newAppointment = appointmentDTO.toEntity(id, petService, clientService, veterinarianService)
         val vet = veterinarianService.getVeterinarianEntity(appointmentDTO.veterinarian)
 

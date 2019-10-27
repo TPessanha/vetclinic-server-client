@@ -25,9 +25,9 @@ import personal.ciai.vetclinic.service.AdministratorService
 )
 
 @RestController
-@RequestMapping("employees/{employeeId:[0-9]+}/administrators")
+@RequestMapping("/administrators")
 class AdministratorController(
-    @Autowired val administradorService: AdministratorService
+    @Autowired val administratorService: AdministratorService
 ) {
 
     @ApiOperation(
@@ -47,11 +47,6 @@ class AdministratorController(
     )
     @GetMapping("/{adminId:[0-9]+}", produces = [APPLICATION_JSON_VALUE])
     fun getAdministrator(
-        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
-            value = "employeeId",
-            required = true
-        )
-        employeeId: Int,
         @ApiParam(
             name = "adminId",
             required = true,
@@ -60,7 +55,7 @@ class AdministratorController(
             value = "adminId",
             required = true
         ) adminId: Int
-    ) = administradorService.getAdministratorById(adminId)
+    ) = administratorService.getAdministratorById(adminId)
 
     @ApiOperation(
         value = "View a list of Administrators details",
@@ -76,14 +71,11 @@ class AdministratorController(
                 code = 403, message = "Accessing the resource you were tyring to reach is forbidden"
             )]
     )
-    @GetMapping("", produces = [APPLICATION_JSON_VALUE])
-    fun getAllAdministrator(
-        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
-            value = "employeeId",
-            required = true
-        )
-        employeeId: Int
-    ) = administradorService.getAllAdministrator()
+    @GetMapping(
+        "",
+        produces = [APPLICATION_JSON_VALUE]
+    )
+    fun getAllAdministrator() = administratorService.getAllAdministrator()
 
     @ApiOperation(value = "Add a new Administrator account")
     @ApiResponses(
@@ -97,14 +89,9 @@ class AdministratorController(
     @PostMapping("", consumes = [APPLICATION_JSON_VALUE])
     @AccessControlRules.AdministratorsRules.AllowedForEditAdministrator
     fun addAdministrator(
-        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
-            value = "employeeId",
-            required = true
-        )
-        employeeId: Int,
         @ApiParam(required = true, value = "(Required) Administrator info necessary to created a new account")
         @RequestBody admin: AdministratorDTO
-    ) = administradorService.save(admin)
+    ) = administratorService.save(admin)
 
     @ApiOperation(value = "Edit Administrator information", consumes = "application/json")
     @ApiResponses(
@@ -119,17 +106,12 @@ class AdministratorController(
     @PutMapping("/{adminId:[0-9]+}", consumes = [APPLICATION_JSON_VALUE])
     @AccessControlRules.AdministratorsRules.AllowedForEditAdministrator
     fun updateAdministrator(
-        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
-            value = "employeeId",
-            required = true
-        )
-        employeeId: Int,
         @ApiParam(name = "adminId", required = true, value = "(Required) Admin identificator (id)") @PathVariable(
             value = "adminId", required = true
         ) adminId: Int,
         @ApiParam(required = true, value = "(Required) Admin information to be changed")
         @RequestBody admin: AdministratorDTO
-    ) = administradorService.update(admin.copy(id = adminId))
+    ) = administratorService.update(admin.copy(id = adminId))
 
     @ApiOperation(value = "Delete a Administrator account")
     @ApiResponses(
@@ -143,13 +125,8 @@ class AdministratorController(
     @DeleteMapping("/{adminId:[0-9]+}")
     @AccessControlRules.AdministratorsRules.AllowedForDeleteAdministrator
     fun deleteAdministrator(
-        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
-            value = "employeeId",
-            required = true
-        )
-        employeeId: Int,
         @ApiParam(name = "adminId", required = true, value = "(Required) Admin identificator (id)") @PathVariable(
             value = "adminId", required = true
         ) adminId: Int
-    ) = administradorService.delete(adminId)
+    ) = administratorService.delete(adminId)
 }

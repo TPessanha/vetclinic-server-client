@@ -5,6 +5,7 @@ import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.config.ConfigurationProperties
+import personal.ciai.vetclinic.dto.AppointmentDTO
 import personal.ciai.vetclinic.dto.ClientDTO
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.exception.PreconditionFailedException
@@ -36,11 +37,11 @@ class ClientService(
         )
     }
 
-    fun checkAppointments(id: Int): List<Appointment> {
+    fun checkAppointments(id: Int): List<AppointmentDTO> {
         val client =
             repository.findByIdWithAppointments(id)
                 .orElseThrow { NotFoundException("Client with id ($id) not found") }
-        return client.appointments
+        return client.appointments.map { it.toDTO() }
     }
 
     fun getClientById(id: Int) = getClientEntityById(id).toDTO()
