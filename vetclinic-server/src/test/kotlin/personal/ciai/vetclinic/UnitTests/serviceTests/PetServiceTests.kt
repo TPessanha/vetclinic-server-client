@@ -6,8 +6,10 @@ import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.anyBoolean
 import org.mockito.Mockito.anyInt
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -38,9 +40,9 @@ class PetServiceTests {
 
     @Test
     fun `basic test on getAll`() {
-        `when`(repository.findAll()).thenReturn(petList)
+        `when`(repository.findAllByEnabled(anyBoolean())).thenReturn(petList)
 
-        assertEquals(petService.getAllPets(), petList.map { it.toDTO() })
+        assertEquals(petList.map { it.toDTO() }, petService.getAllPets())
     }
 
     @Test
@@ -68,7 +70,7 @@ class PetServiceTests {
                 pet
             }
 
-        petService.addPet(dogExample.toDTO().copy(owner = 1))
+        petService.addPet(dogExample.toDTO().copy(owner = 2))
     }
 
     @Test
