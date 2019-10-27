@@ -49,7 +49,7 @@ class ScheduleController(
         @ApiParam(value = "The ID of the Veterinarian", required = true) @PathVariable
         veterinarianId: Int
 
-    ) = schedulesService.geVeterinarianSchedules(veterinarianId)
+    ) = schedulesService.getVeterinarianSchedules(veterinarianId)
 
     @ApiOperation(
         value = "View the schedule for the given year and month",

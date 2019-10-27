@@ -36,7 +36,7 @@ class ScheduleService(
         repository.save(schedule)
     }
 
-    fun geVeterinarianSchedules(vetId: Int): List<ScheduleDTO> {
+    fun getVeterinarianSchedules(vetId: Int): List<ScheduleDTO> {
         return repository.findByVetId(vetId).map { it.toDTO() }
     }
 

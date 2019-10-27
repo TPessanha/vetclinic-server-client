@@ -26,10 +26,7 @@ import personal.ciai.vetclinic.util.now
 class VeterinarianService(
     @Autowired val vetRepository: VeterinarianRepository,
     @Autowired private val configurationProperties: ConfigurationProperties,
-    @Autowired val userService: UserService
-    @Autowired private val appointmentRepository: AppointmentRepository,
-    @Autowired private val scheduleService: ScheduleService,
-    @Autowired private val configurationProperties: ConfigurationProperties,
+    @Autowired val userService: UserService,
     @Autowired val imageService: ImageService
 ) {
     fun existByUserName(userName: String) = vetRepository.existsByUsername(userName)

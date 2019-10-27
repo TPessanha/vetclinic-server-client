@@ -183,7 +183,7 @@ class AdministratorController(
             name = "adminId",
             required = true,
             value = "(Required) Administrator identificator (id)"
-        ) @PathVariableadminId: Int
+        ) @PathVariable adminId: Int
     ) = ResponseEntity
         .ok()
         .contentType(MediaType.IMAGE_JPEG)

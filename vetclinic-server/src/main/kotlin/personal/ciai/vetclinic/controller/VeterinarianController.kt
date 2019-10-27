@@ -170,7 +170,7 @@ class VeterinarianController(
             )]
     )
     @GetMapping("/{vetId:[0-9]+}/appointments")
-    AllowedForGetVeterinarian
+    @AllowedForGetVeterinarian
     fun getVeterinarianAppointments(
         @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
             value = "employeeId",
@@ -230,8 +230,7 @@ class VeterinarianController(
         @ApiParam(name = "vetId", required = true, value = "(Required) Veterinarian identificator (id)")
         @PathVariable(value = "vetId", required = true) vetId: Int,
         @RequestParam("photo")
-        photo: MultipartFile,
-        principal: Principal
+        photo: MultipartFile
     ) = veterinarianService.updatePhoto(vetId, photo)
 
     @ApiOperation(
