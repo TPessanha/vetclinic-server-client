@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import personal.ciai.vetclinic.dto.ScheduleDTO
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.repository.VeterinarianRepository
+import personal.ciai.vetclinic.security.SecurityService
 import personal.ciai.vetclinic.service.ScheduleService
 import personal.ciai.vetclinic.utils.ScheduleUtils.`schedule 1`
 
@@ -34,6 +35,8 @@ class ScheduleControllerTest {
 
     @Autowired
     lateinit var mvc: MockMvc
+    @MockBean
+    lateinit var securityService: SecurityService
 
     @MockBean
     lateinit var scheduleService: ScheduleService
@@ -48,26 +51,10 @@ class ScheduleControllerTest {
 
     @Test
     @WithMockUser(username = "admin", password = "123", roles = ["ADMIN"])
-    fun `Test GET all Schedule`() {
+    fun `Test GET One Schedule`() {
+        `when`(scheduleService.getVeterinarianScheduleByDate(1, 2019, 11)).thenReturn(`schedule 1`.toDTO())
 
-        `when`(scheduleService.getVeterinarianSchedule(1)).thenReturn(listOf(`schedule 1`.toDTO()))
-
-        val result = mvc.perform(get(schedulesUrl))
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$", hasSize<Any>(1)))
-            .andReturn()
-
-        val responseString = result.response.contentAsString
-        val responseDTO = mapper.readValue<List<ScheduleDTO>>(responseString)
-        assertEquals(responseDTO.size, 1)
-    }
-
-    @Test
-    @WithMockUser(username = "admin", password = "123", roles = ["ADMIN"])
-    fun `Test GET One Veterinarian`() {
-        `when`(scheduleService.getOneScheduleById(1)).thenReturn(`schedule 1`)
-
-        val result = mvc.perform(get(schedulesUrl))
+        val result = mvc.perform(get("$schedulesUrl/2019/11"))
             .andExpect(status().isOk)
             .andReturn()
 
@@ -79,14 +66,30 @@ class ScheduleControllerTest {
 
     @Test
     @WithMockUser(username = "admin", password = "123", roles = ["ADMIN"])
-    fun `TEST - GET One Veterinarian (Not Found)`() {
+    fun `TEST - GET One Schedule (Not Found)`() {
         `when`(scheduleService.getOneScheduleById(1)).thenThrow(NotFoundException("not found"))
 
-        mvc.perform(get(schedulesUrl))
+        mvc.perform(get("$schedulesUrl/1"))
             .andExpect(status().is4xxClientError)
     }
 
     fun <T> nonNullAny(t: Class<T>): T = any(t)
+
+    @Test
+    @WithMockUser(username = "admin", password = "123", roles = ["ADMIN"])
+    fun `Test GET all Schedule`() {
+
+        `when`(scheduleService.getVeterinarianSchedule(1)).thenReturn(listOf(`schedule 1`.toDTO()))
+
+        val result = mvc.perform(get("$schedulesUrl"))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$", hasSize<Any>(1)))
+            .andReturn()
+
+        val responseString = result.response.contentAsString
+        val responseDTO = mapper.readValue<List<ScheduleDTO>>(responseString)
+        assertEquals(responseDTO.size, 1)
+    }
 
     @Test
     @WithMockUser(username = "admin", password = "123", roles = ["ADMIN"])

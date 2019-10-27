@@ -47,9 +47,7 @@ private class WebSecurityConfig(
             .antMatchers(HttpMethod.GET, "/administrators*/*").hasRole("ADMIN")
             .antMatchers("*/administrators").permitAll()
             .antMatchers(HttpMethod.GET, "*/schedules*/*").hasRole("CLIENT")
-            .antMatchers(HttpMethod.DELETE, "*/schedules*/*").hasRole("ADMIN")
             .antMatchers(HttpMethod.PUT, "*/schedules*/*").hasRole("ADMIN")
-            .antMatchers(HttpMethod.POST, "*/schedules*/*").hasRole("ADMIN")
             .antMatchers(HttpMethod.GET, "*/schedules*/*").hasRole("VET")
             .anyRequest().authenticated()
             .and().headers().frameOptions().sameOrigin() // H2CONSOLE

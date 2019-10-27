@@ -139,7 +139,7 @@ public class AccessControlRules {
         @Documented
         @PreAuthorize(AllowedForAddSchedule.condition)
         public @interface AllowedForEditSchedule {
-            String condition = AllowedForEditSchedule.condition + " or " + "@SecurityService.isVeterinarianAccountOwner(principal,#adminId)";
+            String condition = AllowedForAddSchedule.condition + " or " + "@SecurityService.isVeterinarianAccountOwner(principal,#veterinarianId)";
         }
 
         @Target({ElementType.METHOD, ElementType.TYPE})

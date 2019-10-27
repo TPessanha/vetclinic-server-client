@@ -23,7 +23,7 @@ import personal.ciai.vetclinic.service.ScheduleService
 )
 
 @RestController
-@RequestMapping("/veterinarian/{vetId:[0-9]+}/schedules")
+@RequestMapping("/veterinarians/{vetId:[0-9]+}/schedules")
 class ScheduleController(
     @Autowired private val schedulesService: ScheduleService
 ) {
@@ -47,9 +47,9 @@ class ScheduleController(
     @AllowedForGetSchedule
     fun getVeterinarianSchedule(
         @ApiParam(value = "The ID of the Veterinarian", required = true) @PathVariable
-        veterinarianId: Int
+        vetId: Int
 
-    ) = schedulesService.getVeterinarianSchedule(veterinarianId)
+    ) = schedulesService.getVeterinarianSchedule(vetId)
 
     @ApiOperation(
         value = "View the schedule for the given year and month",
