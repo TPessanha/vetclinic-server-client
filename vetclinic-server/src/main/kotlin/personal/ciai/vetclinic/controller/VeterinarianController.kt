@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.dto.AppointmentDTO
+import personal.ciai.vetclinic.dto.BasicSafeInfoDTO
 import personal.ciai.vetclinic.dto.VeterinarianDTO
 import personal.ciai.vetclinic.security.AccessControlRules.VeterinariansRules.AllowedForAddVeterinarian
 import personal.ciai.vetclinic.security.AccessControlRules.VeterinariansRules.AllowedForDeleteVeterinarian
@@ -64,7 +65,7 @@ class VeterinarianController(
         value = "View a list of Veterinarians details",
         produces = "application/json",
         responseContainer = "List",
-        response = VeterinarianDTO::class
+        response = BasicSafeInfoDTO::class
     )
     @ApiResponses(
         value = [
@@ -76,7 +77,7 @@ class VeterinarianController(
     )
     @GetMapping("")
     fun getAllVeterinarian(
-    ) = veterinarianService.getAllVeterinarian()
+    ) = veterinarianService.getAllVeterinarian().map { BasicSafeInfoDTO(it) }
 
     @ApiOperation(value = "Add a new Veterinarian account")
     @ApiResponses(

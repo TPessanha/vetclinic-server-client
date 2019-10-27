@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.dto.AdministratorDTO
+import personal.ciai.vetclinic.dto.BasicSafeInfoDTO
 import personal.ciai.vetclinic.security.AccessControlRules.AdministratorsRules.AllowedForAddAdministrator
 import personal.ciai.vetclinic.security.AccessControlRules.AdministratorsRules.AllowedForDeleteAdministrators
 import personal.ciai.vetclinic.security.AccessControlRules.AdministratorsRules.AllowedForEditAdministrator
+import personal.ciai.vetclinic.security.AccessControlRules.AdministratorsRules.AllowedForGetAdministrador
 import personal.ciai.vetclinic.service.AdministratorService
 
 @Api(
@@ -43,7 +45,7 @@ class AdministratorController(
     )
     @ApiResponses(
         value = [
-            ApiResponse(code = 200, message = "Successfully retrieved the administrador details"),
+            ApiResponse(code = 200, message = "Successfully retrieved the administrator details"),
             ApiResponse(code = 401, message = "You are not authorized to access the resource"),
             ApiResponse(code = 404, message = "The resource not found"),
 
@@ -52,11 +54,12 @@ class AdministratorController(
             )]
     )
     @GetMapping("/{adminId:[0-9]+}", produces = [APPLICATION_JSON_VALUE])
+    @AllowedForGetAdministrador
     fun getAdministrator(
         @ApiParam(
             name = "adminId",
             required = true,
-            value = "(Required) Administrator identificator (id)"
+            value = "(Required) Administrator identification (id)"
         ) @PathVariable(
             value = "adminId",
             required = true
@@ -67,11 +70,11 @@ class AdministratorController(
         value = "View a list of Administrators details",
         produces = "application/json",
         responseContainer = "List",
-        response = AdministratorDTO::class
+        response = BasicSafeInfoDTO::class
     )
     @ApiResponses(
         value = [
-            ApiResponse(code = 200, message = "Successfully retrieved a list of all administrador"),
+            ApiResponse(code = 200, message = "Successfully retrieved a list of all administrator"),
             ApiResponse(code = 401, message = "You are not authorized to access the resource"),
             ApiResponse(
                 code = 403, message = "Accessing the resource you were tyring to reach is forbidden"
@@ -81,12 +84,12 @@ class AdministratorController(
         "",
         produces = [APPLICATION_JSON_VALUE]
     )
-    fun getAllAdministrator() = administratorService.getAllAdministrator()
+    fun getAllAdministrator() = administratorService.getAllAdministrator().map { BasicSafeInfoDTO(it) }
 
     @ApiOperation(value = "Add a new Administrator account")
     @ApiResponses(
         value = [
-            ApiResponse(code = 200, message = "Successfully added a new administrador"),
+            ApiResponse(code = 200, message = "Successfully added a new administrator"),
             ApiResponse(code = 401, message = "You are not authorized to access the resource"),
             ApiResponse(
                 code = 403, message = "Accessing the resource you were tyring to reach is forbidden"
@@ -112,7 +115,7 @@ class AdministratorController(
     @PutMapping("/{adminId:[0-9]+}", consumes = [APPLICATION_JSON_VALUE])
     @AllowedForEditAdministrator
     fun updateAdministrator(
-        @ApiParam(name = "adminId", required = true, value = "(Required) Admin identificator (id)") @PathVariable(
+        @ApiParam(name = "adminId", required = true, value = "(Required) Admin identification (id)") @PathVariable(
             value = "adminId", required = true
         ) adminId: Int,
         @ApiParam(required = true, value = "(Required) Admin information to be changed")
@@ -122,7 +125,7 @@ class AdministratorController(
     @ApiOperation(value = "Delete a Administrator account")
     @ApiResponses(
         value = [
-            ApiResponse(code = 200, message = "Successfully delete the administrador"),
+            ApiResponse(code = 200, message = "Successfully delete the administrator"),
             ApiResponse(code = 404, message = "The resource not found"),
             ApiResponse(
                 code = 403, message = "Accessing the resource you were tyring to reach is forbidden"
@@ -131,7 +134,7 @@ class AdministratorController(
     @DeleteMapping("/{adminId:[0-9]+}")
     @AllowedForDeleteAdministrators
     fun deleteAdministrator(
-        @ApiParam(name = "adminId", required = true, value = "(Required) Admin identificator (id)") @PathVariable(
+        @ApiParam(name = "adminId", required = true, value = "(Required) Admin identification (id)") @PathVariable(
             value = "adminId", required = true
         ) adminId: Int
     ) = administratorService.delete(adminId)
@@ -156,7 +159,7 @@ class AdministratorController(
         @ApiParam(
             name = "adminId",
             required = true,
-            value = "(Required) Administrator identificator (id)"
+            value = "(Required) Administrator identification (id)"
         ) @PathVariable adminId: Int,
         @RequestParam("photo")
         photo: MultipartFile
@@ -182,7 +185,7 @@ class AdministratorController(
         @ApiParam(
             name = "adminId",
             required = true,
-            value = "(Required) Administrator identificator (id)"
+            value = "(Required) Administrator identification (id)"
         ) @PathVariable adminId: Int
     ) = ResponseEntity
         .ok()

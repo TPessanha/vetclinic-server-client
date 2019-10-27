@@ -117,9 +117,9 @@ public class AccessControlRules {
         @Retention(RetentionPolicy.RUNTIME)
         @Inherited
         @Documented
-        @PreAuthorize(allowedForGetAdministrador.condition)
-        public @interface allowedForGetAdministrador {
-            String condition = AllowedForDeleteAdministrators.condition;
+        @PreAuthorize(AllowedForGetAdministrador.condition)
+        public @interface AllowedForGetAdministrador {
+            String condition = "hasRole('ADMIN')";
         }
 
         @Target({ElementType.METHOD, ElementType.TYPE})
@@ -128,7 +128,7 @@ public class AccessControlRules {
         @Documented
         @PreAuthorize(AllowedForAddAdministrator.condition)
         public @interface AllowedForAddAdministrator {
-            String condition = AllowedForDeleteAdministrators.condition;
+            String condition = "hasRole('ADMIN')";
         }
     }
 
@@ -159,7 +159,6 @@ public class AccessControlRules {
         public @interface AllowedForGetSchedule {
             String condition = "hasRole('VET') or hasRole('CLIENT') or " + AllowedForAddSchedule.condition;
         }
-
     }
 
 
