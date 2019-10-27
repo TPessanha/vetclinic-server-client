@@ -59,11 +59,11 @@ class Init(
 ) {
     @EventListener
     fun appReady(event: ApplicationReadyEvent) {
-        val debug = false
+        val debugAndTesting = true
 
         val roles = addRoles()
         addAdmin(roles)
-        if (debug) {
+        if (debugAndTesting) {
             val clients = addClients(roles)
             addPets(clients)
             addVets()
