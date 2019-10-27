@@ -42,12 +42,12 @@ class ClientRepositoryTests {
 
         assertEquals(client, fakeClient)
 
-        val savedPet = clients.findById(client.id).get()
+        val saveClient = clients.findById(client.id).get()
 
-        assertEquals(fakeClient, savedPet)
+        assertEquals(fakeClient, saveClient)
 
         clients.delete(client)
 
-        assertFalse(clients.existsById(savedPet.id))
+        assertFalse(clients.existsById(saveClient.id))
     }
 }
