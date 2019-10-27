@@ -29,11 +29,11 @@ import personal.ciai.vetclinic.IntegrationTests.VeterinarianTests
 import personal.ciai.vetclinic.dto.VeterinarianDTO
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.service.VeterinarianService
+import personal.ciai.vetclinic.utils.VeterinarianUtils.`veterinarian 1`
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@WithMockUser(username = "vet", password = "123", roles = ["VET"])
 class VeterinarianControllerTests {
 
     @Autowired
@@ -63,6 +63,7 @@ class VeterinarianControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "vet", password = "123", roles = ["VET"])
     fun `Test GET One Veterinarian`() {
         `when`(vets.getVeterinarianById(1)).thenReturn(vet1.toDTO())
 
@@ -76,6 +77,7 @@ class VeterinarianControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "vet", password = "123", roles = ["VET"])
     fun `Test GET One Veterinarian (Not Found)`() {
         `when`(vets.getVeterinarianById(2)).thenThrow(NotFoundException("not found"))
 
@@ -86,9 +88,10 @@ class VeterinarianControllerTests {
     fun <T> nonNullAny(t: Class<T>): T = any(t)
 
     @Test
+    @WithMockUser(username = "admin", password = "123", roles = ["ADMIN"])
     fun `Test POST One Veterinarian`() {
 
-        val vetsJSON = mapper.writeValueAsString(vet2.toDTO())
+        val vetsJSON = mapper.writeValueAsString(`veterinarian 1`.toDTO())
 
         `when`(vets.save(nonNullAny(VeterinarianDTO::class.java)))
             .then { assertEquals(vet2.toDTO(), it.getArgument(0)) }
@@ -103,7 +106,7 @@ class VeterinarianControllerTests {
 
         mvc.perform(
             MockMvcRequestBuilders
-                .delete("${VeterinarianTests.veterinarianURL}/1")
+                .delete("${VeterinarianTests.veterinarianURL}/2")
         )
             .andExpect(status().isOk)
     }

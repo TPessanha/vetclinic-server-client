@@ -58,7 +58,7 @@ class ExampleObjects {
             employeeId = 12
         )
         val admin2 = Administrator(
-            id = -1,
+            id = 2,
             email = "admin2@vetclinic.pt",
             name = "Lufy D Monkey",
             phoneNumber = 925653938,

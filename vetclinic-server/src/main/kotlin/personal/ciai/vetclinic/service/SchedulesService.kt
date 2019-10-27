@@ -1,7 +1,6 @@
 package personal.ciai.vetclinic.service
 
 import java.time.YearMonth
-import java.util.Date
 import kotlin.math.min
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.jpa.domain.AbstractPersistable_.id
@@ -15,11 +14,11 @@ import personal.ciai.vetclinic.model.Schedules
 import personal.ciai.vetclinic.model.Veterinarian
 import personal.ciai.vetclinic.repository.SchedulesRepository
 import personal.ciai.vetclinic.repository.VeterinarianRepository
-import personal.ciai.vetclinic.util.asDate
 import personal.ciai.vetclinic.util.asLocalDate
+import personal.ciai.vetclinic.util.asLocalDateTime
+import personal.ciai.vetclinic.util.isBefore
 import personal.ciai.vetclinic.util.isValidateDate
 import personal.ciai.vetclinic.util.numberOfWeeks
-import personal.ciai.vetclinic.util.sameDate
 import personal.ciai.vetclinic.util.toHours
 
 @Service
@@ -27,7 +26,6 @@ class SchedulesService(
     @Autowired private val schedulesRepository: SchedulesRepository,
     @Autowired private val veterinarianRepository: VeterinarianRepository
 ) {
-    private val SLOTS = 720
     private val MONTHLYHOURS = 160
     private val WEEKLYHOURS = 40
     private val NORMALWORKHOURS = 6
@@ -39,68 +37,74 @@ class SchedulesService(
     private fun getOneScheduleEntity(scheduleId: Int): Schedules = schedulesRepository.findById(scheduleId)
         .orElseThrow { NotFoundException("Schedules with Id $scheduleId not found") }
 
-    fun getScheduleByVeterinarianIdAndStartTimeEntity(vetId: Int, startTime: Date): Schedules {
+    fun getVeterinarianSchedules(vetId: Int): List<SchedulesDTO> {
+        return (schedulesRepository.findAllByVeterinarian(vetId).orElseThrow {
+            throw NotFoundException("Schedules for Veterinarian with id $vetId  not found")
+        }).map { it.toDTO() }
+    }
+
+    fun getScheduleByVeterinarianAndStartTime(vetId: Int, startTime: Long): SchedulesDTO =
+        getScheduleByVeterinarianIdAndStartTimeEntity(vetId, startTime).toDTO()
+
+    fun getScheduleByVeterinarianIdAndStartTimeEntity(vetId: Int, startTime: Long): Schedules {
+        getVeterinarianEntity(vetId)
         return schedulesRepository.getVeterinarianAndStartDateIsEqual(
             vetId,
-            startTime.time
+            startTime
         ).orElseThrow {
             NotFoundException("Schedules for Veterinarian with id $vetId and slot for date $startTime not found")
         }
     }
 
-    fun getScheduleByIdAndStartTime(vetId: Int, startTime: Date): SchedulesDTO =
-        getScheduleByVeterinarianIdAndStartTimeEntity(vetId, startTime).toDTO()
-
-    fun geVeterinarianSchedules(vetId: Int): List<SchedulesDTO> {
-        val afterDate = asDate(YearMonth.now().atDay(1))
-        return geVeterinarianSchedules(vetId, afterDate)
-    }
-
-    fun geVeterinarianSchedules(vetId: Int, afterDate: Date): List<SchedulesDTO> {
-        if (afterDate.before(asDate(YearMonth.now().atDay(1)))) {
-            throw PreconditionFailedException()
-        }
-
+    fun getVeterinarianSchedules(vetId: Int, afterDate: Long): List<SchedulesDTO> {
+        getVeterinarianEntity(vetId)
         return schedulesRepository.findAllByVeterinarianAndStartDateIsGreaterThanEqual(
             vetId,
-            afterDate.time
+            afterDate
         ).map { it.toDTO() }
     }
 
-    fun saveSchedule(schedules: List<SchedulesDTO>, vetId: Int) {
+    fun addMonthlySchedule(schedules: List<SchedulesDTO>, vetId: Int) {
 
         val vet = getVeterinarianEntity(vetId)
         validateSchedules(schedules)
-        vet.schedules = schedules.map { it.toEntity(vet) }.toMutableList()
-        veterinarianRepository.save(vet)
-        //  schedulesRepository.save(schedules.toEntity(getVeterinarianEntity(vetId)))
+        val toSave = schedules.map { it.toEntity(vet) }
+        schedulesRepository.saveAll(toSave)
     }
 
-    fun updateSchedule(schedules: SchedulesDTO) {
-        if (schedules.status.equals(ScheduleStatus.Booked).not())
+    fun update(schedules: SchedulesDTO) {
+        val saved = getOneScheduleEntity(schedules.id)
+        if (saved.status.equals(ScheduleStatus.Booked).not() &&
+            !isBefore(saved.timeSlot.startDate.toLong())
+        ) {
             schedulesRepository.save(schedules.toEntity(getVeterinarianEntity(schedules.vetId)))
-        else throw PreconditionFailedException()
+        } else throw PreconditionFailedException("Schedule can no be changed")
+    }
+
+    fun updateEntity(schedules: Schedules) {
+        val saved = getOneScheduleEntity(schedules.id)
+        if (saved.status.equals(ScheduleStatus.Booked).not() &&
+            isBefore(saved.timeSlot.startDate.toLong())
+        ) {
+            schedulesRepository.save(schedules)
+        } else throw PreconditionFailedException("Schedule can no be changed")
     }
 
     fun isScheduleAvailable(vetId: Int, startTime: Long): Boolean {
-        return getScheduleByIdAndStartTime(vetId, Date(startTime))
+        return getScheduleByVeterinarianAndStartTime(vetId, startTime)
             .status.equals(ScheduleStatus.Available)
     }
 
     fun scheduleAppointment(appointmentDTO: AppointmentDTO) {
         val schedule = getScheduleByVeterinarianIdAndStartTimeEntity(
             appointmentDTO.veterinarian,
-            Date(appointmentDTO.startTime)
+            appointmentDTO.startTime
         )
 
         validateAppointment(schedule, appointmentDTO)
         schedule.status = ScheduleStatus.Booked
 
-        saveSchedule(schedule)
-    }
-
-    fun saveSchedule(schedules: Schedules) {
-        schedulesRepository.save(schedules)
+        schedulesRepository.save(schedule)
     }
 
     private fun validateAppointment(
@@ -120,8 +124,8 @@ class SchedulesService(
     }
 
     private fun validateSchedules(schedules: List<SchedulesDTO>) {
-        // List must have 720 slots
-        if (schedules.size != SLOTS)
+        // List must have 160 slots with 1 hours each
+        if (schedules.size != MONTHLYHOURS)
             throw PreconditionFailedException("Numbers of Slots mismatch")
 
         var durationMonth = 0
@@ -143,14 +147,14 @@ class SchedulesService(
                 // Validate per Day
                 for (k in 0..leftToCheck) {
 
-                    if (!sameDate(day, (sortedSchedules.get(k).startTime))) {
+                    if (day.isBefore(asLocalDate(sortedSchedules.first().startTime))) {
                         if (durationDay > NORMALWORKHOURS) {
-                            if (k < sortedSchedules.size - 1) {
+                            if (sortedSchedules.size > 1) {
                                 if (toHours(
-                                        sortedSchedules.get(k + 1).endTime - sortedSchedules.get(k).startTime
+                                        sortedSchedules.get(0).endTime - sortedSchedules.get(1).startTime
                                     ) < RESTHOURS
                                 )
-                                    throw PreconditionFailedException("Veterinarian need longes Rest hour")
+                                    throw PreconditionFailedException("Veterinarian need longer Rest hour")
                             }
                         }
                         break
@@ -162,22 +166,29 @@ class SchedulesService(
 
                     durationDay += duration
                     sortedSchedules.removeAt(0)
+                    if (sortedSchedules.isEmpty())
+                        break
                 }
 
                 durationWeek += durationDay
                 durationDay = 0
                 leftToCheck = sortedSchedules.size
+
                 if ((durationDay) > MAXDAILYHOURS)
                     throw PreconditionFailedException("Invalid hours work hour per day")
+                if (sortedSchedules.isEmpty())
+                    break
             }
 
             monthDays -= 7
-
-            if ((durationWeek) != WEEKLYHOURS)
-                throw PreconditionFailedException("Invalid weekly work hour")
-
             durationMonth += durationWeek
             durationWeek = 0
+
+            if ((durationWeek) > WEEKLYHOURS)
+                throw PreconditionFailedException("Invalid weekly work hour")
+
+            if (sortedSchedules.isEmpty())
+                break
         }
 
         if (durationMonth != MONTHLYHOURS)

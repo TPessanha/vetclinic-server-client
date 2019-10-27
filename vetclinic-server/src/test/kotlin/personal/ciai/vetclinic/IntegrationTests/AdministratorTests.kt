@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.context.WebApplicationContext
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.admin1
 import personal.ciai.vetclinic.dto.AdministratorDTO
+import personal.ciai.vetclinic.security.SecurityService
 import personal.ciai.vetclinic.service.AdministratorService
 
 @ExtendWith(SpringExtension::class)
@@ -40,6 +42,9 @@ class AdministratorTests {
     @Autowired
     lateinit var mvc: MockMvc
 
+    @MockBean
+    lateinit var securityService: SecurityService
+
     companion object {
         // To avoid all annotations JsonProperties in data classes
         // see: https://github.com/FasterXML/jackson-module-kotlin
@@ -50,15 +55,17 @@ class AdministratorTests {
     }
 
     @Test
+    @Transactional
+    @WithMockUser(username = "admin", password = "password", roles = [ "ADMIN"])
     fun `Add a new Administrator`() {
         val nAdmins = adminService.getAllAdministrator().size
-        val dogJSON = mapper.writeValueAsString(admin1.toDTO())
+        val adminJSON = mapper.writeValueAsString(admin1.toDTO())
 
         mvc.perform(
             MockMvcRequestBuilders
                 .post(adminsURL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(dogJSON)
+                .content(adminJSON)
         )
             .andExpect(status().isOk)
 

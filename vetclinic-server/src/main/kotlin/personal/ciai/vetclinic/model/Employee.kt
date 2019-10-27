@@ -3,6 +3,8 @@ package personal.ciai.vetclinic.model
 import java.net.URI
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
 import javax.persistence.Table
 
 @Entity
@@ -10,6 +12,7 @@ import javax.persistence.Table
 abstract class Employee(
     id: Int,
     @Column(unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var employeeId: Int,
     email: String,
     name: String,

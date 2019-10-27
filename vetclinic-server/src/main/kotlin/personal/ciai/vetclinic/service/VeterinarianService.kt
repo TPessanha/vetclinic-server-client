@@ -89,10 +89,10 @@ class VeterinarianService(
         // throw PreconditionFailedException("A justifiaction is need")
         val schedule = schedulesService.getScheduleByVeterinarianIdAndStartTimeEntity(
             appointmentDTO.veterinarian,
-            Date(appointmentDTO.startTime)
+            appointmentDTO.startTime
         )
         schedule.status = ScheduleStatus.Available
-        schedulesService.saveSchedule(schedule)
+        schedulesService.updateEntity(schedule)
     }
 
     private fun acceptAppointment(appointmentDTO: AppointmentDTO) {
@@ -102,10 +102,10 @@ class VeterinarianService(
 
         val schedule = schedulesService.getScheduleByVeterinarianIdAndStartTimeEntity(
             appointmentDTO.veterinarian,
-            Date(appointmentDTO.startTime)
+            appointmentDTO.startTime
         )
         schedule.status = ScheduleStatus.Booked
-        schedulesService.saveSchedule(schedule)
+        schedulesService.updateEntity(schedule)
     }
 
     private fun completeAppointment(startTime: Date, vetId: Int) {

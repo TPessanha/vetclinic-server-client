@@ -12,7 +12,7 @@ interface SchedulesRepository : JpaRepository<Schedules, Int> {
 
     @Query(
         "select s from Schedules s left join fetch s.veterinarian" +
-                " where s.veterinarian = :veterinarian and  s.timeSlot.startDate = :date"
+                " where s.veterinarian.id = :veterinarian and  s.timeSlot.startDate = :date"
     )
     fun getVeterinarianAndStartDateIsEqual(
         @Param("veterinarian") veterinarian: Int,
@@ -21,10 +21,16 @@ interface SchedulesRepository : JpaRepository<Schedules, Int> {
 
     @Query(
         "select s from Schedules s left join fetch s.veterinarian" +
-                " where s.veterinarian = :veterinarian and  s.timeSlot.startDate <= :startDate"
+                " where s.veterinarian.id = :veterinarian and  s.timeSlot.startDate >= :startDate"
     )
     fun findAllByVeterinarianAndStartDateIsGreaterThanEqual(
         @Param("veterinarian") veterinarian: Int,
         @Param("startDate") startDate: Number
     ): List<Schedules>
+
+    @Query(
+        "select s from Schedules s left join fetch s.veterinarian" +
+                " where s.veterinarian.id = :veterinarian"
+    )
+    fun findAllByVeterinarian(@Param("veterinarian") veterinarian: Int): Optional<List<Schedules>>
 }

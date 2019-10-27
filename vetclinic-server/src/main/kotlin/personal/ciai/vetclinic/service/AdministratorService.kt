@@ -12,7 +12,8 @@ import personal.ciai.vetclinic.repository.AdministratorRepository
 @Service
 class AdministratorService(
     @Autowired val adminRepository: AdministratorRepository,
-    @Autowired val configurationProperties: ConfigurationProperties
+    @Autowired val configurationProperties: ConfigurationProperties,
+    @Autowired val imageService: ImageService
 ) {
 
     fun existsById(id: Int): Boolean {

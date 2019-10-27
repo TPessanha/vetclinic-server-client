@@ -15,8 +15,8 @@ class DateTimeConfig {
         val conversionService = DefaultFormattingConversionService(false)
 
         val registrar = DateTimeFormatterRegistrar()
-        registrar.setDateFormatter(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
-        registrar.setDateTimeFormatter(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"))
+        registrar.setDateFormatter(DateTimeFormatter.ofPattern("dd.mm.yyyy"))
+        registrar.setDateTimeFormatter(DateTimeFormatter.ofPattern("dd.mm.yyyy HH:mm:ss"))
         registrar.setTimeFormatter(DateTimeFormatter.ofPattern("HH:mm:ss"))
         registrar.registerFormatters(conversionService)
 

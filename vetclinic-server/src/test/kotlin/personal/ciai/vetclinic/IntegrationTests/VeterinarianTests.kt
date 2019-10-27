@@ -24,6 +24,7 @@ import org.springframework.web.context.WebApplicationContext
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.vet2
 import personal.ciai.vetclinic.dto.VeterinarianDTO
 import personal.ciai.vetclinic.service.VeterinarianService
+import personal.ciai.vetclinic.utils.VeterinarianUtils.`veterinarian 1`
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
@@ -50,15 +51,16 @@ class VeterinarianTests {
     }
 
     @Test
+    @Transactional
+    @WithMockUser(username = "admin", password = "password", roles = [ "VET", "ADMIN"])
     fun `Add a new Veterinarian`() {
         val nVets = vetService.getAllVeterinarian().size
-        val dogJSON = mapper.writeValueAsString(vet2.toDTO())
-
+        val vetJSON = AdministratorTests.mapper.writeValueAsString(`veterinarian 1`)
         mvc.perform(
             MockMvcRequestBuilders
                 .post(veterinarianURL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(dogJSON)
+                .content(vetJSON)
         )
             .andExpect(status().isOk)
 
