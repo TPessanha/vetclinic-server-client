@@ -2,7 +2,9 @@ package personal.ciai.vetclinic.service
 
 import java.util.Date
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.config.ConfigurationProperties
 import personal.ciai.vetclinic.dto.AppointmentDTO
 import personal.ciai.vetclinic.dto.VeterinarianDTO
@@ -24,7 +26,8 @@ class VeterinarianService(
     @Autowired val vetRepository: VeterinarianRepository,
     @Autowired private val appointmentRepository: AppointmentRepository,
     @Autowired private val schedulesService: SchedulesService,
-    @Autowired private val configurationProperties: ConfigurationProperties
+    @Autowired private val configurationProperties: ConfigurationProperties,
+    @Autowired val imageService: ImageService
 ) {
     fun existByUserName(userName: String) = vetRepository.existsByUsername(userName)
 
@@ -33,6 +36,7 @@ class VeterinarianService(
     fun getAllVeterinarian(): List<VeterinarianDTO> = vetRepository.findAll()
         .map { it.toDTO() }
 
+    @Cacheable("Veterinarian", key = "#vetId")
     fun getVeterinarianById(vetId: Int): VeterinarianDTO {
         return getVeterinarianEntity(vetId).toDTO()
     }
@@ -54,9 +58,8 @@ class VeterinarianService(
 
     fun delete(id: Int) {
         val vet: Veterinarian = getVeterinarianEntity(id)
-
-        vet.enabled = false
-        vetRepository.save(vet)
+            vet.enabled = false
+            vetRepository.save(vet)
     }
 
     fun getVeterinarianAppointments(vetId: Int): List<AppointmentDTO> {
@@ -81,6 +84,17 @@ class VeterinarianService(
         // appointmentRepository.save(appointmentDTO.toEntity(savedAppoint))  TODO NEED TOENTITY WITH ENTITY PARM
     }
 
+    fun getPhoto(id: Int): ByteArray {
+        val vet = getVeterinarianEntity(id)
+        return imageService.getUserPhoto(vet.photo)
+    }
+
+    fun updatePhoto(id: Int, photo: MultipartFile) {
+        val vet = getVeterinarianEntity(id)
+        vet.photo = imageService.updateUserPhoto(vet.id, photo)
+        update(vet.toDTO())
+    }
+
     private fun refuseAppointment(appointmentDTO: AppointmentDTO) {
         if (Date(appointmentDTO.startTime).before(now())) {
             throw PreconditionFailedException("Appointment ${appointmentDTO.id} Already passed")
@@ -89,10 +103,10 @@ class VeterinarianService(
         // throw PreconditionFailedException("A justifiaction is need")
         val schedule = schedulesService.getScheduleByVeterinarianIdAndStartTimeEntity(
             appointmentDTO.veterinarian,
-            Date(appointmentDTO.startTime)
+            appointmentDTO.startTime
         )
         schedule.status = ScheduleStatus.Available
-        schedulesService.saveSchedule(schedule)
+        schedulesService.updateEntity(schedule)
     }
 
     private fun acceptAppointment(appointmentDTO: AppointmentDTO) {
@@ -102,10 +116,10 @@ class VeterinarianService(
 
         val schedule = schedulesService.getScheduleByVeterinarianIdAndStartTimeEntity(
             appointmentDTO.veterinarian,
-            Date(appointmentDTO.startTime)
+            appointmentDTO.startTime
         )
         schedule.status = ScheduleStatus.Booked
-        schedulesService.saveSchedule(schedule)
+        schedulesService.updateEntity(schedule)
     }
 
     private fun completeAppointment(startTime: Date, vetId: Int) {

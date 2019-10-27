@@ -101,6 +101,8 @@ public class AccessControlRules {
         @Documented
         @PreAuthorize(AllowedForDeleteAdministrator.condition)
         public @interface AllowedForDeleteAdministrator {
+        @PreAuthorize(AllowedForDeleteAdministrators.condition)
+        public @interface AllowedForDeleteAdministrators {
             String condition = "hasRole('ADMIN')";
         }
 
@@ -120,6 +122,18 @@ public class AccessControlRules {
         @PreAuthorize(AllowedForGetAdministrador.condition)
         public @interface AllowedForGetAdministrador {
             String condition = AllowedForDeleteAdministrator.condition;
+        @PreAuthorize(allowedForGetAdministrador.condition)
+        public @interface allowedForGetAdministrador {
+            String condition = AllowedForDeleteAdministrators.condition;
+        }
+
+        @Target({ElementType.METHOD, ElementType.TYPE})
+        @Retention(RetentionPolicy.RUNTIME)
+        @Inherited
+        @Documented
+        @PreAuthorize(AllowedForAddAdministrator.condition)
+        public @interface AllowedForAddAdministrator {
+            String condition = AllowedForDeleteAdministrators.condition;
         }
     }
 
@@ -128,8 +142,17 @@ public class AccessControlRules {
         @Retention(RetentionPolicy.RUNTIME)
         @Inherited
         @Documented
-        @PreAuthorize(AllowedForEditSchedule.condition)
+        @PreAuthorize(AllowedForAddSchedule.condition)
         public @interface AllowedForEditSchedule {
+            String condition =AllowedForEditSchedule.condition + " or " + "@SecurityService.isVeterinarianAccountOwner(principal,#adminId)";
+        }
+
+        @Target({ElementType.METHOD, ElementType.TYPE})
+        @Retention(RetentionPolicy.RUNTIME)
+        @Inherited
+        @Documented
+        @PreAuthorize(AllowedForAddSchedule.condition)
+        public @interface AllowedForAddSchedule {
             String condition = "hasRole('ADMIN')";
         }
 
@@ -139,7 +162,7 @@ public class AccessControlRules {
         @Documented
         @PreAuthorize(AllowedForGetSchedule.condition)
         public @interface AllowedForGetSchedule {
-            String condition = "hasRole('VET') or hasRole('CLIENT') or " + AllowedForEditSchedule.condition;
+            String condition = "hasRole('VET') or hasRole('CLIENT') or " + AllowedForAddSchedule.condition;
         }
     }
 }
