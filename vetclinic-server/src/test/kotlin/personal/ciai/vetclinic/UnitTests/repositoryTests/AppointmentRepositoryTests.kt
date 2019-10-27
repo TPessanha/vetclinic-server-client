@@ -64,9 +64,11 @@ class AppointmentRepositoryTests {
                 12
             )
         val fakePet = Pet(555, "moon dog", 2, owner = fakeClient)
-
         val app =
-            Appointment(0, TimeSlot(1571414431763, 1571414631763), fakeVet, fakePet, fakeClient, "Serious description")
+            Appointment(
+                0, TimeSlot(1571414431763, 1571414631763), fakeVet, fakePet, fakeClient,
+                arrayListOf(), "Serious description"
+            )
 
 //        `when`(pets.findById(555)).thenReturn(Optional.empty())
 

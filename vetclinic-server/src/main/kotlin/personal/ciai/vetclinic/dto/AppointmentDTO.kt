@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import personal.ciai.vetclinic.model.Appointment
 import personal.ciai.vetclinic.model.AppointmentStatus
+import personal.ciai.vetclinic.model.Notification
 import personal.ciai.vetclinic.model.TimeSlot
 import personal.ciai.vetclinic.service.ClientService
 import personal.ciai.vetclinic.service.PetService
@@ -85,6 +86,22 @@ data class AppointmentDTO(
             description = this.description,
             client = clientService.getClientEntityById(this.client),
             pet = petService.getPetEntityById(this.pet),
-            status = AppointmentStatus.values()[status]
+            status = AppointmentStatus.values()[status],
+            notification = arrayListOf<Notification>()
+        )
+
+    fun toEntity(
+        entity: Appointment,
+        status: AppointmentStatus
+    ) =
+        Appointment(
+            id = entity.id,
+            timeSlot = entity.timeSlot,
+            veterinarian = entity.veterinarian,
+            description = this.description,
+            client = entity.client,
+            pet = entity.pet,
+            status = status,
+            notification = arrayListOf<Notification>()
         )
 }

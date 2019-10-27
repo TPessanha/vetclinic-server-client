@@ -15,6 +15,7 @@ import personal.ciai.vetclinic.model.AppointmentStatus.Accepted
 import personal.ciai.vetclinic.model.AppointmentStatus.Completed
 import personal.ciai.vetclinic.model.AppointmentStatus.Refused
 import personal.ciai.vetclinic.model.AppointmentStatus.valueOf
+import personal.ciai.vetclinic.model.Notification
 import personal.ciai.vetclinic.model.ScheduleStatus
 import personal.ciai.vetclinic.model.Veterinarian
 import personal.ciai.vetclinic.repository.AppointmentRepository
@@ -27,7 +28,8 @@ class VeterinarianService(
     @Autowired private val appointmentRepository: AppointmentRepository,
     @Autowired private val schedulesService: SchedulesService,
     @Autowired private val configurationProperties: ConfigurationProperties,
-    @Autowired val imageService: ImageService
+    @Autowired val imageService: ImageService,
+    @Autowired val notificationService: NotificationService
 ) {
     fun existByUserName(userName: String) = vetRepository.existsByUsername(userName)
 
@@ -58,8 +60,8 @@ class VeterinarianService(
 
     fun delete(id: Int) {
         val vet: Veterinarian = getVeterinarianEntity(id)
-            vet.enabled = false
-            vetRepository.save(vet)
+        vet.enabled = false
+        vetRepository.save(vet)
     }
 
     fun getVeterinarianAppointments(vetId: Int): List<AppointmentDTO> {
@@ -81,7 +83,10 @@ class VeterinarianService(
             else -> throw PreconditionFailedException()
         }
 
-        // appointmentRepository.save(appointmentDTO.toEntity(savedAppoint))  TODO NEED TOENTITY WITH ENTITY PARM
+        appointmentRepository.save(appointmentDTO.toEntity(savedAppoint, newStatus))
+
+        if (newStatus != Completed)
+            notificationService.save(Notification.createNotification(savedAppoint.client, savedAppoint, newStatus))
     }
 
     fun getPhoto(id: Int): ByteArray {
@@ -105,6 +110,7 @@ class VeterinarianService(
             appointmentDTO.veterinarian,
             appointmentDTO.startTime
         )
+
         schedule.status = ScheduleStatus.Available
         schedulesService.updateEntity(schedule)
     }

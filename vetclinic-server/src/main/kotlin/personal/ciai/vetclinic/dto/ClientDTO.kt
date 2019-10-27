@@ -81,6 +81,7 @@ data class ClientDTO(
         password = this.password,
         address = this.address,
         photo = Paths.get(picturePath, this.id.toString()).toUri(),
-        appointments = arrayListOf()
+        appointments = arrayListOf(),
+        notification = arrayListOf()
     )
 }

@@ -17,6 +17,7 @@ import personal.ciai.vetclinic.dto.SchedulesDTO
     name = "schedules",
     uniqueConstraints = [UniqueConstraint(columnNames = ["startDate", "veterinarian"])]
 )
+
 class Schedules(
     id: Int,
 

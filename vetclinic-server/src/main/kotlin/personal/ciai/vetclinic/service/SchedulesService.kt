@@ -102,7 +102,7 @@ class SchedulesService(
         schedulesRepository.save(schedule)
     }
 
-    private fun validateAppointment(
+    fun validateAppointment(
         s: Schedules,
         a: AppointmentDTO
     ) {

@@ -154,5 +154,19 @@ public class AccessControlRules {
     }
 
 
+    public static class NotificationRules {
+        @Target({ElementType.METHOD, ElementType.TYPE})
+        @Retention(RetentionPolicy.RUNTIME)
+        @Inherited
+        @Documented
+        @PreAuthorize(AllowedForGetNotification.condition)
+        public @interface AllowedForGetNotification {
+            String condition = "@SecurityService.isNotificationOwner(principal,#userId)";
+        }
+
+
+    }
+
+
 }
 
