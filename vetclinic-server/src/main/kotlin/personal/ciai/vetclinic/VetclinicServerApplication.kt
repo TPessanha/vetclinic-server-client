@@ -53,11 +53,15 @@ class Init(
 ) {
     @EventListener
     fun appReady(event: ApplicationReadyEvent) {
+        val debug = true
+
         val roles = addRoles()
         addAdmin(roles)
-        val clients = addClients(roles)
-        addPets(clients)
-        addVets()
+        if (debug) {
+            val clients = addClients(roles)
+            addPets(clients)
+            addVets()
+        }
     }
 
     private fun addVets() {
@@ -77,12 +81,18 @@ class Init(
         veterinarianRepository.save(vet1)
 
         var blocks = BitSet(720)
-        for (i in 0 until 720)
+        var booked = BitSet(720)
+        for (i in 0 until 720) {
             blocks[i] = false
+            booked[i] = false
+        }
+        for (i in 0 until 5)
+            blocks[i] = true
 
         val arr = blocks.toByteArray()
-        val sche = Schedule(0, YearMonth.of(2019, 10), vet1, arr, arr)
-        val sche2 = Schedule(0, YearMonth.of(2019, 11), vet1, arr, arr)
+        val arr2 = booked.toByteArray()
+        val sche = Schedule(0, YearMonth.of(2019, 10), vet1, arr, arr2)
+        val sche2 = Schedule(0, YearMonth.of(2019, 11), vet1, arr, arr2)
 
         scheduleRepository.save(sche)
         scheduleRepository.save(sche2)

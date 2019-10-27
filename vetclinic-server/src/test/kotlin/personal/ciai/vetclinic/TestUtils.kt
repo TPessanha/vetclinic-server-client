@@ -64,7 +64,7 @@ object TestUtils {
     val petList = listOf<Pet>(dogExample, pigExample, iguanaExample)
 
     val appointmentExample1 =
-        Appointment(0, 10, 2019, TimeSlot(5, 10), vetExample1, dogExample, clientExample1)
+        Appointment(0, 10, 2019, TimeSlot(0, 2), vetExample1, dogExample, clientExample1)
 
     val appointmentList = listOf<Appointment>(appointmentExample1)
 

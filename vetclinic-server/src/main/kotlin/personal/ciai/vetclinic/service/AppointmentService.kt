@@ -29,7 +29,6 @@ class AppointmentService(
     @Autowired
     val scheduleService: ScheduleService
 ) {
-    @Secured("ROLE_ADMIN")
     fun getAllAppointments() = repository.findAll().map { it.toDTO() }
 
     fun getAppointmentById(id: Int) = getAppointmentEntityById(id).toDTO()

@@ -98,7 +98,7 @@ class AppointmentServiceTests {
 
         `when`(petRepository.findById(anyInt())).thenReturn(Optional.of(dogExample))
 
-        appointmentService.addAppointment(appointmentExample1.toDTO().copy(id = 0, client = 1, veterinarian = 2))
+        appointmentService.addAppointment(appointmentExample1.toDTO().copy(id = 0, client = 2, veterinarian = 4))
     }
 
     @Test
