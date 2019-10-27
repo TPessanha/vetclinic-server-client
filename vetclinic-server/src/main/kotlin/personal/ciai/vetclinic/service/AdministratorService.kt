@@ -2,6 +2,7 @@ package personal.ciai.vetclinic.service
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.config.ConfigurationProperties
 import personal.ciai.vetclinic.dto.AdministratorDTO
 import personal.ciai.vetclinic.exception.ConflictException
@@ -47,4 +48,15 @@ class AdministratorService(
 
     fun getAdministratorEntity(id: Int): Administrator = adminRepository.findById(id)
         .orElseThrow { NotFoundException("Administrator account with Id $id not found") }
+
+    fun getPhoto(id: Int): ByteArray {
+        val admin = getAdministratorEntity(id)
+        return imageService.getUserPhoto(admin.photo)
+    }
+
+    fun updatePhoto(id: Int, photo: MultipartFile) {
+        val admin = getAdministratorEntity(id)
+        admin.photo = imageService.updateUserPhoto(admin.id, photo)
+        update(admin.toDTO())
+    }
 }

@@ -13,10 +13,12 @@ import personal.ciai.vetclinic.utils.VeterinarianUtils.`veterinarian 1`
 object ScheduleUtils {
 
     // Veterinarian
-    val `start at time` = LocalDateTime.now().withDayOfMonth(1).withHour(6).plusMonths(1).toEpochSecond(ZoneOffset.UTC)
+    val `start at time` = LocalDateTime.now().withDayOfMonth(1).withHour(6).withMinute(0).withSecond(0).plusMonths(1)
+        .toEpochSecond(ZoneOffset.UTC)
 
     val `end at time` =
-        LocalDateTime.now().withDayOfMonth(1).withHour(6).plusMonths(1).plusHours(1).toEpochSecond(ZoneOffset.UTC)
+        LocalDateTime.now().withDayOfMonth(1).withHour(6).plusMonths(1).plusHours(1).withMinute(0).withSecond(0)
+            .toEpochSecond(ZoneOffset.UTC)
 
     val `schedule 1` = Schedules(
         id = 1,
@@ -28,8 +30,10 @@ object ScheduleUtils {
     val `schedule 2` = Schedules(
         id = 2,
         timeSlot = TimeSlot(
-            LocalDateTime.now().withDayOfMonth(1).withHour(6).plusMonths(1).plusHours(1).toEpochSecond(ZoneOffset.UTC),
-            LocalDateTime.now().withDayOfMonth(1).withHour(6).plusMonths(1).plusHours(2).toEpochSecond(ZoneOffset.UTC)
+            LocalDateTime.now().withDayOfMonth(1).withHour(6).plusMonths(1).plusHours(1).withMinute(0)
+                .withSecond(0).toEpochSecond(ZoneOffset.UTC),
+            LocalDateTime.now().withDayOfMonth(1).withHour(6).plusMonths(1).plusHours(2).withMinute(0)
+                .withSecond(0).toEpochSecond(ZoneOffset.UTC)
         ),
         veterinarian = `veterinarian 1`,
         status = ScheduleStatus.Available
@@ -41,7 +45,7 @@ object ScheduleUtils {
      * @param starDate the first schedule slot
      */
     fun generateMonth(vet: Veterinarian): MutableList<Schedules> {
-        var time = LocalDateTime.now().withDayOfMonth(1).withHour(6).plusMonths(1)
+        var time = LocalDateTime.now().withDayOfMonth(1).withHour(6).withMinute(0).withSecond(0).plusMonths(1)
         val `list of schedules` = mutableListOf<Schedules>()
         var hoursWeek = 0
         var hoursDay = 0

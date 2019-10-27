@@ -10,7 +10,7 @@ import personal.ciai.vetclinic.service.UserService
 import personal.ciai.vetclinic.service.VeterinarianService
 
 @Service("SecurityService")
-public class SecurityService(
+class SecurityService(
     @Autowired
     val petService: PetService,
     @Autowired
@@ -23,7 +23,7 @@ public class SecurityService(
     val schedulesService: SchedulesService
 
 ) {
-    public fun isPetOwner(principal: Principal, id: Int): Boolean {
+    fun isPetOwner(principal: Principal, id: Int): Boolean {
         val pet = petService.getPetEntityById(id)
         return pet.owner.username == principal.name
     }
@@ -33,7 +33,7 @@ public class SecurityService(
 //        return pet.owner.username == principal.name
 //    }
 
-    public fun isPrincipalWithID(principal: Principal, id: Int): Boolean {
+    fun isPrincipalWithID(principal: Principal, id: Int): Boolean {
         val user = userService.getUserEntityById(id)
         return user.username == principal.name
     }

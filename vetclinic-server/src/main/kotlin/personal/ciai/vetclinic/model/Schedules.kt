@@ -4,6 +4,8 @@ import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Embedded
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.Table
@@ -19,14 +21,15 @@ class Schedules(
     id: Int,
 
     @Embedded
-    var timeSlot: TimeSlot,
+    val timeSlot: TimeSlot,
 
     @ManyToOne(cascade = [(CascadeType.ALL)])
     @JoinColumn(name = "veterinarian")
     var veterinarian: Veterinarian,
 
     @Column(nullable = false)
-    var status: ScheduleStatus
+    @Enumerated(EnumType.ORDINAL)
+    var status: ScheduleStatus = ScheduleStatus.Available
 ) : IdentifiedEntity(id) {
 
     override fun toDTO() = SchedulesDTO(

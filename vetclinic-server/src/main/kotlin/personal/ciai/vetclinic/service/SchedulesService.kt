@@ -90,11 +90,6 @@ class SchedulesService(
         } else throw PreconditionFailedException("Schedule can no be changed")
     }
 
-    fun isScheduleAvailable(vetId: Int, startTime: Long): Boolean {
-        return getScheduleByVeterinarianAndStartTime(vetId, startTime)
-            .status.equals(ScheduleStatus.Available)
-    }
-
     fun scheduleAppointment(appointmentDTO: AppointmentDTO) {
         val schedule = getScheduleByVeterinarianIdAndStartTimeEntity(
             appointmentDTO.veterinarian,
@@ -114,7 +109,7 @@ class SchedulesService(
         if (s.status == ScheduleStatus.Booked)
             throw PreconditionFailedException("Slot ${a.startTime} already taken")
 
-        if (a.startTime.equals(s.timeSlot.startDate).not() || a.endTime.compareTo(s.timeSlot.endDate.toLong()) > 0)
+        if (a.startTime != s.timeSlot.startDate.toLong() || a.endTime != s.timeSlot.endDate.toLong())
             throw PreconditionFailedException("Slot Time mismatch")
     }
 

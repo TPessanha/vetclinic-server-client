@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
+import java.security.Principal
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import personal.ciai.vetclinic.dto.SchedulesDTO
+import personal.ciai.vetclinic.security.AccessControlRules.SchedulesRules.AllowedForAddSchedule
 import personal.ciai.vetclinic.security.AccessControlRules.SchedulesRules.AllowedForEditSchedule
 import personal.ciai.vetclinic.security.AccessControlRules.SchedulesRules.AllowedForGetSchedule
 import personal.ciai.vetclinic.service.SchedulesService
@@ -153,7 +155,7 @@ class ScheduleController(
         ]
     )
     @PostMapping("")
-    @AllowedForEditSchedule
+    @AllowedForAddSchedule
     fun addSchedule(
         @ApiParam(value = "The ID of the employee", required = true) @PathVariable
         employeeId: Int,
@@ -192,6 +194,7 @@ class ScheduleController(
         @ApiParam(
             value = "Details of an Schedule to be created",
             required = true
-        ) @RequestBody schedules: SchedulesDTO
+        ) @RequestBody schedules: SchedulesDTO,
+        principal: Principal
     ) = schedulesService.update(schedules.copy(id = scheduleId, vetId = vetId))
 }
