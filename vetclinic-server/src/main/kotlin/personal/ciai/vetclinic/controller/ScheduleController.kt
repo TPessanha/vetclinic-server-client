@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import personal.ciai.vetclinic.dto.ScheduleDTO
-import personal.ciai.vetclinic.security.AccessControlRules.ScheduleRules.AllowedForEditSchedule
-import personal.ciai.vetclinic.security.AccessControlRules.ScheduleRules.AllowedForGetSchedule
+import personal.ciai.vetclinic.security.AccessControlRules.SchedulesRules.AllowedForEditSchedule
+import personal.ciai.vetclinic.security.AccessControlRules.SchedulesRules.AllowedForGetSchedule
 import personal.ciai.vetclinic.service.ScheduleService
 
 @Api(
