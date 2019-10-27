@@ -21,6 +21,15 @@ public class AccessControlRules {
         @Retention(RetentionPolicy.RUNTIME)
         @Inherited
         @Documented
+        @PreAuthorize(AllowedForGetAllClientDetails.condition)
+        public @interface AllowedForGetAllClientDetails {
+            String condition = "hasRole('ADMIN') or hasRole('VET')";
+        }
+
+        @Target({ElementType.METHOD, ElementType.TYPE})
+        @Retention(RetentionPolicy.RUNTIME)
+        @Inherited
+        @Documented
         @PreAuthorize(AllowedForGetClientAppointments.condition)
         public @interface AllowedForGetClientAppointments {
             String condition = "hasRole('ADMIN') or " + UserRules.IsPrincipalAccountOwner.condition;

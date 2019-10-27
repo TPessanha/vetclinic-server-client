@@ -33,6 +33,27 @@ class ClientController(
 ) {
 
     @ApiOperation(
+        value = "View the list of clients",
+        produces = "application/json",
+        responseContainer = "List",
+        response = ClientDTO::class
+    )
+    @ApiResponses(
+        value = [
+            (ApiResponse(code = 200, message = "Successfully retrieved the list of appointments")),
+            (ApiResponse(code = 401, message = "You are not authorized to view the resource")),
+            (ApiResponse(
+                code = 403,
+                message = "Accessing the resource you were tyring to reach is forbidden"
+            ))
+        ]
+    )
+    @GetMapping("")
+    @AccessControlRules.ClientRules.AllowedForGetAllClientDetails
+    fun getAllClients(
+    ) = clientService.getAllClients()
+
+    @ApiOperation(
         value = "View the list of client appointments",
         produces = "application/json",
         responseContainer = "List",

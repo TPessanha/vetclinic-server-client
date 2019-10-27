@@ -65,7 +65,7 @@ class PetControllerTests {
     fun `Test GET client pets`() {
         val dtoList = petList.map { it.toDTO() }
         `when`(pets.getClientPets(anyInt())).thenReturn(dtoList)
-        `when`(securityService.isPrincipalWithID(nonNullAny(Principal::class.java), anyInt())).thenReturn(true)
+        `when`(securityService.isPrincipalAccountOwner(nonNullAny(Principal::class.java), anyInt())).thenReturn(true)
 
         val result = mvc.perform(get(petsURL).header("Authorization", token))
             .andExpect(status().isOk)
@@ -114,7 +114,7 @@ class PetControllerTests {
 
         `when`(pets.addPet(nonNullAny(PetDTO::class.java)))
             .then { assertEquals(dtoL.copy(owner = 2), it.getArgument(0)) }
-        `when`(securityService.isPrincipalWithID(nonNullAny(Principal::class.java), anyInt())).thenReturn(true)
+        `when`(securityService.isPrincipalAccountOwner(nonNullAny(Principal::class.java), anyInt())).thenReturn(true)
 
         mvc.perform(
             post(petsURL).header("Authorization", token)

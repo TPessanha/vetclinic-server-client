@@ -65,6 +65,16 @@ class ImageService(
         return path.toUri() // TODO set owner
     }
 
+    fun unsafeUpdateUserPhoto(userId: Int, photo: File): URI {
+        val path = Paths.get(
+            configurationProperties.fullPathToUserPhotos, "$userId.jpg"
+        )
+
+        writeToFileSystem(path, photo.readBytes(), File(configurationProperties.fullPathToUserPhotos))
+
+        return path.toUri() // TODO set owner
+    }
+
     fun getUserPhoto(photoURI: URI?): ByteArray {
         if (photoURI == null)
             throw NotFoundException("User does not have a profile photo")
