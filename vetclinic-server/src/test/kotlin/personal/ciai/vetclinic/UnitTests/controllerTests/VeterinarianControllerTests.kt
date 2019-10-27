@@ -17,15 +17,12 @@ import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.vet1
-import personal.ciai.vetclinic.ExampleObjects.exampleObjects.vet2
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.vetDTOList
-import personal.ciai.vetclinic.IntegrationTests.VeterinarianTests
 import personal.ciai.vetclinic.dto.BasicSafeInfoDTO
 import personal.ciai.vetclinic.dto.VeterinarianDTO
 import personal.ciai.vetclinic.exception.NotFoundException
@@ -95,19 +92,13 @@ class VeterinarianControllerTests {
         val vetsJSON = mapper.writeValueAsString(`veterinarian 1`.toDTO())
 
         `when`(vets.save(nonNullAny(VeterinarianDTO::class.java)))
-            .then { assertEquals(vet2.toDTO(), it.getArgument(0)) }
+            .then { assertEquals(`veterinarian 1`.toDTO(), it.getArgument(0)) }
 
         mvc.perform(
             post(vetsURL)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(vetsJSON)
-        )
-            .andExpect(status().isOk)
-
-        mvc.perform(
-            MockMvcRequestBuilders
-                .delete("${VeterinarianTests.veterinarianURL}/2")
         )
             .andExpect(status().isOk)
     }

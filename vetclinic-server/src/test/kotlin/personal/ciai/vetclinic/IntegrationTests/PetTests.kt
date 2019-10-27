@@ -17,7 +17,6 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.anyInt
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
@@ -33,11 +32,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
 import personal.ciai.vetclinic.TestUtils
-import personal.ciai.vetclinic.UnitTests.controllerTests.PetControllerTests
-import personal.ciai.vetclinic.controller.PetController
 import personal.ciai.vetclinic.dto.PetDTO
-import personal.ciai.vetclinic.model.Client
-import personal.ciai.vetclinic.model.Pet
 import personal.ciai.vetclinic.security.SecurityService
 import personal.ciai.vetclinic.service.ClientService
 import personal.ciai.vetclinic.service.PetService
