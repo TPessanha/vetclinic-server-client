@@ -9,7 +9,7 @@ import personal.ciai.vetclinic.model.Client
 
 @Repository
 interface ClientRepository : CrudRepository<Client, Int> {
-    @Query("select c from Client c left join fetch c.pets where c.id = :owner")
+    @Query("select c from Client c left join fetch c.pets p where c.id = :owner AND p.enabled = true")
     fun findByIdWithPets(owner: Int): Optional<Client>
 
     /*

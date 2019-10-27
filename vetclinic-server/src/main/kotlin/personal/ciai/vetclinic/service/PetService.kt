@@ -47,16 +47,22 @@ class PetService(
         savePet(petDTO)
     }
 
-    fun getAllPets() = repository.findAll().map { it.toDTO() }
+    fun getAllPets() = repository.findAllByEnabled(true).map { it.toDTO() }
 
     fun getClientPets(clientId: Int): List<PetDTO> {
         val client = clientService.getClientWithPets(clientId)
         return client.pets.map { it.toDTO() }
     }
 
-    fun deletePet(id: Int) = repository.deleteById(id)
+    fun deletePet(id: Int) {
+        val pet = getPetEntityById(id)
+        deletePet(pet)
+    }
 
-    fun deletePet(pet: Pet) = repository.delete(pet)
+    fun deletePet(pet: Pet) {
+        pet.enabled=false
+        repository.save(pet)
+    }
 
     @CacheEvict("PetPicture", key = "#id")
     fun updatePhoto(id: Int, photo: MultipartFile) {

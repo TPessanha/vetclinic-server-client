@@ -11,6 +11,8 @@ import personal.ciai.vetclinic.model.User
 interface UserRepository : CrudRepository<User, Int> {
     fun findByUsername(username: String): Optional<User>
 
+    fun existsByUsername(username: String): Boolean
+
     @Query("select u from User u left join fetch u.roles where u.username = :username ")
     fun findByUsernameWithRoles(@Param("username") username: String): Optional<User>
 }

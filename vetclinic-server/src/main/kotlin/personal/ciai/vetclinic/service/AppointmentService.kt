@@ -53,6 +53,8 @@ class AppointmentService(
             scheduleService.saveSchedule(schedule.get())
             repository.save(newAppointment)
         }
+        else
+            throw PreconditionFailedException("The veterinarian is does not have a schedule for that time")
     }
 
     fun updateAppointment(appointmentDTO: AppointmentDTO, id: Int) {

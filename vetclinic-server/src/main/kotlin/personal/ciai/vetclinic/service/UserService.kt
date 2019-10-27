@@ -73,5 +73,5 @@ class UserService(
             return arrayListOf()
     }
 
-    fun existsByUsername(userName: String) = repository.findByUsername(userName).isPresent
+    fun existsByUsername(userName: String) = repository.existsByUsername(userName)
 }

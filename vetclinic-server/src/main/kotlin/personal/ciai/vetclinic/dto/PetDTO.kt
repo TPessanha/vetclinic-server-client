@@ -84,7 +84,14 @@ data class PetDTO(
         required = false,
         readOnly = true
     )
-    val photo: String? = null
+    val photo: Boolean = false,
+
+    @ApiModelProperty(
+        "Is this pet enabled",
+        required = false,
+        readOnly = true
+    )
+    val enabled: Boolean = true
 ) : Transferable {
 
     fun toEntity(clientService: ClientService, picturePath: String): Pet {
@@ -101,7 +108,8 @@ data class PetDTO(
             medicalRecord = this.medicalRecord,
             physicalDescription = this.physicalDescription,
             notes = this.notes,
-            photo = if (this.photo == null) null else Paths.get(picturePath, this.photo).toUri()
+            photo = if (this.photo) null else Paths.get(picturePath, this.id.toString(), ".jpg").toUri(),
+            enabled = enabled
         )
     }
 }

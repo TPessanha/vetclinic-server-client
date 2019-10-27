@@ -23,14 +23,9 @@ import personal.ciai.vetclinic.util.now
 @Service
 class VeterinarianService(
     @Autowired val vetRepository: VeterinarianRepository,
-    @Autowired private val appointmentRepository: AppointmentRepository,
     @Autowired private val configurationProperties: ConfigurationProperties,
-    @Autowired val petService: PetService,
-    @Autowired val clientService: ClientService,
     @Autowired val userService: UserService
 ) {
-    fun existByUserName(userName: String) = userService.existsByUsername(userName)
-
     fun existsById(id: Int): Boolean = vetRepository.existsById(id)
 
     fun getAllVeterinarian(): List<VeterinarianDTO> = vetRepository.findAll()
@@ -44,7 +39,7 @@ class VeterinarianService(
         .orElseThrow { NotFoundException("Veterinarian account with id '$id' not found") }
 
     fun save(vetDTO: VeterinarianDTO) {
-        if (existByUserName(vetDTO.username).not()) {
+        if (userService.existsByUsername(vetDTO.username).not()) {
             vetRepository.save(vetDTO.toEntity(configurationProperties.fullPathToUserPhotos))
         } else throw ConflictException("Account with username '${vetDTO.username}' already exist")
     }
