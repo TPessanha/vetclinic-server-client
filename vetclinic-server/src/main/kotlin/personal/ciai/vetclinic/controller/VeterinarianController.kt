@@ -231,7 +231,7 @@ class VeterinarianController(
         @ApiParam(name = "appointmentId", required = true, value = "(Required) Appointment identificator (id)")
         @PathVariable(value = "appointmentId", required = true) appointmentId: Int,
         @RequestBody appointmentDTO: AppointmentDTO
-    ) = veterinarianService.changeVeterinarianAppointmentStatus(
+    ) = appointmentService.changeVeterinarianAppointmentStatus(
         appointmentDTO.copy(
             id = appointmentId,
             veterinarian = vetId

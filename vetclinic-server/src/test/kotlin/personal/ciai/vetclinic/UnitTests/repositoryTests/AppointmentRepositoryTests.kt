@@ -60,13 +60,13 @@ class AppointmentRepositoryTests {
                 URI("asdf"),
                 true,
                 arrayListOf(),
-                arrayListOf(),
-                12
+                12,
+                arrayListOf()
             )
         val fakePet = Pet(555, "moon dog", 2, owner = fakeClient)
 
         val app =
-            Appointment(0, TimeSlot(1571414431763, 1571414631763), fakeVet, fakePet, fakeClient, "Serious description")
+            Appointment(0, 10, 2019, TimeSlot(5, 10), fakeVet, fakePet, fakeClient, "Serious description")
 
 //        `when`(pets.findById(555)).thenReturn(Optional.empty())
 
@@ -92,12 +92,12 @@ class AppointmentRepositoryTests {
                 URI("asdf"),
                 true,
                 arrayListOf(),
-                arrayListOf(),
-                12
+                12,
+                arrayListOf()
             )
         val fakePet = Pet(0, "Actually a bunny", 2, owner = fakeClient)
         val fakeApp =
-            Appointment(0, TimeSlot(1571414431763, 1571414631763), fakeVet, pet = fakePet, client = fakeClient)
+            Appointment(0, 10, 2019, TimeSlot(5, 10), fakeVet, pet = fakePet, client = fakeClient)
 
         fakeClient.appointments.add(fakeApp)
         clientRepository.save(fakeClient)

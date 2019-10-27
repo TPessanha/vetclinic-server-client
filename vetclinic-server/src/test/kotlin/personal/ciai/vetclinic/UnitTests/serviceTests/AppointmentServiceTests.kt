@@ -116,10 +116,10 @@ class AppointmentServiceTests {
                 URI("asdf"),
                 true,
                 arrayListOf(),
-                arrayListOf(),
-                12
+                12,
+                arrayListOf()
             )
-        val fakeApp = Appointment(1, TimeSlot(532, 3253), fakeVet, fakePet, clientExample)
+        val fakeApp = Appointment(1, 10, 2019, TimeSlot(532, 3253), fakeVet, fakePet, clientExample)
 
         fakePet.appointments.add(fakeApp)
 

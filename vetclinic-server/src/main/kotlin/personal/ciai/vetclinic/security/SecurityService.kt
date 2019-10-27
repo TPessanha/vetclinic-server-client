@@ -6,12 +6,12 @@ import org.springframework.stereotype.Service
 import personal.ciai.vetclinic.model.User
 import personal.ciai.vetclinic.service.AdministratorService
 import personal.ciai.vetclinic.service.PetService
-import personal.ciai.vetclinic.service.SchedulesService
+import personal.ciai.vetclinic.service.ScheduleService
 import personal.ciai.vetclinic.service.UserService
 import personal.ciai.vetclinic.service.VeterinarianService
 
 @Service("SecurityService")
-public class SecurityService(
+class SecurityService(
     @Autowired
     val petService: PetService,
     @Autowired
@@ -21,10 +21,10 @@ public class SecurityService(
     @Autowired
     val veterinarianService: VeterinarianService,
     @Autowired
-    val schedulesService: SchedulesService
+    val schedulesService: ScheduleService
 
 ) {
-    public fun isPetOwner(principal: Principal, id: Int): Boolean {
+    fun isPetOwner(principal: Principal, id: Int): Boolean {
         val pet = petService.getPetEntityById(id)
         return pet.owner.username == principal.name
     }
@@ -34,7 +34,7 @@ public class SecurityService(
 //        return pet.owner.username == principal.name
 //    }
 
-    public fun isPrincipalWithID(principal: Principal, id: Int): Boolean {
+    fun isPrincipalWithID(principal: Principal, id: Int): Boolean {
         val user = userService.getUserEntityById(id)
         return user.username == principal.name
     }
@@ -50,5 +50,5 @@ public class SecurityService(
     fun isAdministratorAccountOwner(user: User, adminId: Int): Boolean = user.id == adminId && isAdministrator(user)
 
     fun isScheduleVeterinarian(user: User, scheduleId: Int): Boolean =
-        schedulesService.getOneScheduleById(scheduleId).vetId == user.id
+        schedulesService.getOneScheduleById(scheduleId).veterinarian.id == user.id
 }

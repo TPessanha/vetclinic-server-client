@@ -1,5 +1,6 @@
 package personal.ciai.vetclinic.service
 
+import java.lang.Exception
 import java.util.Optional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -11,8 +12,6 @@ import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.exception.PreconditionFailedException
 import personal.ciai.vetclinic.model.User
 import personal.ciai.vetclinic.repository.UserRepository
-import java.lang.Exception
-import javax.validation.ConstraintViolationException
 
 @Service
 class UserService(
@@ -73,4 +72,6 @@ class UserService(
         else
             return arrayListOf()
     }
+
+    fun existsByUsername(userName: String) = repository.findByUsername(userName).isPresent
 }

@@ -1,10 +1,9 @@
 package personal.ciai.vetclinic.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import java.util.Base64
 import java.util.Date
 import javax.servlet.FilterChain
@@ -16,23 +15,21 @@ import kotlin.collections.HashMap
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
-import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter
 import org.springframework.web.filter.GenericFilterBean
-import personal.ciai.vetclinic.dto.CredentialsDTO
 import personal.ciai.vetclinic.dto.UserDTO
 import personal.ciai.vetclinic.exception.ConflictException
 import personal.ciai.vetclinic.model.User
 import personal.ciai.vetclinic.service.UserService
-import java.lang.Exception
+import java.util.concurrent.TimeUnit
 
 object JWTSecret {
     private const val passphrase = "este é um grande segredo que tem que ser mantido escondido"
     val KEY: String = Base64.getEncoder().encodeToString(passphrase.toByteArray())
     const val SUBJECT = "JSON Web Token for CIAI 2019/20"
-    const val VALIDITY = 1000 * 60 * 60 * 10 // 10 minutes in microseconds
+    val VALIDITY = TimeUnit.MINUTES.toMillis(10).toInt() //10 minutos in milliseconds
 }
 
 private fun addResponseToken(authentication: Authentication, response: HttpServletResponse) {
@@ -120,15 +117,10 @@ class JWTAuthenticationFilter(val userService: UserService) : GenericFilterBean(
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             val token = authHeader.substring(7) // Skip 7 characters for "Bearer "
-            val claims = Jwts.parser().setSigningKey(JWTSecret.KEY).parseClaimsJws(token).body
 
-            // should check for token validity here (e.g. expiration date, session in db, etc.)
-            val exp = (claims["exp"] as Int).toLong()
-            if (exp < System.currentTimeMillis() / 1000) // in seconds
+            try {
+                val claims = Jwts.parser().setSigningKey(JWTSecret.KEY).parseClaimsJws(token).body
 
-                (response as HttpServletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED) // RFC 6750 3.1
-
-            else {
                 val auhts = userService.getAuthorities(claims["username"] as String)
                 val authentication = UserAuthToken(claims["username"] as String, auhts)
                 // Can go to the database to get the actual user information (e.g. authorities)
@@ -139,9 +131,12 @@ class JWTAuthenticationFilter(val userService: UserService) : GenericFilterBean(
                 addResponseToken(authentication, response as HttpServletResponse)
 
                 chain!!.doFilter(request, response)
+            } catch (e: ExpiredJwtException) {
+                (response as HttpServletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED)
+                chain!!.doFilter(request, response)
             }
         } else {
-            (response as HttpServletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED)
+//            (response as HttpServletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED)
             chain!!.doFilter(request, response) // TODO: Replace with an error
         }
     }

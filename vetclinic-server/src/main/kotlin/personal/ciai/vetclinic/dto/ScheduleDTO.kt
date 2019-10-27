@@ -1,10 +1,8 @@
 package personal.ciai.vetclinic.dto
 
 import io.swagger.annotations.ApiModelProperty
-import personal.ciai.vetclinic.model.ScheduleStatus
-import personal.ciai.vetclinic.model.Schedules
-import personal.ciai.vetclinic.model.TimeSlot
-import personal.ciai.vetclinic.model.Veterinarian
+import personal.ciai.vetclinic.model.Schedule
+import personal.ciai.vetclinic.service.VeterinarianService
 
 /**
  * Models a Schedule DTO.
@@ -17,7 +15,7 @@ import personal.ciai.vetclinic.model.Veterinarian
  * @property veterinarian the veterinarian of the Schedule.
  * @constructor Creates a Schedule DTO.
  */
-data class SchedulesDTO(
+data class ScheduleDTO(
     @ApiModelProperty(
         "An unique identifier for the schedule",
         required = false,
@@ -27,19 +25,19 @@ data class SchedulesDTO(
     val id: Int = -1,
 
     @ApiModelProperty(
-        "The time that start schedule start",
+        "The year of the schedule",
         required = true,
         readOnly = false,
-        example = "1"
+        example = "2019"
     )
-    val startTime: Long,
+    val year: Int,
     @ApiModelProperty(
-        "The time that the schedule ends",
+        "The month of the schedule",
         required = true,
         readOnly = false,
-        example = "1"
+        example = "6"
     )
-    val endTime: Long,
+    val month: Int,
 
     @ApiModelProperty(
         "The veterinarian id",
@@ -55,16 +53,26 @@ data class SchedulesDTO(
         readOnly = false,
         example = "1"
     )
-    val status: ScheduleStatus
+    val availableBlocks: List<Byte>,
+
+    @ApiModelProperty(
+        "The status of schedule",
+        required = true,
+        readOnly = false,
+        example = "1"
+    )
+    val bookedBlocks: List<Byte>
 
 ) : Transferable {
-    fun toEntity(vet: Veterinarian) = toEntity(this.id, vet)
+    fun toEntity(veterinarianService: VeterinarianService) = toEntity(this.id, veterinarianService)
 
-    fun toEntity(newId: Int, vet: Veterinarian) =
-        Schedules(
+    fun toEntity(newId: Int, vet: VeterinarianService) =
+        Schedule(
             id = newId,
-            timeSlot = TimeSlot(startTime, endTime),
-            status = status,
-            veterinarian = vet
+            year = year,
+            month = month,
+            veterinarian = vet.getVeterinarianEntity(this.vetId),
+            availableBlocks = availableBlocks.toByteArray(),
+            bookedBlocks = bookedBlocks.toByteArray()
         )
 }
