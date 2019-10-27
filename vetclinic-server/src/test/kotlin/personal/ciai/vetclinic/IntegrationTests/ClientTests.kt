@@ -59,7 +59,7 @@ class ClientTests {
     @Test
     @Transactional
     fun `test get client details`() {
-        SecurityContextHolder.clearContext();
+        SecurityContextHolder.clearContext()
 
         val token = TestUtils.generateTestToken("user2", listOf("ROLE_CLIENT"))
 
@@ -78,7 +78,7 @@ class ClientTests {
     @Test
     @Transactional
     fun `test get client details (Not authorized)`() {
-        SecurityContextHolder.clearContext();
+        SecurityContextHolder.clearContext()
 
         val token = TestUtils.generateTestToken("user3", listOf("ROLE_CLIENT"))
 

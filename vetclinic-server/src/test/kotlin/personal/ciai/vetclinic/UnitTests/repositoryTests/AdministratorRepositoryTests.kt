@@ -68,12 +68,12 @@ class AdministratorRepositoryTests {
         nAdmin.add(admin03)
         assertEquals(admin.findAll().toList(), nAdmin)
 
-        nAdmin.add(admin01)
+        nAdmin.remove(admin01)
         admin.delete(admin01)
 
-        assertTrue(admin.findAll().toList().size == nAdmin.size + 1)
+        assertTrue(admin.findAll().toList().size == nAdmin.size)
 
-        nAdmin.add(admin03)
+        nAdmin.remove(admin03)
         admin.delete(admin03)
 
         assertTrue(admin.findAll().toList().size == nAdmin.size)
