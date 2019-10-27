@@ -66,16 +66,7 @@ class PetTests {
 
         val petsURL = "/clients/2/pets"
 
-//        val client1 = Client(0, "mail", "name", 52235, "Username", "123", "asfasf")
-//        val petExample = Pet(0, "cat", 2, client1)
     }
-
-//    @Test
-//    fun `test client add`(){
-//        clientService.repository.save(client1)
-//        val savedClient = clientService.getClientEntityById(1)
-//        assertTrue(savedClient!=null)
-//    }
 
     @Test
     @Transactional

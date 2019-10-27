@@ -12,7 +12,7 @@ public class AccessControlRules {
         @Documented
         @PreAuthorize(IsPrincipalTheClient.condition)
         public @interface IsPrincipalTheClient {
-            String condition = "@SecurityService.isPrincipalWithID(principal,#clientId)";
+            String condition = "@SecurityService.isPrincipalAccountOwner(principal,#clientId)";
         }
     }
 
