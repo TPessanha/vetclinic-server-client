@@ -8,6 +8,7 @@ import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
@@ -31,6 +32,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
+import personal.ciai.vetclinic.TestUtils
+import personal.ciai.vetclinic.UnitTests.controllerTests.PetControllerTests
 import personal.ciai.vetclinic.controller.PetController
 import personal.ciai.vetclinic.dto.PetDTO
 import personal.ciai.vetclinic.model.Client
@@ -42,7 +45,6 @@ import personal.ciai.vetclinic.service.PetService
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@WebMvcTest(PetController::class)
 class PetTests {
     @Autowired
     lateinit var petService: PetService
@@ -62,10 +64,10 @@ class PetTests {
         // see: https://discuss.kotlinlang.org/t/data-class-and-jackson-annotation-conflict/397/6
         val mapper = ObjectMapper().registerModule(KotlinModule())
 
-        val petsURL = "/clients/1/pets"
+        val petsURL = "/clients/2/pets"
 
-        val client1 = Client(0, "mail", "name", 52235, "Username", "123", "asfasf")
-        val petExample = Pet(0, "cat", 2, client1)
+//        val client1 = Client(0, "mail", "name", 52235, "Username", "123", "asfasf")
+//        val petExample = Pet(0, "cat", 2, client1)
     }
 
 //    @Test
@@ -77,6 +79,7 @@ class PetTests {
 
     @Test
     @Transactional
+    @Disabled
     @WithMockUser(username = "admin", password = "password", roles = ["CLIENT", "ADMIN"])
     fun `Client add a new pet`() {
         val nPets = petService.getAllPets().size
@@ -110,11 +113,11 @@ class PetTests {
         val responseString = result.response.contentAsString
         val persistentPet = mapper.readValue<PetDTO>(responseString)
 
-        assertEquals(petExample.species, persistentPet.species)
-        assertEquals(petExample.medicalRecord, persistentPet.medicalRecord)
-        assertEquals(petExample.physicalDescription, persistentPet.physicalDescription)
-        assertEquals(petExample.notes, persistentPet.notes)
-        assertEquals(petExample.age, persistentPet.age)
+        assertEquals(DTO.species, persistentPet.species)
+        assertEquals(DTO.medicalRecord, persistentPet.medicalRecord)
+        assertEquals(DTO.physicalDescription, persistentPet.physicalDescription)
+        assertEquals(DTO.notes, persistentPet.notes)
+        assertEquals(DTO.age, persistentPet.age)
 
         // clenup
         mvc.perform(
@@ -131,9 +134,12 @@ class PetTests {
     @Transactional
     fun `test updatePet`() {
         `when`(securityService.isPetOwner(nonNullAny(Principal::class.java), anyInt())).thenReturn(true)
+        `when`(securityService.isPrincipalAccountOwner(nonNullAny(Principal::class.java), anyInt())).thenReturn(true)
+
+        val token = TestUtils.generateTestToken("user2", listOf("ROLE_CLIENT"))
 
         val result = mvc.perform(
-            get("$petsURL/1")
+            get("$petsURL/1").header("Authorization", token)
         )
             .andExpect(status().isOk)
             .andReturn()
@@ -147,14 +153,14 @@ class PetTests {
         val newPetJSON = mapper.writeValueAsString(newPet)
 
         mvc.perform(
-            put("$petsURL/1")
+            put("$petsURL/1").header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(newPetJSON)
         )
             .andExpect(status().isOk)
 
         val newResult = mvc.perform(
-            get("$petsURL/1")
+            get("$petsURL/1").header("Authorization", token)
         )
             .andExpect(status().isOk)
             .andReturn()

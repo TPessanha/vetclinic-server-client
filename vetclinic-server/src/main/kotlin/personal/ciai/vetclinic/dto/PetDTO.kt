@@ -108,7 +108,7 @@ data class PetDTO(
             medicalRecord = this.medicalRecord,
             physicalDescription = this.physicalDescription,
             notes = this.notes,
-            photo = if (this.photo) null else Paths.get(picturePath, this.id.toString(), ".jpg").toUri(),
+            photo = if (this.photo) Paths.get(picturePath, this.id.toString(), ".jpg").toUri() else null,
             enabled = enabled
         )
     }
