@@ -102,7 +102,7 @@ class AdministratorControllerTests {
 
         mvc.perform(
             MockMvcRequestBuilders
-                .delete("${AdministratorTests.adminsURL}/1")
+                .delete("${AdministratorTests.adminsURL}/2")
         )
             .andExpect(status().isOk)
     }

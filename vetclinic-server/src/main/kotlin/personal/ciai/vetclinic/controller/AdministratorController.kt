@@ -6,7 +6,9 @@ import io.swagger.annotations.ApiParam
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.MediaType
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -14,9 +16,13 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.dto.AdministratorDTO
-import personal.ciai.vetclinic.security.AccessControlRules
+import personal.ciai.vetclinic.security.AccessControlRules.AdministratorsRules.AllowedForAddAdministrator
+import personal.ciai.vetclinic.security.AccessControlRules.AdministratorsRules.AllowedForDeleteAdministrators
+import personal.ciai.vetclinic.security.AccessControlRules.AdministratorsRules.AllowedForEditAdministrator
 import personal.ciai.vetclinic.service.AdministratorService
 
 @Api(
@@ -87,7 +93,7 @@ class AdministratorController(
             )]
     )
     @PostMapping("", consumes = [APPLICATION_JSON_VALUE])
-    @AccessControlRules.AdministratorsRules.AllowedForEditAdministrator
+    @AllowedForAddAdministrator
     fun addAdministrator(
         @ApiParam(required = true, value = "(Required) Administrator info necessary to created a new account")
         @RequestBody admin: AdministratorDTO
@@ -104,7 +110,7 @@ class AdministratorController(
             )]
     )
     @PutMapping("/{adminId:[0-9]+}", consumes = [APPLICATION_JSON_VALUE])
-    @AccessControlRules.AdministratorsRules.AllowedForEditAdministrator
+    @AllowedForEditAdministrator
     fun updateAdministrator(
         @ApiParam(name = "adminId", required = true, value = "(Required) Admin identificator (id)") @PathVariable(
             value = "adminId", required = true
@@ -123,10 +129,63 @@ class AdministratorController(
             )]
     )
     @DeleteMapping("/{adminId:[0-9]+}")
-    @AccessControlRules.AdministratorsRules.AllowedForDeleteAdministrator
+    @AllowedForDeleteAdministrators
     fun deleteAdministrator(
         @ApiParam(name = "adminId", required = true, value = "(Required) Admin identificator (id)") @PathVariable(
             value = "adminId", required = true
         ) adminId: Int
     ) = administratorService.delete(adminId)
+
+    @PutMapping("/{adminId:[0-9]+}/photo")
+    @ApiOperation(
+        value = "Upload a photo of the Administrator",
+        response = ByteArray::class
+    )
+    @ApiResponses(
+        value = [
+            (ApiResponse(code = 200, message = "Successfully uploaded the photo")),
+            (ApiResponse(
+                code = 403,
+                message = "Accessing the resource you were tyring to reach is forbidden"
+            )),
+            (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
+        ]
+    )
+    @AllowedForEditAdministrator
+    fun savePhoto(
+        @ApiParam(
+            name = "adminId",
+            required = true,
+            value = "(Required) Administrator identificator (id)"
+        ) @PathVariable adminId: Int,
+        @RequestParam("photo")
+        photo: MultipartFile
+    ) = administratorService.updatePhoto(adminId, photo)
+
+    @ApiOperation(
+        value = "Get photo of the Administrator",
+        response = ByteArray::class
+    )
+    @ApiResponses(
+        value = [
+            (ApiResponse(code = 200, message = "Successfully retrieved the photo")),
+            (ApiResponse(code = 401, message = "You are not authorized to view the resource")),
+            (ApiResponse(
+                code = 403,
+                message = "Accessing the resource you were tyring to reach is forbidden"
+            )),
+            (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
+        ]
+    )
+    @GetMapping("/{adminId:[0-9]+}/photo")
+    fun getPhoto(
+        @ApiParam(
+            name = "adminId",
+            required = true,
+            value = "(Required) Administrator identificator (id)"
+        ) @PathVariableadminId: Int
+    ) = ResponseEntity
+        .ok()
+        .contentType(MediaType.IMAGE_JPEG)
+        .body(administratorService.getPhoto(adminId))
 }

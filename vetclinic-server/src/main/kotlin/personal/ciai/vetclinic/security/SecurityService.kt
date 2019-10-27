@@ -3,7 +3,6 @@ package personal.ciai.vetclinic.security
 import java.security.Principal
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import personal.ciai.vetclinic.model.User
 import personal.ciai.vetclinic.service.AdministratorService
 import personal.ciai.vetclinic.service.PetService
 import personal.ciai.vetclinic.service.ScheduleService
@@ -39,16 +38,9 @@ class SecurityService(
         return user.username == principal.name
     }
 
-    private fun isVeterinarian(user: User): Boolean = veterinarianService.existsById(user.id)
+    fun isVeterinarianAccountOwner(principal: Principal, vetId: Int): Boolean =
+        principal.name == veterinarianService.getVeterinarianById(vetId).username
 
-    private fun isAdministrator(user: User): Boolean {
-        return administratorService.existsById(user.id)
-    }
-
-    fun isVeterinarianAccountOwner(user: User, vetId: Int): Boolean = user.id == vetId && isVeterinarian(user)
-
-    fun isAdministratorAccountOwner(user: User, adminId: Int): Boolean = user.id == adminId && isAdministrator(user)
-
-    fun isScheduleVeterinarian(user: User, scheduleId: Int): Boolean =
-        schedulesService.getOneScheduleById(scheduleId).veterinarian.id == user.id
+    fun isAdministratorAccountOwner(principal: Principal, adminId: Int): Boolean =
+        principal.name == administratorService.getAdministratorById(adminId).username
 }

@@ -12,4 +12,6 @@ interface VeterinarianRepository : CrudRepository<Veterinarian, Int> {
 
     @Query("SELECT v from Veterinarian v WHERE v.enabled = ?1")
     fun findAllByEnabled(enabled: Boolean): List<Veterinarian>
+
+    fun getByUsername(username: String): Veterinarian
 }

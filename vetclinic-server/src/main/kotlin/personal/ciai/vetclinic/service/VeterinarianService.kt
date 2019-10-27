@@ -3,7 +3,9 @@ package personal.ciai.vetclinic.service
 import java.util.Calendar
 import java.util.Date
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.config.ConfigurationProperties
 import personal.ciai.vetclinic.dto.AppointmentDTO
 import personal.ciai.vetclinic.dto.VeterinarianDTO
@@ -25,12 +27,19 @@ class VeterinarianService(
     @Autowired val vetRepository: VeterinarianRepository,
     @Autowired private val configurationProperties: ConfigurationProperties,
     @Autowired val userService: UserService
+    @Autowired private val appointmentRepository: AppointmentRepository,
+    @Autowired private val scheduleService: ScheduleService,
+    @Autowired private val configurationProperties: ConfigurationProperties,
+    @Autowired val imageService: ImageService
 ) {
+    fun existByUserName(userName: String) = vetRepository.existsByUsername(userName)
+
     fun existsById(id: Int): Boolean = vetRepository.existsById(id)
 
     fun getAllVeterinarian(): List<VeterinarianDTO> = vetRepository.findAllByEnabled(true)
         .map { it.toDTO() }
 
+    @Cacheable("Veterinarian", key = "#vetId")
     fun getVeterinarianById(vetId: Int): VeterinarianDTO {
         return getVeterinarianEntity(vetId).toDTO()
     }
@@ -52,9 +61,8 @@ class VeterinarianService(
 
     fun delete(id: Int) {
         val vet: Veterinarian = getVeterinarianEntity(id)
-
-        vet.enabled = false
-        vetRepository.save(vet)
+            vet.enabled = false
+            vetRepository.save(vet)
     }
 
     fun getVeterinarianAppointments(vetId: Int): List<AppointmentDTO> {
@@ -62,6 +70,14 @@ class VeterinarianService(
     }
 
 
+    fun getPhoto(id: Int): ByteArray {
+        val vet = getVeterinarianEntity(id)
+        return imageService.getUserPhoto(vet.photo)
+    }
 
-
+    fun updatePhoto(id: Int, photo: MultipartFile) {
+        val vet = getVeterinarianEntity(id)
+        vet.photo = imageService.updateUserPhoto(vet.id, photo)
+        update(vet.toDTO())
+    }
 }

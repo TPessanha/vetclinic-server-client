@@ -6,6 +6,8 @@ import io.swagger.annotations.ApiParam
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -13,10 +15,15 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.dto.AppointmentDTO
 import personal.ciai.vetclinic.dto.VeterinarianDTO
-import personal.ciai.vetclinic.security.AccessControlRules
+import personal.ciai.vetclinic.security.AccessControlRules.VeterinariansRules.AllowedForAddVeterinarian
+import personal.ciai.vetclinic.security.AccessControlRules.VeterinariansRules.AllowedForDeleteVeterinarian
+import personal.ciai.vetclinic.security.AccessControlRules.VeterinariansRules.AllowedForEditVeterinarian
+import personal.ciai.vetclinic.security.AccessControlRules.VeterinariansRules.AllowedForGetVeterinarian
 import personal.ciai.vetclinic.service.AppointmentService
 import personal.ciai.vetclinic.service.VeterinarianService
 
@@ -81,7 +88,7 @@ class VeterinarianController(
             )]
     )
     @PostMapping("")
-    @AccessControlRules.VeterinariansRules.AllowedForAddVeterinarian
+    @AllowedForAddVeterinarian
     fun addVeterinarian(
         @ApiParam(required = true, value = "(Required) Veterinarian info necessary to created a new account")
         @RequestBody vet: VeterinarianDTO
@@ -98,7 +105,7 @@ class VeterinarianController(
             )]
     )
     @PutMapping("/{vetId:[0-9]+}")
-    @AccessControlRules.VeterinariansRules.AllowedForEditVeterinarian
+    @AllowedForEditVeterinarian
     fun updateVeterinarian(
         @ApiParam(name = "vetId", required = true, value = "(Required) Veterinarian identificator (id)")
         @PathVariable(value = "vetId", required = true) vetId: Int,
@@ -117,7 +124,7 @@ class VeterinarianController(
             )]
     )
     @DeleteMapping("/{vetId:[0-9]+}")
-    @AccessControlRules.VeterinariansRules.AllowedForDeleteVeterinarian
+    @AllowedForDeleteVeterinarian
     fun deleteVeterinarian(
         @ApiParam(name = "vetId", required = true, value = "(Required) Veterinarian identificator (id)")
         @PathVariable(value = "vetId", required = true) vetId: Int
@@ -139,7 +146,7 @@ class VeterinarianController(
             )]
     )
     @GetMapping("/{vetId:[0-9]+}/appointments/{appointmentId:[0-9]+}")
-    @AccessControlRules.VeterinariansRules.AllowedForGetVeterinarian
+    @AllowedForGetVeterinarian
     fun getVeterinarianAppointment(
         @ApiParam(name = "vetId", required = true, value = "(Required) Veterinarian identificator (id)")
         @PathVariable(value = "vetId", required = true) vetId: Int,
@@ -163,7 +170,7 @@ class VeterinarianController(
             )]
     )
     @GetMapping("/{vetId:[0-9]+}/appointments")
-    @AccessControlRules.VeterinariansRules.AllowedForGetVeterinarian
+    AllowedForGetVeterinarian
     fun getVeterinarianAppointments(
         @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
             value = "employeeId",
@@ -189,7 +196,7 @@ class VeterinarianController(
             )]
     )
     @PutMapping("/{vetId:[0-9]+}/appointments/{appointmentId:[0-9]+}")
-    @AccessControlRules.VeterinariansRules.AllowedForEditVeterinarian
+    @AllowedForEditVeterinarian
     fun changeVeterinarianAppointment(
         @ApiParam(name = "vetId", required = true, value = "(Required) Veterinarian identificator (id)")
         @PathVariable(value = "vetId", required = true) vetId: Int,
@@ -202,4 +209,52 @@ class VeterinarianController(
             veterinarian = vetId
         )
     )
+
+    @PutMapping("/{adminId:[0-9]+}/photo")
+    @ApiOperation(
+        value = "Upload a photo of the Veterinarian",
+        response = ByteArray::class
+    )
+    @ApiResponses(
+        value = [
+            (ApiResponse(code = 200, message = "Successfully uploaded the photo")),
+            (ApiResponse(
+                code = 403,
+                message = "Accessing the resource you were tyring to reach is forbidden"
+            )),
+            (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
+        ]
+    )
+    @AllowedForEditVeterinarian
+    fun savePhoto(
+        @ApiParam(name = "vetId", required = true, value = "(Required) Veterinarian identificator (id)")
+        @PathVariable(value = "vetId", required = true) vetId: Int,
+        @RequestParam("photo")
+        photo: MultipartFile,
+        principal: Principal
+    ) = veterinarianService.updatePhoto(vetId, photo)
+
+    @ApiOperation(
+        value = "Get photo of the Veterinarian",
+        response = ByteArray::class
+    )
+    @ApiResponses(
+        value = [
+            (ApiResponse(code = 200, message = "Successfully retrieved the photo")),
+            (ApiResponse(code = 401, message = "You are not authorized to view the resource")),
+            (ApiResponse(
+                code = 403,
+                message = "Accessing the resource you were tyring to reach is forbidden"
+            )),
+            (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
+        ]
+    )
+    @GetMapping("/{adminId:[0-9]+}/photo")
+    fun getPhoto(
+        @ApiParam(name = "vetId", required = true, value = "(Required) Veterinarian identificator (id)")
+        @PathVariable(value = "vetId", required = true) vetId: Int
+    ) = ResponseEntity
+        .ok()
+        .contentType(MediaType.IMAGE_JPEG)
+        .body(veterinarianService.getPhoto(vetId))
 }
