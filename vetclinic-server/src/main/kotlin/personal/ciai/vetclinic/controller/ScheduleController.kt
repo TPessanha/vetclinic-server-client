@@ -94,7 +94,7 @@ class ScheduleController(
             (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
         ]
     )
-    @PutMapping("/{year}/{month}")
+    @PutMapping("/{year:[0-9]+}/{month:[0-9]+}")
     @AllowedForEditSchedule
     fun setSchedule(
         @ApiParam(value = "The ID of the Veterinarian", required = true) @PathVariable

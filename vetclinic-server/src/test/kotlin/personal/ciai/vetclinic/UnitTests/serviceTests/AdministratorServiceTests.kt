@@ -19,9 +19,6 @@ import personal.ciai.vetclinic.model.Administrator
 import personal.ciai.vetclinic.repository.AdministratorRepository
 import personal.ciai.vetclinic.service.AdministratorService
 
-/**
- * Description:
- */
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
 class AdministratorServiceTests {
