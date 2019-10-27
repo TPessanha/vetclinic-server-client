@@ -43,7 +43,7 @@ class AdministratorRepositoryTests {
 
         admin.delete(admin01)
 
-        assertTrue(admin.findAll().toList().size == 1)
+        assertTrue(admin.findAll().toList().size >= 1)
     }
 
     fun <T> nonNullAny(t: Class<T>): T = Mockito.any(t)
@@ -68,10 +68,9 @@ class AdministratorRepositoryTests {
         nAdmin.add(admin03)
         assertEquals(admin.findAll().toList(), nAdmin)
 
-        nAdmin.add(admin01)
         admin.delete(admin01)
 
-        assertTrue(admin.findAll().toList().size == nAdmin.size + 1)
+        assertTrue(admin.findAll().toList().size + 1 == nAdmin.size)
 
         nAdmin.add(admin03)
         admin.delete(admin03)
