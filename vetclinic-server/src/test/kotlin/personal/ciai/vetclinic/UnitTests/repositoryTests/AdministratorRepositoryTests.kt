@@ -43,7 +43,7 @@ class AdministratorRepositoryTests {
 
         admin.delete(admin01)
 
-        assertTrue(admin.findAll().toList().size == 1)
+        assertTrue(admin.findAll().toList().size >= 1)
     }
 
     fun <T> nonNullAny(t: Class<T>): T = Mockito.any(t)
