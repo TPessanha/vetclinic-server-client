@@ -18,8 +18,9 @@ class NotificationService(
     }
 
     fun getAllNewNotification(clientId: Int): List<Notification> {
-        clientService.getClientById(clientId)
-        return notificationRepository.findAllNewNotification(clientId).get()
+        return notificationRepository.findAllByClientAndReaded(
+            clientService.getClientEntityById(clientId), false
+        ).get()
     }
 
     fun getNotification(notificationId: Int): Notification {

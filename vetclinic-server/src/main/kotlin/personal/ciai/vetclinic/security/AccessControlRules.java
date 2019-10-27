@@ -129,7 +129,7 @@ public class AccessControlRules {
         @Documented
         @PreAuthorize(AllowedForAddSchedule.condition)
         public @interface AllowedForEditSchedule {
-            String condition =AllowedForEditSchedule.condition + " or " + "@SecurityService.isVeterinarianAccountOwner(principal,#adminId)";
+            String condition = AllowedForEditSchedule.condition + " or " + "@SecurityService.isVeterinarianAccountOwner(principal,#adminId)";
         }
 
         @Target({ElementType.METHOD, ElementType.TYPE})
@@ -161,7 +161,7 @@ public class AccessControlRules {
         @Documented
         @PreAuthorize(AllowedForGetNotification.condition)
         public @interface AllowedForGetNotification {
-            String condition = "@SecurityService.isNotificationOwner(principal,#userId)";
+            String condition = "hasRole('CLIENT') and " + "@SecurityService.isPrincipalWithID(principal,#id)";
         }
 
 

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import personal.ciai.vetclinic.dto.NotificationDTO
-import personal.ciai.vetclinic.service.ClientService
+import personal.ciai.vetclinic.security.AccessControlRules.NotificationRules.AllowedForGetNotification
 import personal.ciai.vetclinic.service.NotificationService
 
 @Api(
@@ -22,9 +22,8 @@ import personal.ciai.vetclinic.service.NotificationService
 )
 
 @RestController
-@RequestMapping("clients/{clientId}/notifications")
+@RequestMapping("/clients/{id:[0-9]+}/notifications")
 class NotificationController(
-    @Autowired private val clientService: ClientService,
     @Autowired private val notificationService: NotificationService
 
 ) {
@@ -46,11 +45,12 @@ class NotificationController(
         ]
     )
     @GetMapping("")
+    @AllowedForGetNotification
     fun getAllAppointments(
         @ApiParam(value = "The ID of the client", required = false, defaultValue = "1") @PathVariable
-        clientId: Int,
+        id: Int,
         principal: Principal
-    ) = notificationService.getAllNotification(clientId)
+    ) = notificationService.getAllNotification(id)
 
     @ApiOperation(
         value = "View the list of client new notification",
@@ -69,11 +69,12 @@ class NotificationController(
         ]
     )
     @GetMapping("/")
+    @AllowedForGetNotification
     fun getAllNewNotification(
         @ApiParam(value = "The ID of the client", required = false, defaultValue = "1") @PathVariable
-        clientId: Int,
+        id: Int,
         principal: Principal
-    ) = notificationService.getAllNewNotification(clientId)
+    ) = notificationService.getAllNewNotification(id)
 
     @ApiOperation(
         value = "View the client  notification",
@@ -91,9 +92,10 @@ class NotificationController(
         ]
     )
     @GetMapping("/{notifId:[0-9]+}")
+    @AllowedForGetNotification
     fun getNotification(
         @ApiParam(value = "The ID of the client", required = false, defaultValue = "1") @PathVariable
-        clientId: Int,
+        id: Int,
         @ApiParam(value = "The ID of the notification", required = true, defaultValue = "1") @PathVariable
         notifId: Int,
         principal: Principal
@@ -115,9 +117,10 @@ class NotificationController(
         ]
     )
     @PutMapping("/{notifId:[0-9]+}")
+    @AllowedForGetNotification
     fun notificationReaded(
         @ApiParam(value = "The ID of the client", required = false, defaultValue = "1") @PathVariable
-        clientId: Int,
+        id: Int,
         @ApiParam(value = "The ID of the notification", required = true, defaultValue = "1") @PathVariable
         notifId: Int,
         principal: Principal

@@ -32,7 +32,7 @@ import personal.ciai.vetclinic.service.AdministratorService
 )
 
 @RestController
-@RequestMapping("employees/{employeeId:[0-9]+}/administrators")
+@RequestMapping("/employees/{employeeId:[0-9]+}/administrators")
 class AdministratorController(
     @Autowired val administratorService: AdministratorService
 ) {

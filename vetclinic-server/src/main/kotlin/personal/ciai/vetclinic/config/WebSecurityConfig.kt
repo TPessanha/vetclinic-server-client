@@ -31,15 +31,30 @@ private class WebSecurityConfig(
             .antMatchers(HttpMethod.POST, "/signup").permitAll()
             .antMatchers("/clients/**").hasRole("CLIENT")
             .antMatchers("/clients").hasRole("ADMIN")
+            .antMatchers("/clients").hasRole("VET")
+            .antMatchers("*/veterinarians").permitAll()
+            .antMatchers("*/veterinarians*/*").hasRole("ADMIN")
+            .antMatchers("*/veterinarians*/*").hasRole("VET")
+            .antMatchers("*/administrators*/*").hasRole("ADMIN")
+            .antMatchers("*/administrators").permitAll()
+            .antMatchers("*/notifications*").hasRole("CLIENT")
+            .antMatchers("*/schedules*/*").hasRole("ADMIN")
+            .antMatchers("*/schedules*/*").hasRole("VET")
             .anyRequest().authenticated()
             .and().headers().frameOptions().sameOrigin() // H2CONSOLE
             .and()
-            .addFilterBefore(UserPasswordAuthenticationFilterToJWT("/login", super.authenticationManagerBean()),
-                BasicAuthenticationFilter::class.java)
-            .addFilterBefore(UserPasswordSignUpFilterToJWT("/signup", users),
-                BasicAuthenticationFilter::class.java)
-            .addFilterBefore(JWTAuthenticationFilter(userService),
-                BasicAuthenticationFilter::class.java)
+            .addFilterBefore(
+                UserPasswordAuthenticationFilterToJWT("/login", super.authenticationManagerBean()),
+                BasicAuthenticationFilter::class.java
+            )
+            .addFilterBefore(
+                UserPasswordSignUpFilterToJWT("/signup", users),
+                BasicAuthenticationFilter::class.java
+            )
+            .addFilterBefore(
+                JWTAuthenticationFilter(userService),
+                BasicAuthenticationFilter::class.java
+            )
     }
 
     override fun configure(auth: AuthenticationManagerBuilder) {
