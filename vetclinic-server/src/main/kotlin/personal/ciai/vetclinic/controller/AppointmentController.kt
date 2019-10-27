@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import personal.ciai.vetclinic.dto.AppointmentDTO
+import personal.ciai.vetclinic.security.AccessControlRules.PetsRules.AllowedForGetPetAppointments
+import personal.ciai.vetclinic.security.AccessControlRules.AppointmentRules.AllowedForGetOneAppointment
+import personal.ciai.vetclinic.security.AccessControlRules.AppointmentRules.AllowedForAddAppointment
 import personal.ciai.vetclinic.service.AppointmentService
 
 @Api(
@@ -43,6 +46,7 @@ class AppointmentController(
         ]
     )
     @GetMapping("")
+    @AllowedForGetPetAppointments
     fun getPetAppointments(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
@@ -67,6 +71,7 @@ class AppointmentController(
         ]
     )
     @GetMapping("/{id:[0-9]+}")
+    @AllowedForGetOneAppointment
     fun getOneAppointment(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
@@ -89,6 +94,7 @@ class AppointmentController(
         ]
     )
     @PostMapping("")
+    @AllowedForAddAppointment
     fun addAppointment(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
