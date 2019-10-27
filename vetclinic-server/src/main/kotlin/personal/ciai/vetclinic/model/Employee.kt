@@ -3,6 +3,8 @@ package personal.ciai.vetclinic.model
 import java.net.URI
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
 import javax.persistence.Inheritance
 import javax.persistence.InheritanceType
 import javax.persistence.Table
@@ -19,6 +21,7 @@ abstract class Employee(
     password: String,
     address: String,
     @Column(unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var employeeId: Int,
     @Column(unique = true, nullable = false)
     var photo: URI
