@@ -17,15 +17,14 @@ import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.admin2
 import personal.ciai.vetclinic.ExampleObjects.exampleObjects.listAdminDTO
-import personal.ciai.vetclinic.IntegrationTests.AdministratorTests
 import personal.ciai.vetclinic.dto.AdministratorDTO
+import personal.ciai.vetclinic.dto.BasicSafeInfoDTO
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.service.AdministratorService
 
@@ -57,8 +56,8 @@ class AdministratorControllerTests {
             .andReturn()
 
         val responseString = result.response.contentAsString
-        val responseDTO = mapper.readValue<List<AdministratorDTO>>(responseString)
-        assertEquals(responseDTO, listAdminDTO)
+        val responseDTO = mapper.readValue<List<BasicSafeInfoDTO>>(responseString)
+        assertEquals(responseDTO.size, listAdminDTO.size)
     }
 
     @Test
@@ -97,12 +96,6 @@ class AdministratorControllerTests {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(adminJSON)
-        )
-            .andExpect(status().isOk)
-
-        mvc.perform(
-            MockMvcRequestBuilders
-                .delete("${AdministratorTests.adminsURL}/2")
         )
             .andExpect(status().isOk)
     }

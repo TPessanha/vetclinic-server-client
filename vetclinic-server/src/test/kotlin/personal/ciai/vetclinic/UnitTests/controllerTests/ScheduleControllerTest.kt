@@ -17,12 +17,10 @@ import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import personal.ciai.vetclinic.IntegrationTests.VeterinarianTests
 import personal.ciai.vetclinic.dto.ScheduleDTO
 import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.repository.VeterinarianRepository
@@ -45,8 +43,7 @@ class ScheduleControllerTest {
     companion object {
         val mapper = ObjectMapper().registerModule(KotlinModule())
 
-        val veterinarianURL = "/veterinarians/"
-        val scheduleURL = "/schedules"
+        val schedulesUrl = "/veterinarians/1/schedules"
     }
 
     @Test
@@ -55,7 +52,7 @@ class ScheduleControllerTest {
 
         `when`(scheduleService.getVeterinarianSchedule(1)).thenReturn(listOf(`schedule 1`.toDTO()))
 
-        val result = mvc.perform(get(veterinarianURL + 1 + scheduleURL))
+        val result = mvc.perform(get(schedulesUrl))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$", hasSize<Any>(1)))
             .andReturn()
@@ -70,7 +67,7 @@ class ScheduleControllerTest {
     fun `Test GET One Veterinarian`() {
         `when`(scheduleService.getOneScheduleById(1)).thenReturn(`schedule 1`)
 
-        val result = mvc.perform(get(veterinarianURL + 1 + scheduleURL))
+        val result = mvc.perform(get(schedulesUrl))
             .andExpect(status().isOk)
             .andReturn()
 
@@ -83,9 +80,9 @@ class ScheduleControllerTest {
     @Test
     @WithMockUser(username = "admin", password = "123", roles = ["ADMIN"])
     fun `TEST - GET One Veterinarian (Not Found)`() {
-        `when`(scheduleService.getOneScheduleById(5)).thenThrow(NotFoundException("not found"))
+        `when`(scheduleService.getOneScheduleById(1)).thenThrow(NotFoundException("not found"))
 
-        mvc.perform(get(veterinarianURL + "5" + scheduleURL))
+        mvc.perform(get(schedulesUrl))
             .andExpect(status().is4xxClientError)
     }
 
@@ -95,22 +92,16 @@ class ScheduleControllerTest {
     @WithMockUser(username = "admin", password = "123", roles = ["ADMIN"])
     fun `Test POST One Schedule`() {
 
-        val json = mapper.writeValueAsString(`schedule 1`.toDTO())
+        val json = mapper.writeValueAsString(`schedule 1`.toDTO().copy(id = 1))
 
         `when`(scheduleService.setVetSchedule(nonNullAny(ScheduleDTO::class.java)))
-            .then { assertEquals(`schedule 1`.toDTO(), it.getArgument(0)) }
+            .then { assertEquals(`schedule 1`.toDTO().copy(id = 1), it.getArgument(0)) }
 
         mvc.perform(
-            post(veterinarianURL + "1" + scheduleURL)
+            post(schedulesUrl)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
-        )
-            .andExpect(status().isOk)
-
-        mvc.perform(
-            MockMvcRequestBuilders
-                .delete("${VeterinarianTests.veterinarianURL}/2")
         )
             .andExpect(status().isOk)
     }
