@@ -79,33 +79,32 @@ class PetTests {
 
     @Test
     @Transactional
-    @Disabled
-    @WithMockUser(username = "admin", password = "password", roles = ["CLIENT", "ADMIN"])
     fun `Client add a new pet`() {
-        val nPets = petService.getAllPets().size
-        assertTrue(petService.getAllPets().size == nPets)
+        `when`(securityService.isPrincipalAccountOwner(nonNullAny(Principal::class.java), anyInt())).thenReturn(true)
+        `when`(securityService.isPetOwner(nonNullAny(Principal::class.java), anyInt())).thenReturn(true)
+        val token = TestUtils.generateTestToken("user2", listOf("ROLE_CLIENT"))
+
 
         val DTO = PetDTO(0, "cat", 2, 1)
 
         val dogJSON = mapper.writeValueAsString(DTO.copy(id = 0, owner = 1))
 
         mvc.perform(
-            post(petsURL)
+            post(petsURL).header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(dogJSON)
         )
             .andExpect(status().isOk)
 
         mvc.perform(
-            get(petsURL)
+            get(petsURL).header("Authorization", token)
                 .accept(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$", hasSize<Any>(nPets + 1)))
+            .andExpect(jsonPath("$", hasSize<Any>(3)))
 
         val result = mvc.perform(
-            MockMvcRequestBuilders
-                .get("$petsURL/3")
+                get("$petsURL/4").header("Authorization", token)
         )
             .andExpect(status().isOk)
             .andReturn()
@@ -121,11 +120,17 @@ class PetTests {
 
         // clenup
         mvc.perform(
-            delete("$petsURL/3")
+            delete("$petsURL/4").header("Authorization", token)
         )
             .andExpect(status().isOk)
 
-        assertEquals(petService.getAllPets().size, nPets)
+        mvc.perform(
+            get(petsURL).header("Authorization", token)
+                .accept(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$", hasSize<Any>(2)))
+
     }
 
     fun <T> nonNullAny(t: Class<T>): T = Mockito.any(t)

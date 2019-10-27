@@ -51,7 +51,7 @@ class PetService(
 
     fun getClientPets(clientId: Int): List<PetDTO> {
         val client = clientService.getClientWithPets(clientId)
-        return client.pets.map { it.toDTO() }
+        return client.pets.filter { it.enabled }.map { it.toDTO() } //should not have to filer but no time to fix query
     }
 
     fun deletePet(id: Int) {
@@ -61,7 +61,7 @@ class PetService(
 
     fun deletePet(pet: Pet) {
         pet.enabled=false
-        repository.save(pet)
+        val saved = repository.save(pet)
     }
 
     @CacheEvict("PetPicture", key = "#id")
