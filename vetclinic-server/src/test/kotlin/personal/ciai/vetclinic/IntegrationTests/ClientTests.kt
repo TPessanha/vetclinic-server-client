@@ -82,15 +82,9 @@ class ClientTests {
 
         val token = TestUtils.generateTestToken("user3", listOf("ROLE_CLIENT"))
 
-        val result = mvc.perform(
+        mvc.perform(
             get("${clientsURL}/2").header("Authorization", token)
         )
-            .andExpect(status().isOk)
-            .andReturn()
-
-        val responseString = result.response.contentAsString
-        val persistentClient = mapper.readValue<ClientDTO>(responseString)
-
-        assertEquals("user2",persistentClient.username)
+            .andExpect(status().isForbidden)
     }
 }
