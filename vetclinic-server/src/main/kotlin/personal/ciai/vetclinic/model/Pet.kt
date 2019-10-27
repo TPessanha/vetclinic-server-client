@@ -42,8 +42,8 @@ class Pet(
     var physicalDescription: String = "",
     @Column(nullable = false)
     var medicalRecord: String = "",
-    @Column
-    var photo: URI? = null
+    var photo: URI? = null,
+    var enabled: Boolean = true
 ) : IdentifiedEntity(id) {
 
     override fun toDTO() = PetDTO(
@@ -54,6 +54,7 @@ class Pet(
         notes = notes,
         physicalDescription = physicalDescription,
         medicalRecord = medicalRecord,
-        photo = if (photo != null) "$id.jpg" else ""
+        photo = photo != null,
+        enabled = enabled
     )
 }

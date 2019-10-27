@@ -159,6 +159,7 @@ public class AccessControlRules {
         public @interface AllowedForGetSchedule {
             String condition = "hasRole('VET') or hasRole('CLIENT') or " + AllowedForAddSchedule.condition;
         }
+
     }
 
 

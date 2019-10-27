@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import personal.ciai.vetclinic.service.AdministratorService
 import personal.ciai.vetclinic.service.PetService
-import personal.ciai.vetclinic.service.SchedulesService
+import personal.ciai.vetclinic.service.ScheduleService
 import personal.ciai.vetclinic.service.UserService
 import personal.ciai.vetclinic.service.VeterinarianService
 
@@ -20,7 +20,7 @@ class SecurityService(
     @Autowired
     val veterinarianService: VeterinarianService,
     @Autowired
-    val schedulesService: SchedulesService
+    val schedulesService: ScheduleService
 
 ) {
     fun isPetOwner(principal: Principal, id: Int): Boolean {

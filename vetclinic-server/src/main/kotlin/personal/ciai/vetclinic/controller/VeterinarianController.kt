@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
-import java.security.Principal
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -34,7 +33,7 @@ import personal.ciai.vetclinic.service.VeterinarianService
 )
 
 @RestController
-@RequestMapping("/employees/{employeeId:[0-9]+}/veterinarians")
+@RequestMapping("/veterinarians")
 class VeterinarianController(
     @Autowired private val veterinarianService: VeterinarianService,
     @Autowired private val appointmentService: AppointmentService
@@ -57,11 +56,6 @@ class VeterinarianController(
     )
     @GetMapping("/{vetId:[0-9]+}")
     fun getVeterinarian(
-        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
-            value = "employeeId",
-            required = true
-        )
-        employeeId: Int,
         @ApiParam(name = "vetId", required = true, value = "(Required) Veterinarian identificator (id)")
         @PathVariable(value = "vetId", required = true) vetId: Int
     ) = veterinarianService.getVeterinarianById(vetId)
@@ -82,11 +76,6 @@ class VeterinarianController(
     )
     @GetMapping("")
     fun getAllVeterinarian(
-        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
-            value = "employeeId",
-            required = true
-        )
-        employeeId: Int
     ) = veterinarianService.getAllVeterinarian()
 
     @ApiOperation(value = "Add a new Veterinarian account")
@@ -101,11 +90,6 @@ class VeterinarianController(
     @PostMapping("")
     @AllowedForAddVeterinarian
     fun addVeterinarian(
-        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
-            value = "employeeId",
-            required = true
-        )
-        employeeId: Int,
         @ApiParam(required = true, value = "(Required) Veterinarian info necessary to created a new account")
         @RequestBody vet: VeterinarianDTO
     ) = veterinarianService.save(vet)
@@ -123,16 +107,10 @@ class VeterinarianController(
     @PutMapping("/{vetId:[0-9]+}")
     @AllowedForEditVeterinarian
     fun updateVeterinarian(
-        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
-            value = "employeeId",
-            required = true
-        )
-        employeeId: Int,
         @ApiParam(name = "vetId", required = true, value = "(Required) Veterinarian identificator (id)")
         @PathVariable(value = "vetId", required = true) vetId: Int,
         @ApiParam(required = true, value = "(Required) Veterinarian information to be changed")
-        @RequestBody vet: VeterinarianDTO,
-        principal: Principal
+        @RequestBody vet: VeterinarianDTO
     ) = veterinarianService.update(vet.copy(id = vetId))
 
     @ApiOperation(value = "Delete a Veterinarian account")
@@ -148,10 +126,6 @@ class VeterinarianController(
     @DeleteMapping("/{vetId:[0-9]+}")
     @AllowedForDeleteVeterinarian
     fun deleteVeterinarian(
-        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
-            value = "employeeId",
-            required = true
-        ) employeeId: Int,
         @ApiParam(name = "vetId", required = true, value = "(Required) Veterinarian identificator (id)")
         @PathVariable(value = "vetId", required = true) vetId: Int
     ) = veterinarianService.delete(vetId)
@@ -174,11 +148,6 @@ class VeterinarianController(
     @GetMapping("/{vetId:[0-9]+}/appointments/{appointmentId:[0-9]+}")
     @AllowedForGetVeterinarian
     fun getVeterinarianAppointment(
-        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
-            value = "employeeId",
-            required = true
-        )
-        employeeId: Int,
         @ApiParam(name = "vetId", required = true, value = "(Required) Veterinarian identificator (id)")
         @PathVariable(value = "vetId", required = true) vetId: Int,
         @ApiParam(name = "appointmentId", required = true, value = "(Required) Appointment identificator (id)")
@@ -201,8 +170,8 @@ class VeterinarianController(
             )]
     )
     @GetMapping("/{vetId:[0-9]+}/appointments")
-    @AllowedForGetVeterinarian
-    fun getVeterinarianAppointment(
+    AllowedForGetVeterinarian
+    fun getVeterinarianAppointments(
         @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
             value = "employeeId",
             required = true
@@ -229,18 +198,12 @@ class VeterinarianController(
     @PutMapping("/{vetId:[0-9]+}/appointments/{appointmentId:[0-9]+}")
     @AllowedForEditVeterinarian
     fun changeVeterinarianAppointment(
-        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
-            value = "employeeId",
-            required = true
-        )
-        employeeId: Int,
         @ApiParam(name = "vetId", required = true, value = "(Required) Veterinarian identificator (id)")
         @PathVariable(value = "vetId", required = true) vetId: Int,
         @ApiParam(name = "appointmentId", required = true, value = "(Required) Appointment identificator (id)")
         @PathVariable(value = "appointmentId", required = true) appointmentId: Int,
-        @RequestBody appointmentDTO: AppointmentDTO,
-        principal: Principal
-    ) = veterinarianService.changeVeterinarianAppointmentStatus(
+        @RequestBody appointmentDTO: AppointmentDTO
+    ) = appointmentService.changeVeterinarianAppointmentStatus(
         appointmentDTO.copy(
             id = appointmentId,
             veterinarian = vetId
@@ -264,11 +227,6 @@ class VeterinarianController(
     )
     @AllowedForEditVeterinarian
     fun savePhoto(
-        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
-            value = "employeeId",
-            required = true
-        )
-        employeeId: Int,
         @ApiParam(name = "vetId", required = true, value = "(Required) Veterinarian identificator (id)")
         @PathVariable(value = "vetId", required = true) vetId: Int,
         @RequestParam("photo")
@@ -293,11 +251,6 @@ class VeterinarianController(
     )
     @GetMapping("/{adminId:[0-9]+}/photo")
     fun getPhoto(
-        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
-            value = "employeeId",
-            required = true
-        )
-        employeeId: Int,
         @ApiParam(name = "vetId", required = true, value = "(Required) Veterinarian identificator (id)")
         @PathVariable(value = "vetId", required = true) vetId: Int
     ) = ResponseEntity

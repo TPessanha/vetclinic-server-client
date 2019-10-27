@@ -28,7 +28,6 @@ object TestUtils {
             photo = URI("asdf"),
             enabled = true,
             appointments = arrayListOf(),
-            schedules = arrayListOf(),
             employeeId = 12
         )
 
@@ -65,7 +64,7 @@ object TestUtils {
     val petList = listOf<Pet>(dogExample, pigExample, iguanaExample)
 
     val appointmentExample1 =
-        Appointment(0, TimeSlot(1571414431763, 1571414531763), vetExample1, dogExample, clientExample1)
+        Appointment(0, 10, 2019, TimeSlot(5, 10), vetExample1, dogExample, clientExample1)
 
     val appointmentList = listOf<Appointment>(appointmentExample1)
 

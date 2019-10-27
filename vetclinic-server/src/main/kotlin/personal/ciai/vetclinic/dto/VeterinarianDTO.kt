@@ -110,8 +110,7 @@ data class VeterinarianDTO(
             address = this.address,
             photo = Paths.get(picturePath, this.id.toString()).toUri(),
             enabled = enabled,
-            appointments = arrayListOf(),
-            schedules = arrayListOf()
+            appointments = arrayListOf()
         )
 
     fun toEntity(entity: Veterinarian, picturePath: String) =
@@ -126,7 +125,6 @@ data class VeterinarianDTO(
             address = this.address,
             photo = Paths.get(picturePath, this.id.toString()).toUri(),
             enabled = entity.enabled,
-            appointments = arrayListOf(),
-            schedules = arrayListOf()
+            appointments = arrayListOf()
         )
 }

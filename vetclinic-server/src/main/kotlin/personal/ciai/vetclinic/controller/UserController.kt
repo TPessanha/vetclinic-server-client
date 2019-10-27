@@ -68,5 +68,6 @@ class UserController(@Autowired val clientService: ClientService) {
     fun register(
         @ApiParam(value = "The Client DTO", required = true) @PathVariable
         client: ClientDTO
-    ) = clientService.addClient(client)
+    ) {
+    }
 }

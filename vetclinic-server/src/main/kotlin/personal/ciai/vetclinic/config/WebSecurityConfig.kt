@@ -1,13 +1,16 @@
 package personal.ciai.vetclinic.config
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.web.access.AccessDeniedHandler
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
+import personal.ciai.vetclinic.security.CustomAccessDeniedHandler
 import personal.ciai.vetclinic.security.UserDetailsService
 import personal.ciai.vetclinic.service.UserService
 
@@ -20,6 +23,8 @@ private class WebSecurityConfig(
 ) : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity) {
         http.csrf().disable() // for now, we can disable cross site request forgery protection
+            .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
+            .and()
             .authorizeRequests()
             .antMatchers("/v2/**").permitAll()
             .antMatchers("/webjars/**").permitAll()
@@ -29,17 +34,8 @@ private class WebSecurityConfig(
             .antMatchers("/console/**").permitAll()
             .antMatchers(HttpMethod.POST, "/login").permitAll()
             .antMatchers(HttpMethod.POST, "/signup").permitAll()
-            .antMatchers("/clients/**").hasRole("CLIENT")
-            .antMatchers("/clients").hasRole("ADMIN")
-            .antMatchers("/clients").hasRole("VET")
-            .antMatchers("*/veterinarians").permitAll()
-            .antMatchers("*/veterinarians*/*").hasRole("ADMIN")
-            .antMatchers("*/veterinarians*/*").hasRole("VET")
-            .antMatchers("*/administrators*/*").hasRole("ADMIN")
-            .antMatchers("*/administrators").permitAll()
-            .antMatchers("*/notifications*").hasRole("CLIENT")
-            .antMatchers("*/schedules*/*").hasRole("ADMIN")
-            .antMatchers("*/schedules*/*").hasRole("VET")
+            .antMatchers(HttpMethod.GET, "/administrators").permitAll()
+            .antMatchers(HttpMethod.GET, "/veterinarians").permitAll()
             .anyRequest().authenticated()
             .and().headers().frameOptions().sameOrigin() // H2CONSOLE
             .and()
@@ -55,6 +51,12 @@ private class WebSecurityConfig(
                 JWTAuthenticationFilter(userService),
                 BasicAuthenticationFilter::class.java
             )
+
+    }
+
+    @Bean
+    fun accessDeniedHandler(): AccessDeniedHandler {
+        return CustomAccessDeniedHandler()
     }
 
     override fun configure(auth: AuthenticationManagerBuilder) {

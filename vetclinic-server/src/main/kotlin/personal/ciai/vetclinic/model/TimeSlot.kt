@@ -7,15 +7,15 @@ import personal.ciai.vetclinic.exception.PreconditionFailedException
 @Embeddable
 class TimeSlot(
     @Column
-    val startDate: Number,
+    val startDate: Int,
 
     @Column
-    val endDate: Number
+    val endDate: Int
 ) {
 //    constructor(startDate: Long, endDate: Long) : this(Int.t, Date(endDate))
 
     init {
-        if (endDate.toInt() < startDate.toInt())
+        if (endDate < startDate)
             throw PreconditionFailedException("Start date most be before end date")
     }
 
@@ -26,5 +26,5 @@ class TimeSlot(
      * @return Boolean true if there is NO conflict, false if there is a conflict
      */
     fun checkConflict(timeSlot: TimeSlot) =
-        (timeSlot.endDate.toInt() < this.startDate.toInt() || timeSlot.startDate.toInt() > this.endDate.toInt())
+        (timeSlot.endDate < this.startDate || timeSlot.startDate > this.endDate)
 }

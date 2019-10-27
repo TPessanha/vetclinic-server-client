@@ -1,6 +1,8 @@
 package personal.ciai.vetclinic
 
 import java.net.URI
+import java.time.YearMonth
+import java.util.BitSet
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.event.ApplicationReadyEvent
@@ -17,8 +19,10 @@ import personal.ciai.vetclinic.model.Pet
 import personal.ciai.vetclinic.model.Role
 import personal.ciai.vetclinic.model.Role.RoleName
 import personal.ciai.vetclinic.model.Veterinarian
+import personal.ciai.vetclinic.model.Schedule
 import personal.ciai.vetclinic.repository.AdministratorRepository
 import personal.ciai.vetclinic.repository.ClientRepository
+import personal.ciai.vetclinic.repository.ScheduleRepository
 import personal.ciai.vetclinic.repository.PetRepository
 import personal.ciai.vetclinic.repository.RoleRepository
 import personal.ciai.vetclinic.repository.VeterinarianRepository
@@ -43,7 +47,9 @@ class Init(
     @Autowired
     val veterinarianRepository: VeterinarianRepository,
     @Autowired
-    val roleRepository: RoleRepository
+    val roleRepository: RoleRepository,
+    @Autowired
+    val scheduleRepository: ScheduleRepository
 ) {
     @EventListener
     fun appReady(event: ApplicationReadyEvent) {
@@ -68,8 +74,18 @@ class Init(
                 true,
                 employeeId = 2
             )
-
         veterinarianRepository.save(vet1)
+
+        var blocks = BitSet(720)
+        for (i in 0 until 720)
+            blocks[i] = false
+
+        val arr = blocks.toByteArray()
+        val sche = Schedule(0, YearMonth.of(2019, 10), vet1, arr, arr)
+        val sche2 = Schedule(0, YearMonth.of(2019, 11), vet1, arr, arr)
+
+        scheduleRepository.save(sche)
+        scheduleRepository.save(sche2)
     }
 
     private fun addPets(clients: List<Client>) {

@@ -23,8 +23,8 @@ class ExampleObjects {
             URI.create("vets/1"),
             true,
             arrayListOf(),
-            arrayListOf(),
-            2
+            2,
+            arrayListOf()
         )
         val vet2 = Veterinarian(
             -1,
@@ -37,8 +37,8 @@ class ExampleObjects {
             URI.create("vets2/2"),
             true,
             arrayListOf(),
-            arrayListOf(),
-            2
+            2,
+            arrayListOf()
         )
 
         val vetList = listOf<Veterinarian>(vet1, vet2)
