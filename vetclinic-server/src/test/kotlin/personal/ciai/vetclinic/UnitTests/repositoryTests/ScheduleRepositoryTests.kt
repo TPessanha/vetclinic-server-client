@@ -112,7 +112,7 @@ class ScheduleRepositoryTests {
         assertTrue(schedules.size >= 1)
 
         assertScheduleEquals(
-            `schedules repository`.findByVetIdAndYearAndMonth(vet01.id, 2019,11 ).get(), sche
+            `schedules repository`.findByVetIdAndYearAndMonth(vet01.id, 2019, 11).get(), sche
         )
 
         `schedules repository`.delete(schedules.first())

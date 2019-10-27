@@ -3,6 +3,7 @@ package personal.ciai.vetclinic.UnitTests.serviceTests
 import java.util.Optional
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
@@ -24,6 +25,7 @@ import personal.ciai.vetclinic.service.VeterinarianService
  */
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
+@Disabled
 class VeterinarianServiceTests {
 
     @Autowired
