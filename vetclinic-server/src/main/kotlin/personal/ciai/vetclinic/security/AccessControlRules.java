@@ -99,8 +99,6 @@ public class AccessControlRules {
         @Retention(RetentionPolicy.RUNTIME)
         @Inherited
         @Documented
-        @PreAuthorize(AllowedForDeleteAdministrator.condition)
-        public @interface AllowedForDeleteAdministrator {
         @PreAuthorize(AllowedForDeleteAdministrators.condition)
         public @interface AllowedForDeleteAdministrators {
             String condition = "hasRole('ADMIN')";
@@ -119,9 +117,6 @@ public class AccessControlRules {
         @Retention(RetentionPolicy.RUNTIME)
         @Inherited
         @Documented
-        @PreAuthorize(AllowedForGetAdministrador.condition)
-        public @interface AllowedForGetAdministrador {
-            String condition = AllowedForDeleteAdministrator.condition;
         @PreAuthorize(allowedForGetAdministrador.condition)
         public @interface allowedForGetAdministrador {
             String condition = AllowedForDeleteAdministrators.condition;
@@ -144,7 +139,7 @@ public class AccessControlRules {
         @Documented
         @PreAuthorize(AllowedForAddSchedule.condition)
         public @interface AllowedForEditSchedule {
-            String condition =AllowedForEditSchedule.condition + " or " + "@SecurityService.isVeterinarianAccountOwner(principal,#adminId)";
+            String condition = AllowedForEditSchedule.condition + " or " + "@SecurityService.isVeterinarianAccountOwner(principal,#adminId)";
         }
 
         @Target({ElementType.METHOD, ElementType.TYPE})
@@ -165,5 +160,21 @@ public class AccessControlRules {
             String condition = "hasRole('VET') or hasRole('CLIENT') or " + AllowedForAddSchedule.condition;
         }
     }
+
+
+    public static class NotificationRules {
+        @Target({ElementType.METHOD, ElementType.TYPE})
+        @Retention(RetentionPolicy.RUNTIME)
+        @Inherited
+        @Documented
+        @PreAuthorize(AllowedForGetNotification.condition)
+        public @interface AllowedForGetNotification {
+            String condition = "hasRole('CLIENT') and " + "@SecurityService.isPrincipalWithID(principal,#id)";
+        }
+
+
+    }
+
+
 }
 

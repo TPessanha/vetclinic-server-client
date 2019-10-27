@@ -7,6 +7,7 @@ import javax.persistence.EnumType
 import javax.persistence.Enumerated
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
+import javax.persistence.OneToMany
 import javax.persistence.Table
 import personal.ciai.vetclinic.dto.AppointmentDTO
 
@@ -25,6 +26,8 @@ class Appointment(
     @ManyToOne
     @JoinColumn(name = "client_id")
     var client: Client,
+    @OneToMany(mappedBy = "appointment")
+    var notification: MutableList<Notification> = arrayListOf(),
     @Column(nullable = false)
     var description: String = "",
     @Enumerated(EnumType.ORDINAL)

@@ -70,14 +70,14 @@ class ExampleObjects {
         )
         val admin3 = Administrator(
             id = -1,
+            employeeId = 12,
             email = "admin2@vetclinic.pt",
             name = "Homer Simpson",
             phoneNumber = 936925673,
             username = "Admin3",
             password = "1234",
             address = "Rua da Esqurda 4, 4323-543, Lisboa",
-            photo = URI.create("admin/3"),
-            employeeId = 12
+            photo = URI.create("admin/3")
         )
 
         val listAdmin = listOf<Administrator>(admin1, admin2, admin3)

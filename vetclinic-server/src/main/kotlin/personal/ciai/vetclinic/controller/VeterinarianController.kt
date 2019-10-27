@@ -34,7 +34,7 @@ import personal.ciai.vetclinic.service.VeterinarianService
 )
 
 @RestController
-@RequestMapping("employees/{employeeId:[0-9]+}/veterinarians")
+@RequestMapping("/employees/{employeeId:[0-9]+}/veterinarians")
 class VeterinarianController(
     @Autowired private val veterinarianService: VeterinarianService,
     @Autowired private val appointmentService: AppointmentService

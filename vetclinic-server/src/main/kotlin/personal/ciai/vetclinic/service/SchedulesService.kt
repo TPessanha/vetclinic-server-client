@@ -102,7 +102,7 @@ class SchedulesService(
         schedulesRepository.save(schedule)
     }
 
-    private fun validateAppointment(
+    fun validateAppointment(
         s: Schedules,
         a: AppointmentDTO
     ) {
@@ -128,9 +128,14 @@ class SchedulesService(
         var durationDay = 0
         val sortedSchedules = schedules.sortedBy { it.startTime }.toMutableList()
 
-        var monthDays = sortedSchedules.size
-        val monthWeeks = (monthDays / 7).toInt()
-        var count = 0
+        val startDate = asLocalDateTime(sortedSchedules.first().startTime)
+        println(startDate)
+        if (!isValidateDate(startDate))
+            throw PreconditionFailedException("Can not set Schedule for a the month")
+
+        var monthDays = YearMonth.from(startDate).lengthOfMonth()
+        val monthWeeks = numberOfWeeks(startDate) + 1
+        var leftToCheck = sortedSchedules.size
 
         // Validate the total duration for the mounth
         for (i in 0..monthWeeks) {

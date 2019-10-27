@@ -44,7 +44,7 @@ class VeterinarianRepositoryTests {
         assertTrue(vet.findAll().toList().size == nVet.size + 1)
         vet.delete(vet01)
 
-        assertTrue(vet.findAll().toList().size == nVet.size)
+        assertTrue(vet.findAll().toList().filter { it.enabled }.size == nVet.size)
     }
 
     @Test
@@ -70,11 +70,10 @@ class VeterinarianRepositoryTests {
         nVet.remove(vet01)
         vet.delete(vet01)
 
-        assertTrue(vet.findAll().toList().size == nVet.toList().size + 1)
+        assertTrue(vet.findAll().toList().filter { it.enabled }.size == nVet.size)
 
         vet.delete(vet02)
         nVet.remove(vet02)
-
-        assertTrue(vet.findAll().toList().size == nVet.toList().size)
+        assertTrue(vet.findAll().toList().filter { it.enabled }.size == nVet.size)
     }
 }
