@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
+import java.security.Principal
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -19,12 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.dto.PetDTO
-import personal.ciai.vetclinic.security.AccessControlRules.UserRules.IsPrincipalAccountOwner
+import personal.ciai.vetclinic.security.AccessControlRules.PetsRules.AllowedForEditPet
 import personal.ciai.vetclinic.security.AccessControlRules.PetsRules.AllowedForGetClientPets
 import personal.ciai.vetclinic.security.AccessControlRules.PetsRules.AllowedForGetOnePet
-import personal.ciai.vetclinic.security.AccessControlRules.PetsRules.AllowedForEditPet
+import personal.ciai.vetclinic.security.AccessControlRules.UserRules.IsPrincipalAccountOwner
 import personal.ciai.vetclinic.service.PetService
-import java.security.Principal
 
 @Api(
     value = "VetClinic Management System - Pet API",
@@ -109,8 +109,7 @@ class PetController(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
         @ApiParam(value = "Details of a pet to be created", required = true) @RequestBody
-        pet: PetDTO,
-        principal: Principal
+        pet: PetDTO
     ) = petService.addPet(pet.copy(owner = clientId))
 
     @ApiOperation(

@@ -3,7 +3,6 @@ package personal.ciai.vetclinic.IntegrationTests
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
-import java.security.Principal
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
@@ -11,12 +10,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.anyInt
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
@@ -29,9 +25,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
 import personal.ciai.vetclinic.TestUtils
 import personal.ciai.vetclinic.dto.PetDTO
-import personal.ciai.vetclinic.security.SecurityService
-import personal.ciai.vetclinic.service.ClientService
-import personal.ciai.vetclinic.service.PetService
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
@@ -39,7 +32,6 @@ import personal.ciai.vetclinic.service.PetService
 class PetTests {
     @Autowired
     lateinit var mvc: MockMvc
-
 
     companion object {
         // To avoid all annotations JsonProperties in data classes
