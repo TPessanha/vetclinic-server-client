@@ -30,6 +30,13 @@ data class PetDTO(
     )
     val id: Int = 0,
     @ApiModelProperty(
+        "The name of the pet",
+        required = false,
+        readOnly = false,
+        example = "Pantufas"
+    )
+    val name: String = "PetName",
+    @ApiModelProperty(
         "The species of the pet",
         required = true,
         readOnly = false,
@@ -101,6 +108,7 @@ data class PetDTO(
     fun toEntity(newId: Int, picturePath: String, clientService: ClientService): Pet {
         return Pet(
             id = newId,
+            name = this.name,
             species = this.species,
             age = this.age,
             owner = clientService.getClientEntityById(this.owner),

@@ -106,13 +106,13 @@ class Init(
 
     private fun addPets(clients: List<Client>) {
         val p1 = Pet(
-            0, "cat", 2, clients[0]
+            id = 0, species = "cat", age = 2, owner = clients[0]
         )
         val p2 = Pet(
-            0, "dog", 3, clients[0]
+            id = 0, species = "dog", age = 3, owner = clients[0]
         )
         val p3 = Pet(
-            0, "pig", 6, clients[1]
+            id = 0, species = "pig", age = 6, owner = clients[1]
         )
 
         petRepository.save(p1)

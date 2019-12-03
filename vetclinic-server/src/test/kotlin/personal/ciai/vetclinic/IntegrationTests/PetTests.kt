@@ -47,7 +47,7 @@ class PetTests {
     fun `Client add a new pet`() {
         val token = TestUtils.generateTestToken("user2", listOf("ROLE_CLIENT"))
 
-        val DTO = PetDTO(0, "cat", 2, 2)
+        val DTO = PetDTO(id = 0, species = "cat", age = 2, owner = 2)
 
         val dogJSON = mapper.writeValueAsString(DTO)
 
@@ -66,7 +66,7 @@ class PetTests {
             .andExpect(jsonPath("$", hasSize<Any>(3)))
 
         val result = mvc.perform(
-                get("$petsURL/4").header("Authorization", token)
+            get("$petsURL/4").header("Authorization", token)
         )
             .andExpect(status().isOk)
             .andReturn()
