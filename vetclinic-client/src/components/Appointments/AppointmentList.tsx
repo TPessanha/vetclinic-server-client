@@ -1,6 +1,10 @@
-const ArtistListItem = (props:{artist:Artist}) =>
-<li key={props.artist.id}> {props.artist.firstName} {props.artist.lastName}</li>;
-const ArtistIndex = (props:{artists:Artist[]}) =>
-<ul>
-{ props.artists.map((artist:Artist) => <ArtistListItem artist={artist}/>)}
-</ul>;
+const AppointmentList = () =>
+<div>
+    <h2>Users</h2>
+    <ul>
+        <li>Appointment 1</li>
+        <li>Appointment 2</li>
+        <li>Appointment 3</li>
+        <li>Appointment 4</li>
+    </ul>
+</div>
