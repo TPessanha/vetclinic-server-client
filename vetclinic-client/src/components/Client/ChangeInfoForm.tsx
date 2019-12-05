@@ -12,7 +12,7 @@ class ChangeInfoForm extends React.Component {
 
   mySubmitHandler = (event:any) => {
     event.preventDefault();
-    alert("Client Information updated");
+    alert("Appointment booked.");
   }
 
   myChangeHandler = (event:any) => {
