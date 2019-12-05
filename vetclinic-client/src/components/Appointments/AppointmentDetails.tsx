@@ -1,3 +1,30 @@
+/*baseado em AdministratorList*/
+
+
+import {Link} from 'react-router-dom';
+import React from 'react';
+
+const AppointmentDetails = (props: any) => {
+    const appointment = props.appointment;
+    return (
+        <div className="appoointment-details">
+
+            <div className="administrator-info">
+               
+                <span className="pet">{appointment.pet}</span>
+                <span className="date">{appointment.date}</span>
+                <span className="client">{appointment.client}</span>
+                <span className="vet">{appointment.veterinarian}</span>
+                <span className="description">{appointment.description}</span>
+            </div>
+           
+        </div>
+    );
+};
+
+export default AppointmentDetails;
+
+/*
 const ArtistDetails = (props:{artistId:number}) => {
     const [ artist, setArtist] = useState<Artist | null>(null);
     getData<Artist>(`/artists/${props.artistId}`)
@@ -12,3 +39,4 @@ const ArtistDetails = (props:{artistId:number}) => {
     { !artist && <div>No artist</div>}
     </>;
     }
+*/
