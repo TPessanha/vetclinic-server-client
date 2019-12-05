@@ -160,6 +160,14 @@ public class AccessControlRules {
             String condition = "@SecurityService.isAdministratorAccountOwner(principal,#adminId)";
         }
 
+        @Target({ElementType.METHOD, ElementType.TYPE})
+        @Retention(RetentionPolicy.RUNTIME)
+        @Inherited
+        @Documented
+        @PreAuthorize(AllowedForGetAdministrador.condition)
+        public @interface AllowedForGetAdministrador {
+            String condition = "hasRole('ADMIN')";
+        }
 
         @Target({ElementType.METHOD, ElementType.TYPE})
         @Retention(RetentionPolicy.RUNTIME)
