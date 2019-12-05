@@ -24,7 +24,6 @@ import personal.ciai.vetclinic.dto.BasicSafeInfoDTO
 import personal.ciai.vetclinic.security.AccessControlRules.AdministratorsRules.AllowedForAddAdministrator
 import personal.ciai.vetclinic.security.AccessControlRules.AdministratorsRules.AllowedForDeleteAdministrators
 import personal.ciai.vetclinic.security.AccessControlRules.AdministratorsRules.AllowedForEditAdministrator
-import personal.ciai.vetclinic.security.AccessControlRules.AdministratorsRules.AllowedForGetAdministrador
 import personal.ciai.vetclinic.service.AdministratorService
 
 @Api(
@@ -54,7 +53,6 @@ class AdministratorController(
             )]
     )
     @GetMapping("/{adminId:[0-9]+}", produces = [APPLICATION_JSON_VALUE])
-    @AllowedForGetAdministrador
     fun getAdministrator(
         @ApiParam(
             name = "adminId",
