@@ -37,6 +37,8 @@ class Pet(
     var appointments: MutableList<Appointment> = arrayListOf(),
 
     @Column(nullable = false)
+    val name: String = "",
+    @Column(nullable = false)
     var notes: String = "",
     @Column(nullable = false)
     var physicalDescription: String = "",
@@ -48,6 +50,7 @@ class Pet(
 
     override fun toDTO() = PetDTO(
         id = id,
+        name = name,
         species = species,
         age = age,
         owner = owner.id,

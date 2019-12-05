@@ -23,8 +23,8 @@ class SecurityService(
     val schedulesService: ScheduleService
 
 ) {
-    fun isPetOwner(principal: Principal, id: Int): Boolean {
-        val pet = petService.getPetEntityById(id)
+    fun isPetOwner(principal: Principal, petId: Int): Boolean {
+        val pet = petService.getPetEntityById(petId)
         return pet.owner.username == principal.name
     }
 

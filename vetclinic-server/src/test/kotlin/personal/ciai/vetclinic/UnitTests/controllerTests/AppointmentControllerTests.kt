@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.any
+import org.mockito.Mockito.anyInt
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -20,6 +21,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import personal.ciai.vetclinic.TestUtils
 import personal.ciai.vetclinic.TestUtils.appointmentExample1
 import personal.ciai.vetclinic.dto.AppointmentDTO
 import personal.ciai.vetclinic.exception.NotFoundException
@@ -42,15 +44,17 @@ class AppointmentControllerTests {
         // see: https://discuss.kotlinlang.org/t/data-class-and-jackson-annotation-conflict/397/6
         val mapper = ObjectMapper().registerModule(KotlinModule())
 
-        val requestURL = "/clients/1/pets/1/appointments"
+        val requestURL = "/clients/2/pets/1/appointments"
+
+        val token = TestUtils.generateTestToken("user2", listOf("ROLE_CLIENT"))
     }
 
     @Test
     fun `Test GET getPetWithAppointments`() {
 //        val appointmentListDTOs =appointmentList.map { it.toDTO() }
-        `when`(appointmentService.getPetAppointments(1)).thenReturn(arrayListOf())
+        `when`(appointmentService.getPetAppointments(anyInt())).thenReturn(arrayListOf())
 
-        val result = mvc.perform(get(requestURL))
+        val result = mvc.perform(get(requestURL).header("Authorization", token))
             .andExpect(status().isOk)
             .andReturn()
 
@@ -62,11 +66,12 @@ class AppointmentControllerTests {
 
     @Test
     fun `Test GET One Appointment`() {
+
         val dto = appointmentExample1.toDTO()
 
         `when`(appointmentService.getAppointmentById(1)).thenReturn(dto)
 
-        val result = mvc.perform(get("$requestURL/1"))
+        val result = mvc.perform(get("$requestURL/1").header("Authorization", token))
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andReturn()
 
@@ -79,7 +84,7 @@ class AppointmentControllerTests {
     fun `Test GET One Appointment (Not Found)`() {
         `when`(appointmentService.getAppointmentById(2)).thenThrow(NotFoundException("not found"))
 
-        mvc.perform(get("$requestURL/2"))
+        mvc.perform(get("$requestURL/2").header("Authorization", token))
             .andExpect(status().is4xxClientError)
     }
 
@@ -92,10 +97,11 @@ class AppointmentControllerTests {
         val appointmentJSON = mapper.writeValueAsString(dto)
 
         `when`(appointmentService.addAppointment(nonNullAny(AppointmentDTO::class.java)))
-            .then { assertEquals(dto.copy(pet = 1, client = 1), it.getArgument(0)) }
+            .then { assertEquals(dto.copy(pet = 1, client = 2), it.getArgument(0)) }
 
         mvc.perform(
             post(requestURL)
+                .header("Authorization", token)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(appointmentJSON)

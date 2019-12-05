@@ -70,7 +70,7 @@ public class AccessControlRules {
         @Documented
         @PreAuthorize(IsPetOwner.condition)
         public @interface IsPetOwner {
-            String condition = "@SecurityService.isPetOwner(principal,#id)";
+            String condition = "@SecurityService.isPetOwner(principal,#petId)";
         }
 
         @Target({ElementType.METHOD, ElementType.TYPE})

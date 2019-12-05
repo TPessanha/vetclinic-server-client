@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 import personal.ciai.vetclinic.dto.PetDTO
-import personal.ciai.vetclinic.security.AccessControlRules
+import personal.ciai.vetclinic.security.AccessControlRules.PetsRules.AllowedForEditPet
+import personal.ciai.vetclinic.security.AccessControlRules.PetsRules.AllowedForGetClientPets
+import personal.ciai.vetclinic.security.AccessControlRules.PetsRules.AllowedForGetOnePet
+import personal.ciai.vetclinic.security.AccessControlRules.UserRules.IsPrincipalAccountOwner
 import personal.ciai.vetclinic.service.PetService
 
 @Api(
@@ -51,7 +54,7 @@ class PetController(
         ]
     )
     @GetMapping("")
-    @AccessControlRules.PetsRules.AllowedForGetClientPets
+    @AllowedForGetClientPets
     fun getAllClientPets(
         @ApiParam(value = "The ID of the client", required = true, defaultValue = "1") @PathVariable
         clientId: Int
@@ -73,14 +76,14 @@ class PetController(
             (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
         ]
     )
-    @GetMapping("/{id:[0-9]+}")
-    @AccessControlRules.PetsRules.AllowedForGetOnePet
+    @GetMapping("/{petId:[0-9]+}")
+    @AllowedForGetOnePet
     fun getOnePet(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
         @ApiParam(value = "The ID of the pet", required = true) @PathVariable
-        id: Int
-    ) = petService.getPetById(id)
+        petId: Int
+    ) = petService.getPetById(petId)
 
     @ApiOperation(
         value = "Create a new pet",
@@ -100,7 +103,7 @@ class PetController(
         ]
     )
     @PostMapping("")
-    @AccessControlRules.UserRules.IsPrincipalAccountOwner
+    @IsPrincipalAccountOwner
     fun addPet(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
@@ -126,16 +129,16 @@ class PetController(
             (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
         ]
     )
-    @PutMapping("/{id:[0-9]+}")
-    @AccessControlRules.PetsRules.AllowedForEditPet
+    @PutMapping("/{petId:[0-9]+}")
+    @AllowedForEditPet
     fun updatePet(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
         @ApiParam(value = "The ID of the pet", required = true) @PathVariable
-        id: Int,
+        petId: Int,
         @ApiParam(value = "Details of a pet to be updated", required = true) @RequestBody
         pet: PetDTO
-    ) = petService.updatePet(pet, id = id)
+    ) = petService.updatePet(pet, id = petId)
 
     @ApiOperation(value = "Update photo of a pet")
     @ApiResponses(
@@ -151,16 +154,16 @@ class PetController(
             (ApiResponse(code = 415, message = "Photos can only be of type (jpg/png)"))
         ]
     )
-    @PutMapping("/{id:[0-9]+}/photo")
-    @AccessControlRules.PetsRules.AllowedForEditPet
+    @PutMapping("/{petId:[0-9]+}/photo")
+    @AllowedForEditPet
     fun savePhoto(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
         @ApiParam(value = "The ID of the pet", required = true) @PathVariable
-        id: Int,
+        petId: Int,
         @RequestParam("photo")
         photo: MultipartFile
-    ) = petService.updatePhoto(id, photo)
+    ) = petService.updatePhoto(petId, photo)
 
     @ApiOperation(
         value = "Get photo of a pet",
@@ -177,17 +180,16 @@ class PetController(
             (ApiResponse(code = 404, message = "The resource you were trying to reach was not found"))
         ]
     )
-    @GetMapping("/{id:[0-9]+}/photo")
-    @AccessControlRules.PetsRules.AllowedForEditPet
+    @GetMapping("/{petId:[0-9]+}/photo")
     fun getPhoto(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
         @ApiParam(value = "The ID of the pet", required = true) @PathVariable
-        id: Int
+        petId: Int
     ) = ResponseEntity
         .ok()
         .contentType(MediaType.IMAGE_JPEG)
-        .body(petService.getPhoto(id))
+        .body(petService.getPhoto(petId))
 
     @ApiOperation(value = "Delete a pet")
     @ApiResponses(
@@ -197,12 +199,12 @@ class PetController(
             ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden")
         ]
     )
-    @DeleteMapping("/{id:[0-9]+}")
-    @AccessControlRules.PetsRules.AllowedForEditPet
+    @DeleteMapping("/{petId:[0-9]+}")
+    @AllowedForEditPet
     fun deletePet(
         @ApiParam(value = "The ID of the client", required = true) @PathVariable
         clientId: Int,
         @ApiParam(value = "The ID of the pet", required = true) @PathVariable
-        id: Int
-    ) = petService.deletePet(id)
+        petId: Int
+    ) = petService.deletePet(petId)
 }

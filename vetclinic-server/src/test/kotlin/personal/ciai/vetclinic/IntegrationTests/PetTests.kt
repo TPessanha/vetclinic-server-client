@@ -3,7 +3,6 @@ package personal.ciai.vetclinic.IntegrationTests
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
-import java.security.Principal
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
@@ -11,12 +10,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.anyInt
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
@@ -29,25 +25,13 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
 import personal.ciai.vetclinic.TestUtils
 import personal.ciai.vetclinic.dto.PetDTO
-import personal.ciai.vetclinic.security.SecurityService
-import personal.ciai.vetclinic.service.ClientService
-import personal.ciai.vetclinic.service.PetService
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
 @AutoConfigureMockMvc
 class PetTests {
     @Autowired
-    lateinit var petService: PetService
-
-    @Autowired
-    lateinit var clientService: ClientService
-
-    @Autowired
     lateinit var mvc: MockMvc
-
-    @MockBean
-    lateinit var securityService: SecurityService
 
     companion object {
         // To avoid all annotations JsonProperties in data classes
@@ -61,13 +45,11 @@ class PetTests {
     @Test
     @Transactional
     fun `Client add a new pet`() {
-        `when`(securityService.isPrincipalAccountOwner(nonNullAny(Principal::class.java), anyInt())).thenReturn(true)
-        `when`(securityService.isPetOwner(nonNullAny(Principal::class.java), anyInt())).thenReturn(true)
         val token = TestUtils.generateTestToken("user2", listOf("ROLE_CLIENT"))
 
-        val DTO = PetDTO(0, "cat", 2, 1)
+        val DTO = PetDTO(id = 0, species = "cat", age = 2, owner = 2)
 
-        val dogJSON = mapper.writeValueAsString(DTO.copy(id = 0, owner = 1))
+        val dogJSON = mapper.writeValueAsString(DTO)
 
         mvc.perform(
             post(petsURL).header("Authorization", token)
@@ -84,7 +66,7 @@ class PetTests {
             .andExpect(jsonPath("$", hasSize<Any>(3)))
 
         val result = mvc.perform(
-                get("$petsURL/4").header("Authorization", token)
+            get("$petsURL/4").header("Authorization", token)
         )
             .andExpect(status().isOk)
             .andReturn()
@@ -117,9 +99,6 @@ class PetTests {
     @Test
     @Transactional
     fun `test updatePet`() {
-        `when`(securityService.isPetOwner(nonNullAny(Principal::class.java), anyInt())).thenReturn(true)
-        `when`(securityService.isPrincipalAccountOwner(nonNullAny(Principal::class.java), anyInt())).thenReturn(true)
-
         val token = TestUtils.generateTestToken("user2", listOf("ROLE_CLIENT"))
 
         val result = mvc.perform(
