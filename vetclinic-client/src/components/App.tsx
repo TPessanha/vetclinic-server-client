@@ -1,16 +1,16 @@
-import agent from '../agent';
-import Header from './Header';
-import React from 'react';
-import {connect} from 'react-redux';
-import {APP_LOAD, REDIRECT} from '../constants/actionTypes';
-import {Route, Switch} from 'react-router-dom';
-
 import Home from './Home';
-import Login from './Login';
-import Register from './Register';
-import Accounts from './Accounts';
-import {store} from '../store';
-import {push} from 'react-router-redux';
+import React, {useEffect} from 'react';
+import {APP_LOAD, REDIRECT} from '../constants/actionTypes';
+import Login from "./Login";
+import Register from "./Register";
+import Accounts from "./Accounts";
+import agent from "../agent";
+import {store} from "../store";
+import {push} from "react-router-redux";
+import {connect} from "react-redux";
+import Header from "./Header";
+// @ts-ignore
+import {Route, Switch} from 'react-router-dom';
 
 const mapStateToProps = (state: any) => {
     return {
@@ -28,56 +28,51 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch({type: REDIRECT})
 });
 
-class App extends React.Component<any, any> {
 
-    constructor(props: any) {
-        super(props);
-    }
+const App = (props: any) => {
 
-    componentWillReceiveProps(nextProps: any) {
-        if (nextProps.redirectTo) {
-            store.dispatch(push(nextProps.redirectTo));
-            this.props.onRedirect();
-        }
-    }
-
-    componentWillMount() {
+    useEffect(() => {
         const token = window.localStorage.getItem('jwt');
         if (token) {
             agent.setToken(token);
         }
+    }, []);
 
-    this.props.onLoad(token ? token : null, token);
-  }
 
-    render() {
-        if (this.props.appLoaded) {
-            return (
-                <div>
-                    <Header
-                        appName={this.props.appName}
-                        currentUser={this.props.currentUser}/>
-                    <Switch>
-                        <Route exact path="/" component={Home}/>
-                        <Route path="/login" component={Login}/>
-                        <Route path="/register" component={Register}/>
-                        <Route path="/account" component={Accounts}/>
-                    </Switch>
-                </div>
-            );
+    useEffect(() => {
+        if (props.location.pathname) {
+            store.dispatch(push(props.location.pathname));
+            props.onRedirect();
         }
-        return (
+    }, [props.location.pathname]);
+
+
+    if (props.appLoaded) {
+        return <>
             <div>
                 <Header
-                    appName={this.props.appName}
-                    currentUser={this.props.currentUser}/>
+                    appName={props.appName}
+                    currentUser={props.currentUser}/>
+                <Switch>
+                    <Route exact path="/" component={Home}/>
+                    <Route path="/login" component={Login}/>
+                    <Route path="/register" component={Register}/>
+                    <Route path="/account" component={Accounts}/>
+                </Switch>
             </div>
-        );
+        </>
     }
+
+    return <>
+        <div>
+            <Header
+                appName={props.appName}
+                currentUser={props.currentUser}/>
+        </div>
+    </>
+
+
 }
 
-// App.contextTypes = {
-//   router: PropTypes.object.isRequired
-// };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

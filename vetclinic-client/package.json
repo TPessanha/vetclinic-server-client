@@ -18,7 +18,9 @@
     "react-router-redux": "latest",
     "redux-devtools-extension": "latest",
     "redux-logger": "latest",
-    "marked": "latest"
+    "marked": "latest",
+    "hookrouter": "latest",
+    "react-hook-form": "latest"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -43,10 +45,12 @@
   },
   "proxy": "http://localhost:8080",
   "devDependencies": {
+    "@types/hookrouter": "^2.2.1",
     "@types/react-dom": "lasted",
     "@types/react-redux": "^7.1.5",
     "@types/react-router-dom": "^5.1.2",
     "@types/react-router-redux": "^5.0.18",
-    "@types/redux-logger": "^3.0.7"
+    "@types/redux-logger": "^3.0.7",
+    "react-hook-form": "latest"
   }
 }

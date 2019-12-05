@@ -1,98 +1,95 @@
 import {Link} from 'react-router-dom';
-import ListErrors from './ListErrors';
-import React from 'react';
+import React, {useEffect} from 'react';
 import agent from '../agent';
 import {connect} from 'react-redux';
 import {LOGIN, LOGIN_PAGE_UNLOADED, UPDATE_FIELD_AUTH} from '../constants/actionTypes';
+import useForm from "react-hook-form";
 
 const mapStateToProps = (state: any) => ({...state.auth});
 
 const mapDispatchToProps = (dispatch: any) => ({
-    onChangeEmail: (value:any) =>
+    onChangeEmail: (value: any) =>
         dispatch({type: UPDATE_FIELD_AUTH, key: 'email', value}),
-    onChangePassword: (value:any) =>
+    onChangePassword: (value: any) =>
         dispatch({type: UPDATE_FIELD_AUTH, key: 'password', value}),
-    onSubmit: (email:string, password:string) =>
+    onSubmit: (email: string, password: string) =>
         dispatch({type: LOGIN, payload: agent.Auth.login(email, password)}),
     onUnload: () =>
         dispatch({type: LOGIN_PAGE_UNLOADED})
 });
 
-class Login extends React.Component<any, any> {
-    private changeEmail: (event: any) => any;
-    private changePassword: (event: any) => any;
-    private submitForm: (username: string, password: string) => (event: any) => void;
+function Login(props: any) {
+    const {handleSubmit, register, errors} = useForm();
 
-    constructor(props: any) {
-        super(props);
+    const onSubmit = (values: any) => {
+        console.log(values);
+    };
+    useEffect(() => {
 
-        this.changeEmail = (event: any) => this.props.onChangeEmail(event.target.value);
-        this.changePassword = (event: any) => this.props.onChangePassword(event.target.value);
-        this.submitForm = (username: string, password: string) => (event: any) => {
-            event.preventDefault();
-            this.props.onSubmit(username, password);
-        };
-    }
+        return (() => {
+            props.onUnload();
+        })
+    });
 
-    componentWillUnmount() {
-        this.props.onUnload();
-    }
 
-    render() {
-        const username = this.props.email;
-        const password = this.props.password;
-        return (
-            <div className="auth-page">
-                <div className="container page">
-                    <div className="row">
+    const password = props.password;
+    const username = props.username;
 
-                        <div className="col-md-6 offset-md-3 col-xs-12">
-                            <h1 className="text-xs-center">Login In</h1>
-                            <p className="text-xs-center">
-                                <Link to="/register">
-                                    Need an Account?
-                                </Link>
-                            </p>
+    return <>
+        <div className="auth-page">
+            <div className="container page">
+                <div className="row">
 
-                            <ListErrors errors={this.props.errors}/>
+                    <div className="col-md-6 offset-md-3 col-xs-12">
+                        <h1 className="text-xs-center">Login In</h1>
+                        <p className="text-xs-center">
+                            <Link to="/register">
+                                Need an Account?
+                            </Link>
+                        </p>
 
-                            <form onSubmit={this.submitForm(username, password)}>
-                                <fieldset>
 
-                                    <fieldset className="form-group">
-                                        <input
-                                            className="form-control form-control-lg"
-                                            type="text"
-                                            placeholder="User Name"
-                                            value={username}
-                                            onChange={this.changeEmail}/>
-                                    </fieldset>
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <fieldset>
 
-                                    <fieldset className="form-group">
-                                        <input
-                                            className="form-control form-control-lg"
-                                            type="password"
-                                            placeholder="Password"
-                                            value={password}
-                                            onChange={this.changePassword}/>
-                                    </fieldset>
-
-                                    <button
-                                        className="btn btn-lg btn-primary pull-xs-right"
-                                        type="submit"
-                                        disabled={this.props.inProgress}>
-                                        Log in
-                                    </button>
+                                <fieldset className="form-group">
+                                    <input
+                                        className="form-control form-control-lg"
+                                        name="username"
+                                        type="text"
+                                        ref={register({
+                                            validate: value => value !== "admin" || "Nice try!"
+                                        })}
+                                        placeholder="User Name"
+                                        value={props.username}
+                                        onChange={handleSubmit(onSubmit)}/>
+                                    {errors.username && errors.username.message}
+                                </fieldset>
+                                <fieldset className="form-group">
+                                    <input
+                                        className="form-control form-control-lg"
+                                        type="password"
+                                        placeholder="Password"
+                                        value={props.password}
+                                        onChange={handleSubmit(onSubmit)}/>
+                                    {errors.password && errors.password.message}
 
                                 </fieldset>
-                            </form>
-                        </div>
+                                <button
+                                    className="btn btn-lg btn-primary pull-xs-right"
+                                    type="submit"
+                                    disabled={props.inProgress}>
+                                    Login
+                                </button>
 
+                            </fieldset>
+                        </form>
                     </div>
+
                 </div>
             </div>
-        );
-    }
+        </div>
+    </>;
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

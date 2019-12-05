@@ -1,6 +1,6 @@
 import Logo from './Logo';
 import Main from './MainView';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import {HOME_PAGE_LOADED, HOME_PAGE_UNLOADED} from '../../constants/actionTypes';
 import agent from "../../agent";
@@ -19,44 +19,37 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch({type: HOME_PAGE_UNLOADED})
 });
 
-class Home extends React.Component<any, any> {
-
-    constructor(props: any) {
-        super(props)
-    }
-
-    componentWillMount() {
-        const container = this.props.token ? 'session' : 'default';
-        const userPromise = this.props.token ?
+function Home(props: any) {
+    useEffect(() => {
+        const container = props.token ? 'session' : 'default';
+        const userPromise = props.token ?
             agent.User.type :
             agent.Employee.all;
 
-        this.props.onLoad(container, userPromise, agent.Employee.all());
-    }
+        props.onLoad(container, userPromise, agent.Employee.all());
+        return (() => {
+            props.onUnload();
+        })
+    });
 
-    componentWillUnmount() {
-        this.props.onUnload();
-    }
 
-    render() {
-        return (
-            <div className="home-page">
+    return <>
+        <div className="home-page">
 
-                <Logo token={this.props.token} appName={this.props.appName}></Logo>
+            <Logo token={props.token} appName={props.appName}/>
 
-                <div className="container page">
-                    <div className="row">
-                        <Main/>
+            <div className="container page">
+                <div className="row">
+                    <Main/>
 
-                        <div className="col-md-3">
+                    <div className="col-md-3">
 
-                        </div>
                     </div>
                 </div>
-
             </div>
-        );
-    }
+
+        </div>
+    </>;
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

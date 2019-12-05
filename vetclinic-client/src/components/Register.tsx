@@ -1,10 +1,10 @@
 import {Link} from 'react-router-dom';
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import agent from '../agent';
 import {connect} from 'react-redux';
-import ListErrors from "./ListErrors";
 import {REGISTER_PAGE_UNLOADED, SINGUP, UPDATE_FIELD_AUTH} from "../constants/actionTypes";
+import useForm from "react-hook-form";
 
 const mapStateToProps = (state: any) => ({...state.auth});
 
@@ -23,92 +23,100 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch({type: REGISTER_PAGE_UNLOADED})
 });
 
-class Register extends React.Component<any, any>{
-    private submitForm: (username: string, email: string, password: string) => (event: any) => void;
-    private changeEmail: (event: any) => any;
-    private changePassword: (event: any) => any;
-    private changeUsername: (event: any) => any;
-    constructor(props: any) {
-        super(props);
-        this.changeEmail = (event:any) => this.props.onChangeEmail(event.target.value);
-        this.changePassword = (event:any) => this.props.onChangePassword(event.target.value);
-        this.changeUsername = (event:any) => this.props.onChangeUsername(event.target.value);
-        this.submitForm = (username: string, email: string, password: string) => (event:any) => {
-            event.preventDefault();
-            this.props.onSubmit(username, email, password);
-        }
-    }
+function Register(props: any) {
+    const {handleSubmit, register, errors} = useForm();
 
-    componentWillUnmount() {
-        this.props.onUnload();
-    }
+    const onSubmit = (values: any) => {
+        console.log(values);
+    };
+    useEffect(() => {
 
-    render() {
-        const email = this.props.email;
-        const password = this.props.password;
-        const username = this.props.username;
+        return (() => {
+            props.onUnload();
+        })
+    });
 
-        return (
-            <div className="auth-page">
-                <div className="container page">
-                    <div className="row">
 
-                        <div className="col-md-6 offset-md-3 col-xs-12">
-                            <h1 className="text-xs-center">Sign Up</h1>
-                            <p className="text-xs-center">
-                                <Link to="/login">
-                                    Already Have an Account?
-                                </Link>
-                            </p>
+    const email = props.email;
+    const password = props.password;
+    const username = props.username;
 
-                            <ListErrors errors={this.props.errors}/>
+    return <>
+        <div className="auth-page">
+            <div className="container page">
+                <div className="row">
 
-                            <form onSubmit={this.submitForm(username, email, password)}>
-                                <fieldset>
+                    <div className="col-md-6 offset-md-3 col-xs-12">
+                        <h1 className="text-xs-center">Sign Up</h1>
+                        <p className="text-xs-center">
+                            <Link to="/login">
+                                Already Have an Account?
+                            </Link>
+                        </p>
 
-                                    <fieldset className="form-group">
-                                        <input
-                                            className="form-control form-control-lg"
-                                            type="text"
-                                            placeholder="Username"
-                                            value={this.props.username}
-                                            onChange={this.changeUsername}/>
-                                    </fieldset>
 
-                                    <fieldset className="form-group">
-                                        <input
-                                            className="form-control form-control-lg"
-                                            type="email"
-                                            placeholder="Email"
-                                            value={this.props.email}
-                                            onChange={this.changeEmail}/>
-                                    </fieldset>
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <fieldset>
 
-                                    <fieldset className="form-group">
-                                        <input
-                                            className="form-control form-control-lg"
-                                            type="password"
-                                            placeholder="Password"
-                                            value={this.props.password}
-                                            onChange={this.changePassword}/>
-                                    </fieldset>
+                                <fieldset className="form-group">
+                                    <input
+                                        className="form-control form-control-lg"
+                                        name="username"
+                                        type="text"
+                                        ref={register({
+                                            validate: value => value !== "admin" || "Nice try!"
+                                        })}
+                                        placeholder="User Name"
+                                        value={props.username}
+                                        onChange={handleSubmit(onSubmit)}/>
+                                    {errors.username && errors.username.message}
+                                </fieldset>
 
-                                    <button
-                                        className="btn btn-lg btn-primary pull-xs-right"
-                                        type="submit"
-                                        disabled={this.props.inProgress}>
-                                        Sign up
-                                    </button>
+                                <fieldset className="form-group">
+                                    <input
+                                        className="form-control form-control-lg"
+                                        name="email"
+                                        ref={register({
+                                            required: 'Required',
+                                            pattern: {
+                                                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                                                message: "invalid email address"
+                                            }
+                                        })}
+
+                                        type="email"
+                                        placeholder="Email"
+                                        value={props.email}
+                                        onChange={handleSubmit(onSubmit)}/>
+                                    {errors.email && errors.email.message}
+                                </fieldset>
+
+                                <fieldset className="form-group">
+                                    <input
+                                        className="form-control form-control-lg"
+                                        type="password"
+                                        placeholder="Password"
+                                        value={props.password}
+                                        onChange={handleSubmit(onSubmit)}/>
+                                    {errors.password && errors.password.message}
 
                                 </fieldset>
-                            </form>
-                        </div>
+                                <button
+                                    className="btn btn-lg btn-primary pull-xs-right"
+                                    type="submit"
+                                    disabled={props.inProgress}>
+                                    Sign up
+                                </button>
 
+                            </fieldset>
+                        </form>
                     </div>
+
                 </div>
             </div>
-        );
-    }
+        </div>
+    </>;
 }
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(Register);

@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import agent from '../../agent';
 import {connect} from 'react-redux';
-import {GET_ADMINISTRATOR, GET_EMPLOYEE} from '../../constants/actionTypes';
+import {GET_EMPLOYEE} from '../../constants/actionTypes';
 
 const mapDispatchToProps = (dispatch: any) => ({
     onClick: (employee: any) => dispatch({

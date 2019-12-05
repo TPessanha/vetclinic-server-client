@@ -1,11 +1,13 @@
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
-import React from 'react';
+import React, {createContext} from 'react';
 import {history, store} from './store';
 
 import {Route, Router, Switch} from 'react-router-dom';
 
 import App from './components/App';
+
+export const AppContext = createContext("")
 
 ReactDOM.render((
 
@@ -18,3 +20,5 @@ ReactDOM.render((
     </Provider>
 
 ), document.getElementById('root'));
+
+

@@ -33,8 +33,8 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch({type: CHANGE_TAB, payload})
 });
 
-const MainView = (props: any) => {
-    return (
+function MainView(props: any) {
+    return <>
         <div className="col-md-9">
             <div className="feed-toggle">
                 <ul className="nav nav-pills outline-active">
@@ -43,7 +43,7 @@ const MainView = (props: any) => {
             </div>
 
         </div>
-    );
+    </>;
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainView);
