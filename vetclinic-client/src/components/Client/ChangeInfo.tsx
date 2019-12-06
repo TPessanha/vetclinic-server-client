@@ -40,7 +40,7 @@ class ChangeInfoForm extends React.Component {
         />
         <button type="submit"> Confirm </button>
         </form>
-        </div>
+      </div>
         <div className="ClientDetails">
         <h2>Client Details</h2>
         <p >Name:</p>
