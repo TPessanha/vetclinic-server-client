@@ -23,7 +23,7 @@ export default (state: any, action: any) => {
                     (state.administrator || []).concat([action.payload.administrator])
             };
         case DELETE_ADMINISTRATOR:
-            const id = action.administrator.id
+            const id = action.administrator.id;
             return {
                 ...state,
                 administrator: state.administrators.filter((administrator: any) => administrator.id !== id)

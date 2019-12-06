@@ -9,36 +9,31 @@ const Employees = (props: any) => {
 
     const token = useSelector((state: any) => state.common.token);
 
+
     return (
         <li className="nav-item">
             <a
                 href=""
                 className={employee === 'all' ? 'nav-link active' : 'nav-link'}
                 onClick={() => setEmployee(agent.Employee.all)}>
-                All Employee
+                See All Employee
             </a>
         </li>
     );
 };
 
 
-const mapStateToProps = (state: any) => ({
-    ...state.articleList,
-    token: state.common.token
-});
-
-
 function MainView(props: any) {
+    const token = useSelector((state: any) => state.common.token);
+
     return <>
         <div className="col-md-9">
             <div className="feed-toggle">
                 <ul className="nav nav-pills outline-active">
-                    <Employees tab={props.tab} onTabClick={props.EmployeGetTab}/>
+                    <Employees token={token}/>
                 </ul>
             </div>
-
         </div>
     </>;
-};
-
+}
 export default MainView

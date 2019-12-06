@@ -20,10 +20,10 @@ function Login(props: any) {
         dispatch({type: UPDATE_FIELD_AUTH, key: 'password', value: value.password})
     };
     const onSubmit = (username: string, password: string) =>
-        dispatch({type: LOGIN, payload: agent.Auth.login(username, password)})
+        dispatch({type: LOGIN, payload: agent.Auth.login(username, password)});
 
     const onUnload = () =>
-        dispatch({type: LOGIN_PAGE_UNLOADED})
+        dispatch({type: LOGIN_PAGE_UNLOADED});
 
     const onHandleSubmit = (event: any) => {
         onSubmit(event.username, event.password)
@@ -34,7 +34,7 @@ function Login(props: any) {
         return (() => {
             onUnload();
         })
-    });
+    },[]);
 
     return <>
         <div className="auth-page">
@@ -48,7 +48,6 @@ function Login(props: any) {
                                 Need an Account?
                             </Link>
                         </p>
-
 
                         <form onSubmit={handleSubmit(onHandleSubmit)}>
                             <fieldset>

@@ -1,4 +1,3 @@
-import Logo from './Logo';
 import Main from './MainView';
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
@@ -34,7 +33,11 @@ function Home(props: any) {
     return <>
         <div className="home-page">
 
-            <Logo token={token} appName={appName}/>
+            <div className="logo">
+                <div className="container center">
+                    <p className="text-xs-center">Welcome to Veterinarian Manegment Clinic.</p>
+                </div>
+            </div>
 
             <div className="container page">
                 <div className="row">

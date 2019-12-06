@@ -10,16 +10,17 @@ const Api = 'http://localhost:8080';
 
 const responseBody = (res: Body) => res.body;
 
-let token: string;
+// @ts-ignore
+let token: string = null;
 
 
 const tokenPlugin = (req: any) => {
     if (token) {
         req.set('authorization', `Token ${token}`);
     }
-}
+};
 
-enum UserType {
+export enum UserType {
     ADMINISTRATOR, VETERINARIAN, CLIENT, UNREGISTERED
 }
 
@@ -35,12 +36,12 @@ const requests = {
 };
 
 const Auth = {
-    login: (email: string, password: string) =>
-        requests.post('/login', {user: {email, password}}),
+    login: (username: string, password: string) =>
+        requests.post('/login', {CredentialsDTO: {username: username, password: password}}),
     signup: (username: string, email: string, password: string) =>
-        requests.post('/signup', {user: {username, email, password}}),
+        requests.post('/signup', {ClientDTO: {username: username, email: email, password: password}}),
     save: (user: any) => {
-        let type = User.type(user.id)
+        let type = User.type(user.id);
 
         if (UserType.ADMINISTRATOR === type) {
             return Administrator.update(user);
@@ -59,11 +60,11 @@ const Auth = {
 
 const Administrator = {
     all: () =>
-        requests.get(`/administrators?`),
+        requests.get(`/administrators`),
     delete: (id: number) =>
         requests.delete(`/administrators/${id}`),
     get: (id: number) =>
-        requests.get(`/articles/${id}`),
+        requests.get(`/administrators/${id}`),
     update: (adminstrator: any) =>
         requests.put(`/administrators/${adminstrator.id}`, {adminstrator}),
     create: (adminstrator: any) =>
@@ -113,6 +114,7 @@ export default {
     Administrator,
     Employee,
     Veterinarian,
+    Client,
     User,
     Auth,
     setToken: (_token: string) => {

@@ -5,12 +5,16 @@ import Home from "./Home/Home";
 import Login from "./Login";
 import Register from "./Register";
 import NotFound from "./Erros/NotFound";
+import Administrator from "./Administrator/Administrator";
 
 
 const routes = {
     "/": () => <Home/>,
     "/login": () => <Login/>,
-    "/register": () => <Register/>
+    "/register": () => <Register/>,
+    "/admin/:id": ({id}: any) => <Administrator id={id}/>,
+    // "/vet/:id": ({id}: any) => <Veterinarian id={id}/>,
+    // "/cli/:id": ({id}: any) => <Client id={id}/>
 };
 
 const LoggedOutView = (props: any) => {

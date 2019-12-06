@@ -11,7 +11,7 @@ const promiseMiddleware = (store: any) => (next: any) => (action: any) => {
 
         action.payload.then(
             (res: any) => {
-                const currentState = store.getState()
+                const currentState = store.getState();
                 if (!skipTracking && currentState.viewChangeCounter !== currentView) {
                     return
                 }
@@ -21,7 +21,7 @@ const promiseMiddleware = (store: any) => (next: any) => (action: any) => {
                 store.dispatch(action);
             },
             (error: any) => {
-                const currentState = store.getState()
+                const currentState = store.getState();
                 if (!skipTracking && currentState.viewChangeCounter !== currentView) {
                     return
                 }

@@ -1,41 +1,49 @@
-import {Link, useLocation} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 import React, {useEffect} from 'react';
 import agent from '../agent';
-import {connect} from 'react-redux';
+import {connect, useDispatch, useSelector} from 'react-redux';
 import {REGISTER_PAGE_UNLOADED, SINGUP, UPDATE_FIELD_AUTH} from "../constants/actionTypes";
 import useForm from "react-hook-form";
 
 const mapStateToProps = (state: any) => ({...state.auth});
 
-const mapDispatchToProps = (dispatch: any) => ({
-    onChangeEmail: (value: any) =>
-        dispatch({type: UPDATE_FIELD_AUTH, key: 'email', value}),
-    onChangePassword: (value: any) =>
-        dispatch({type: UPDATE_FIELD_AUTH, key: 'password', value}),
-    onChangeUsername: (value: any) =>
-        dispatch({type: UPDATE_FIELD_AUTH, key: 'username', value}),
-    onSubmit: (username: string, email: string, password: string) => {
-        const payload = agent.Auth.signup(username, email, password);
-        dispatch({type: SINGUP, payload})
-    },
-    onUnload: () =>
-        dispatch({type: REGISTER_PAGE_UNLOADED})
-});
+const mapDispatchToProps = (dispatch: any) => ({});
 
 function Singup(props: any) {
+    const dispatch = useDispatch();
+    const auth = useSelector((state: any) => state.auth);
     const {handleSubmit, register, errors} = useForm();
-    let location = useLocation();
-    
-    const onSubmit = (values: any) => {
-        console.log(values);
+
+
+    const onChangeEmail = (value: any) => {
+        dispatch({type: UPDATE_FIELD_AUTH, key: 'email', value})
     };
+    const onChangePassword = (value: any) => {
+        dispatch({type: UPDATE_FIELD_AUTH, key: 'password', value})
+    };
+    const onChangeUsername = (value: any) => {
+        dispatch({type: UPDATE_FIELD_AUTH, key: 'username', value})
+    };
+    const onSubmit = (username: string, email: string, password: string) => {
+        const payload = agent.Auth.signup(username, email, password);
+        dispatch({type: SINGUP, payload})
+    };
+
+    const onUnload = () => dispatch({type: REGISTER_PAGE_UNLOADED});
+
+
+    const onHandleSubmit = (event: any) => {
+        onSubmit(event.username, event.email, event.password)
+    };
+
     useEffect(() => {
 
+
         return (() => {
-            props.onUnload();
+            onUnload();
         })
-    });
+    },[]);
 
 
     const email = props.email;
@@ -56,7 +64,7 @@ function Singup(props: any) {
                         </p>
 
 
-                        <form onSubmit={handleSubmit(onSubmit)}>
+                        <form onSubmit={handleSubmit(onHandleSubmit)}>
                             <fieldset>
 
                                 <fieldset className="form-group">
@@ -69,7 +77,7 @@ function Singup(props: any) {
                                         })}
                                         placeholder="User Name"
                                         value={props.username}
-                                        onChange={handleSubmit(onSubmit)}/>
+                                        onChange={handleSubmit(onChangeUsername)}/>
                                     {errors.username && errors.username.message}
                                 </fieldset>
 
@@ -88,7 +96,7 @@ function Singup(props: any) {
                                         type="email"
                                         placeholder="Email"
                                         value={props.email}
-                                        onChange={handleSubmit(onSubmit)}/>
+                                        onChange={handleSubmit(onChangeEmail)}/>
                                     {errors.email && errors.email.message}
                                 </fieldset>
 
@@ -98,7 +106,7 @@ function Singup(props: any) {
                                         type="password"
                                         placeholder="Password"
                                         value={props.password}
-                                        onChange={handleSubmit(onSubmit)}/>
+                                        onChange={handleSubmit(onChangePassword)}/>
                                     {errors.password && errors.password.message}
 
                                 </fieldset>

@@ -32,7 +32,7 @@ export default (state = defaultState, action: any) => {
         case LOGOUT:
             return {...state, redirectTo: '/', token: null, currentUser: null};
         case ADMINISTRATOR_CREATED:
-            const redirectUrl = `/article/${action.payload.article.slug}`;
+            const redirectUrl = `/administrator/${action.payload.administrator}`;
             return {...state, redirectTo: redirectUrl};
 
         case LOGIN:
