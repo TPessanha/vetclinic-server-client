@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-class ChangeInfoForm extends React.Component {
+class ChangeInfo extends React.Component {
   constructor(props:any) {
     super(props);
     this.state = {
@@ -25,7 +25,7 @@ class ChangeInfoForm extends React.Component {
       <div className="ChangeInfoContainer">
       <div className="ChangeInfoForm">
         <form onSubmit={this.mySubmitHandler}>
-        <h1 style={{ borderColor: 'black', borderStyle:'solid' }}>Change your informtion</h1>
+        <h1 style={{ backgroundColor: 'darkTurquoise', borderStyle:'solid', textAlign: 'center' }}>Edit your Information</h1>
         <p>New email:</p>
         <input
           type='text'
