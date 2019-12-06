@@ -1,5 +1,17 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {useSelector} from "react-redux";
+import {A, useRoutes} from "hookrouter";
+import Home from "./Home/Home";
+import Login from "./Login";
+import Register from "./Register";
+import NotFound from "./Erros/NotFound";
+
+
+const routes = {
+    "/": () => <Home/>,
+    "/login": () => <Login/>,
+    "/register": () => <Register/>
+};
 
 const LoggedOutView = (props: any) => {
     if (!props.currentUser) {
@@ -7,23 +19,22 @@ const LoggedOutView = (props: any) => {
             <ul className="nav navbar-nav pull-xs-right">
 
                 <li className="nav-item">
-                    <Link to="/" className="nav-link">
+                    <A href="/" className="nav-link">
                         Home
-                    </Link>
+                    </A>
                 </li>
 
                 <li className="nav-item">
-                    <Link to="/login" className="nav-link">
+                    <A href="/login" className="nav-link">
                         Login
-                    </Link>
+                    </A>
                 </li>
 
                 <li className="nav-item">
-                    <Link to="/register" className="nav-link">
+                    <A href="/register" className="nav-link">
                         Sign up
-                    </Link>
+                    </A>
                 </li>
-
             </ul>
         </>;
     }
@@ -35,27 +46,17 @@ const LoggedInView = (props: any) => {
         return <>
             <ul className="nav navbar-nav pull-xs-right">
                 <li className="nav-item">
-                    <Link to="/" className="nav-link">
+                    <A href="/" className="nav-link">
                         Home
-                    </Link>
+                    </A>
                 </li>
                 <li className="nav-item">
-                    <Link to="/editor" className="nav-link">
-                        <i className="ion-compose"></i>&nbsp;Action
-                    </Link>
-                </li>
-                <li className="nav-item">
-                    <Link to="/settings" className="nav-link">
-                        <i className="ion-gear-a"></i>&nbsp;Account
-                    </Link>
-                </li>
-                <li className="nav-item">
-                    <Link
-                        to={`/@${props.currentUser.username}`}
+                    <A
+                        href={`/@${props.currentUser.username}`}
                         className="nav-link">
                         <img src={props.currentUser.image} className="user-pic" alt={props.currentUser.username}/>
                         {props.currentUser.username}
-                    </Link>
+                    </A>
                 </li>
 
             </ul>
@@ -66,14 +67,19 @@ const LoggedInView = (props: any) => {
 };
 
 function Header(props: any) {
+    const routeResult = useRoutes(routes)
+    const appName = useSelector((state: any) => state.common.appName);
+    const currentUser = useSelector((state: any) => state.common.currentUser);
+
     return <>
         <nav className="navbar navbar-light">
             <div className="container">
-                <Link to="/" className="navbar-brand">{props.appName}</Link>
-                <LoggedOutView currentUser={props.currentUser}/>
-                <LoggedInView currentUser={props.currentUser}/>
+                <A href="/" className="navbar-brand">{appName}</A>
+                <LoggedOutView currentUser={currentUser}/>
+                <LoggedInView currentUser={currentUser}/>
             </div>
         </nav>
+        {routeResult || <NotFound/>}
     </>
 }
 

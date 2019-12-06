@@ -1,4 +1,4 @@
-import {Link} from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 
 import React, {useEffect} from 'react';
 import agent from '../agent';
@@ -23,9 +23,10 @@ const mapDispatchToProps = (dispatch: any) => ({
         dispatch({type: REGISTER_PAGE_UNLOADED})
 });
 
-function Register(props: any) {
+function Singup(props: any) {
     const {handleSubmit, register, errors} = useForm();
-
+    let location = useLocation();
+    
     const onSubmit = (values: any) => {
         console.log(values);
     };
@@ -60,7 +61,7 @@ function Register(props: any) {
 
                                 <fieldset className="form-group">
                                     <input
-                                        className="form-control form-control-lg"
+                                        className="form-control "
                                         name="username"
                                         type="text"
                                         ref={register({
@@ -74,7 +75,7 @@ function Register(props: any) {
 
                                 <fieldset className="form-group">
                                     <input
-                                        className="form-control form-control-lg"
+                                        className="form-control "
                                         name="email"
                                         ref={register({
                                             required: 'Required',
@@ -93,7 +94,7 @@ function Register(props: any) {
 
                                 <fieldset className="form-group">
                                     <input
-                                        className="form-control form-control-lg"
+                                        className="form-control "
                                         type="password"
                                         placeholder="Password"
                                         value={props.password}
@@ -119,4 +120,4 @@ function Register(props: any) {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Register);
+export default connect(mapStateToProps, mapDispatchToProps)(Singup);

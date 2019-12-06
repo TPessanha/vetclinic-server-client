@@ -1,35 +1,38 @@
-import Home from './Home';
 import React, {useEffect} from 'react';
 import {APP_LOAD, REDIRECT} from '../constants/actionTypes';
 import Login from "./Login";
 import Register from "./Register";
-import Accounts from "./Accounts";
 import agent from "../agent";
-import {store} from "../store";
-import {push} from "react-router-redux";
-import {connect} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Header from "./Header";
 // @ts-ignore
-import {Route, Switch} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
+import {useRoutes} from "hookrouter";
+import Home from "./Home/Home";
 
 const mapStateToProps = (state: any) => {
-    return {
-        appLoaded: state.common.appLoaded,
-        appName: state.common.appName,
-        currentUser: state.common.currentUser,
-        redirectTo: state.common.redirectTo
-    }
+    return {}
 };
 
-const mapDispatchToProps = (dispatch: any) => ({
-    onLoad: (payload: any, token: string) =>
-        dispatch({type: APP_LOAD, payload, token, skipTracking: true}),
-    onRedirect: () =>
-        dispatch({type: REDIRECT})
-});
+const mapDispatchToProps = (dispatch: any) => ({});
+
+const routes = {
+    "/": () => <Home/>,
+    "/login": () => <Login/>,
+    "/register": () => <Register/>
+};
+
+const App = () => {
+    const dispatch = useDispatch();
+    const routeResult = useRoutes(routes)
+    const appLoaded = useSelector((state: any) => state.common.appLoaded);
+    const appName = useSelector((state: any) => state.common.appName);
+    const currentUser = useSelector((state: any) => state.common.currentUser);
+    const redirectTo = useLocation();
 
 
-const App = (props: any) => {
+    const onLoad = (payload: any, token: string) => dispatch({type: APP_LOAD, payload, token, skipTracking: true})
+    const onRedirect = () => dispatch({type: REDIRECT});
 
     useEffect(() => {
         const token = window.localStorage.getItem('jwt');
@@ -39,26 +42,12 @@ const App = (props: any) => {
     }, []);
 
 
-    useEffect(() => {
-        if (props.location.pathname) {
-            store.dispatch(push(props.location.pathname));
-            props.onRedirect();
-        }
-    }, [props.location.pathname]);
-
-
-    if (props.appLoaded) {
+    if (appLoaded) {
         return <>
             <div>
                 <Header
-                    appName={props.appName}
-                    currentUser={props.currentUser}/>
-                <Switch>
-                    <Route exact path="/" component={Home}/>
-                    <Route path="/login" component={Login}/>
-                    <Route path="/register" component={Register}/>
-                    <Route path="/account" component={Accounts}/>
-                </Switch>
+                    appName={appName}
+                    currentUser={currentUser}/>
             </div>
         </>
     }
@@ -66,13 +55,15 @@ const App = (props: any) => {
     return <>
         <div>
             <Header
-                appName={props.appName}
-                currentUser={props.currentUser}/>
+                appName={appName}
+                currentUser={currentUser}/>
         </div>
     </>
 
 
 }
+//
+//
+// export default connect(mapStateToProps, mapDispatchToProps)(App);
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App

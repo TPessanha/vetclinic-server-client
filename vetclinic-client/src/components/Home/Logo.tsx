@@ -6,11 +6,11 @@ const Logo = ({appName = "VetClinic", token = null}) => {
     }
     return (
         <div className="logo">
-            <div className="container">
-                <h1 className="logo-font">
-                    {appName}
-                </h1>
-                <p>Welcome to Veterinarian Manegment Clinic.</p>
+            <div className="container center">
+                {/*<h1 className="logo-font">*/}
+                {/*    {appName}*/}
+                {/*</h1>*/}
+                <p className="text-xs-center">Welcome to Veterinarian Manegment Clinic.</p>
             </div>
         </div>
     );

@@ -7,7 +7,6 @@ import {Route, Router, Switch} from 'react-router-dom';
 
 import App from './components/App';
 
-export const AppContext = createContext("")
 
 ReactDOM.render((
 

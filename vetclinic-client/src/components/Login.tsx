@@ -1,39 +1,40 @@
 import {Link} from 'react-router-dom';
 import React, {useEffect} from 'react';
 import agent from '../agent';
-import {connect} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {LOGIN, LOGIN_PAGE_UNLOADED, UPDATE_FIELD_AUTH} from '../constants/actionTypes';
 import useForm from "react-hook-form";
 
-const mapStateToProps = (state: any) => ({...state.auth});
-
-const mapDispatchToProps = (dispatch: any) => ({
-    onChangeEmail: (value: any) =>
-        dispatch({type: UPDATE_FIELD_AUTH, key: 'email', value}),
-    onChangePassword: (value: any) =>
-        dispatch({type: UPDATE_FIELD_AUTH, key: 'password', value}),
-    onSubmit: (email: string, password: string) =>
-        dispatch({type: LOGIN, payload: agent.Auth.login(email, password)}),
-    onUnload: () =>
-        dispatch({type: LOGIN_PAGE_UNLOADED})
-});
 
 function Login(props: any) {
+    const dispatch = useDispatch();
+    const auth = useSelector((state: any) => state.auth);
     const {handleSubmit, register, errors} = useForm();
 
-    const onSubmit = (values: any) => {
-        console.log(values);
+
+    const onChangeUserName = (value: any) => {
+        dispatch({type: UPDATE_FIELD_AUTH, key: 'username', value: value.username})
     };
+
+    const onChangePassword = (value: any) => {
+        dispatch({type: UPDATE_FIELD_AUTH, key: 'password', value: value.password})
+    };
+    const onSubmit = (username: string, password: string) =>
+        dispatch({type: LOGIN, payload: agent.Auth.login(username, password)})
+
+    const onUnload = () =>
+        dispatch({type: LOGIN_PAGE_UNLOADED})
+
+    const onHandleSubmit = (event: any) => {
+        onSubmit(event.username, event.password)
+    };
+
     useEffect(() => {
 
         return (() => {
-            props.onUnload();
+            onUnload();
         })
     });
-
-
-    const password = props.password;
-    const username = props.username;
 
     return <>
         <div className="auth-page">
@@ -49,29 +50,33 @@ function Login(props: any) {
                         </p>
 
 
-                        <form onSubmit={handleSubmit(onSubmit)}>
+                        <form onSubmit={handleSubmit(onHandleSubmit)}>
                             <fieldset>
 
                                 <fieldset className="form-group">
                                     <input
-                                        className="form-control form-control-lg"
+                                        className="form-control"
                                         name="username"
                                         type="text"
                                         ref={register({
-                                            validate: value => value !== "admin" || "Nice try!"
+                                            validate: value => value !== "admin"
                                         })}
                                         placeholder="User Name"
                                         value={props.username}
-                                        onChange={handleSubmit(onSubmit)}/>
+                                        onChange={handleSubmit(onChangeUserName)}/>
                                     {errors.username && errors.username.message}
                                 </fieldset>
                                 <fieldset className="form-group">
                                     <input
-                                        className="form-control form-control-lg"
+                                        className="form-control "
                                         type="password"
+                                        name="password"
+                                        ref={register({
+                                            validate: value => value !== "1234" || value.size > 8
+                                        })}
                                         placeholder="Password"
                                         value={props.password}
-                                        onChange={handleSubmit(onSubmit)}/>
+                                        onChange={handleSubmit(onChangePassword)}/>
                                     {errors.password && errors.password.message}
 
                                 </fieldset>
@@ -92,4 +97,4 @@ function Login(props: any) {
     </>;
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default Login;
