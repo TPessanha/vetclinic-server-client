@@ -23,8 +23,9 @@ class ChangeInfoForm extends React.Component {
   render() {
     return (
       <div className="ChangeInfoContainer">
+      <div className="ChangeInfoForm">
         <form onSubmit={this.mySubmitHandler}>
-        <h1>Change your informtion</h1>
+        <h1 style={{ borderColor: 'black', borderStyle:'solid' }}>Change your informtion</h1>
         <p>New email:</p>
         <input
           type='text'
@@ -39,12 +40,13 @@ class ChangeInfoForm extends React.Component {
         />
         <button type="submit"> Confirm </button>
         </form>
+        </div>
         <div className="ClientDetails">
-        <h1>Client Details</h1>
-        <p>Name:</p>
+        <h2>Client Details</h2>
+        <p >Name:</p>
         <p>Email:</p>
-        <p>Photo:</p>
-        <p>Adress:</p>
+        <p>Photo: </p>
+        <p>Adress: </p>
         <p>Username:</p>
         </div>
       </div>
