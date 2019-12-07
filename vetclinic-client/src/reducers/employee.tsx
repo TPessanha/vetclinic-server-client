@@ -36,7 +36,8 @@ export default (state = {}, action: any) => {
             if (action.subtype === EMPLOYEE_VET_LOADED || action.subtype === EMPLOYEE_ADMIN_LOADED || action.subtype === EMPLOYEE_VET_LOADED) {
                 return {...state, inProgress: true};
             }
-            break;
+            //return previous state
+            return {...state};
         case EMPLOYEE_PAGE_UNLOADED:
             return {};
         default:
