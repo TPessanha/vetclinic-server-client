@@ -10,8 +10,7 @@ const Api = 'http://localhost:8080';
 
 const responseBody = (res: Body) => res.body;
 
-// @ts-ignore
-let token: string = null;
+let token:any;
 
 
 const tokenPlugin = (req: any) => {
