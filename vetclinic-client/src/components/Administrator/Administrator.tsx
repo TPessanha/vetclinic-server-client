@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {ADMINISTRATOR_PAGE_LOADED, ADMINISTRATOR_PAGE_UNLOADED} from '../../constants/actionTypes';
-import agent from "../../agent";
 
 
 function Administrator(props: any) {

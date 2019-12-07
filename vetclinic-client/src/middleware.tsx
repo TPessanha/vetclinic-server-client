@@ -1,4 +1,4 @@
-import agent from './agent';
+import api from './api';
 import {ASYNC_END, ASYNC_START, LOGIN, LOGOUT, SINGUP} from './constants/actionTypes';
 
 
@@ -45,11 +45,11 @@ const localStorageMiddleware = (store: any) => (next: any) => (action: any) => {
     if (action.type === SINGUP || action.type === LOGIN) {
         if (!action.error) {
             window.localStorage.setItem('jwt', action.payload.user.token);
-            agent.setToken(action.payload.user.token);
+            api.setToken(action.payload.user.token);
         }
     } else if (action.type === LOGOUT) {
         window.localStorage.setItem('jwt', '');
-        agent.setToken("");
+        api.setToken("");
     }
 
     next(action);

@@ -3,7 +3,7 @@ import {useSelector} from "react-redux";
 import {A, useRoutes} from "hookrouter";
 import Home from "./Home/Home";
 import Login from "./Login";
-import Register from "./Register";
+import {Singup} from "./Register";
 import NotFound from "./Erros/NotFound";
 import Administrator from "./Administrator/Administrator";
 
@@ -11,7 +11,7 @@ import Administrator from "./Administrator/Administrator";
 const routes = {
     "/": () => <Home/>,
     "/login": () => <Login/>,
-    "/register": () => <Register/>,
+    "/register": () => <Singup/>,
     "/admin/:id": ({id}: any) => <Administrator id={id}/>,
     // "/vet/:id": ({id}: any) => <Veterinarian id={id}/>,
     // "/cli/:id": ({id}: any) => <Client id={id}/>

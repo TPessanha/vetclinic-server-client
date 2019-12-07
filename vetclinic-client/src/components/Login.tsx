@@ -1,6 +1,6 @@
 import {Link} from 'react-router-dom';
 import React, {useEffect} from 'react';
-import agent from '../agent';
+import api from '../api';
 import {useDispatch, useSelector} from 'react-redux';
 import {LOGIN, LOGIN_PAGE_UNLOADED, UPDATE_FIELD_AUTH} from '../constants/actionTypes';
 import useForm from "react-hook-form";
@@ -8,7 +8,6 @@ import useForm from "react-hook-form";
 
 function Login(props: any) {
     const dispatch = useDispatch();
-    const auth = useSelector((state: any) => state.auth);
     const {handleSubmit, register, errors} = useForm();
 
 
@@ -20,7 +19,7 @@ function Login(props: any) {
         dispatch({type: UPDATE_FIELD_AUTH, key: 'password', value: value.password})
     };
     const onSubmit = (username: string, password: string) =>
-        dispatch({type: LOGIN, payload: agent.Auth.login(username, password)});
+        dispatch({type: LOGIN, payload: api.Auth.login(username, password)});
 
     const onUnload = () =>
         dispatch({type: LOGIN_PAGE_UNLOADED});
@@ -63,7 +62,7 @@ function Login(props: any) {
                                         placeholder="User Name"
                                         value={props.username}
                                         onChange={handleSubmit(onChangeUserName)}/>
-                                    {errors.username && errors.username.message}
+                                    {errors.username && errors.message}
                                 </fieldset>
                                 <fieldset className="form-group">
                                     <input

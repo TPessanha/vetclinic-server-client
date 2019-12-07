@@ -1,32 +1,32 @@
 import {Link} from 'react-router-dom';
 
 import React, {useEffect} from 'react';
-import agent from '../agent';
-import {connect, useDispatch, useSelector} from 'react-redux';
+import api from '../api';
+import {useDispatch, useSelector} from 'react-redux';
 import {REGISTER_PAGE_UNLOADED, SINGUP, UPDATE_FIELD_AUTH} from "../constants/actionTypes";
 import useForm from "react-hook-form";
 
-const mapStateToProps = (state: any) => ({...state.auth});
 
-const mapDispatchToProps = (dispatch: any) => ({});
-
-function Singup(props: any) {
+export const Singup = (props: any) => {
     const dispatch = useDispatch();
-    const auth = useSelector((state: any) => state.auth);
+    const username = useSelector((state: any) => state.auth.username);
+    const email = useSelector((state: any) => state.auth.email);
+    const password = useSelector((state: any) => state.auth.password);
+    const inProgress = useSelector((state: any) => state.auth.inProgress);
     const {handleSubmit, register, errors} = useForm();
 
 
     const onChangeEmail = (value: any) => {
-        dispatch({type: UPDATE_FIELD_AUTH, key: 'email', value})
+        dispatch({type: UPDATE_FIELD_AUTH, key: 'email', value:value.email})
     };
     const onChangePassword = (value: any) => {
-        dispatch({type: UPDATE_FIELD_AUTH, key: 'password', value})
+        dispatch({type: UPDATE_FIELD_AUTH, key: 'password', value:value.password})
     };
     const onChangeUsername = (value: any) => {
-        dispatch({type: UPDATE_FIELD_AUTH, key: 'username', value})
+        dispatch({type: UPDATE_FIELD_AUTH, key: 'username', value:value.username})
     };
     const onSubmit = (username: string, email: string, password: string) => {
-        const payload = agent.Auth.signup(username, email, password);
+        const payload = api.Auth.signup(username, email, password);
         dispatch({type: SINGUP, payload})
     };
 
@@ -43,12 +43,8 @@ function Singup(props: any) {
         return (() => {
             onUnload();
         })
-    },[]);
+    }, []);
 
-
-    const email = props.email;
-    const password = props.password;
-    const username = props.username;
 
     return <>
         <div className="auth-page">
@@ -72,13 +68,9 @@ function Singup(props: any) {
                                         className="form-control "
                                         name="username"
                                         type="text"
-                                        ref={register({
-                                            validate: value => value !== "admin" || "Nice try!"
-                                        })}
                                         placeholder="User Name"
-                                        value={props.username}
+                                        value={username}
                                         onChange={handleSubmit(onChangeUsername)}/>
-                                    {errors.username && errors.username.message}
                                 </fieldset>
 
                                 <fieldset className="form-group">
@@ -86,16 +78,15 @@ function Singup(props: any) {
                                         className="form-control "
                                         name="email"
                                         ref={register({
-                                            required: 'Required',
                                             pattern: {
                                                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
                                                 message: "invalid email address"
                                             }
                                         })}
 
-                                        type="email"
+                                        type="text"
                                         placeholder="Email"
-                                        value={props.email}
+                                        value={email}
                                         onChange={handleSubmit(onChangeEmail)}/>
                                     {errors.email && errors.email.message}
                                 </fieldset>
@@ -104,16 +95,16 @@ function Singup(props: any) {
                                     <input
                                         className="form-control "
                                         type="password"
+
                                         placeholder="Password"
-                                        value={props.password}
+                                        value={password}
                                         onChange={handleSubmit(onChangePassword)}/>
-                                    {errors.password && errors.password.message}
 
                                 </fieldset>
                                 <button
                                     className="btn btn-lg btn-primary pull-xs-right"
                                     type="submit"
-                                    disabled={props.inProgress}>
+                                    disabled={inProgress}>
                                     Sign up
                                 </button>
 
@@ -127,5 +118,3 @@ function Singup(props: any) {
     </>;
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(Singup);

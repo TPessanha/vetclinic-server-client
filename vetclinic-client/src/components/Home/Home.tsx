@@ -1,37 +1,48 @@
-import Main from './MainView';
 import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {HOME_PAGE_LOADED, HOME_PAGE_UNLOADED} from '../../constants/actionTypes';
-import agent from "../../agent";
+import {useDispatch} from 'react-redux';
+import {
+    EMPLOYEE_ADMIN_LOADED,
+    EMPLOYEE_VET_LOADED,
+    HOME_PAGE_LOADED,
+    HOME_PAGE_UNLOADED
+} from '../../constants/actionTypes';
+import api from "../../api";
+import {Employee} from "../Employee/Employee";
 
 
-function Home(props: any) {
+function Home() {
     const dispatch = useDispatch();
 
-    const token = useSelector((state: any) => state.common.token);
-    const appName = useSelector((state: any) => state.common.appName);
-    const currentUser = useSelector((state: any) => state.common.currentUser);
-
-
-    const onLoad = (tab: any, pager: any, payload: any) =>
-        dispatch({type: HOME_PAGE_LOADED, tab, pager, payload});
+    const onLoad = () =>
+        dispatch({type: HOME_PAGE_LOADED});
     const onUnload = () =>
         dispatch({type: HOME_PAGE_UNLOADED});
+    const onLoadVets = () => {
+        const payload = api.Veterinarian.all();
+        dispatch({type: EMPLOYEE_VET_LOADED, payload});
+    };
+    const onLoadAdmins = () => {
+        const payload = api.Administrator.all();
+        dispatch({type: EMPLOYEE_ADMIN_LOADED, payload});
+    };
 
     useEffect(() => {
-        const container = props.token != "" ? 'session' : 'default';
-        const userPromise = props.token === "" ?
-            agent.Employee.all : agent.User.type;
+        onLoad();
+        onLoadVets();
+        onLoadAdmins();
 
-        onLoad(container, userPromise, agent.Employee.all());
+    });
+
+    useEffect(() => {
+
         return (() => {
             onUnload();
         })
-    }, []);
+    });
 
 
     return <>
-        <div className="home-page">
+        <div className="container page">
 
             <div className="logo">
                 <div className="container center">
@@ -41,11 +52,8 @@ function Home(props: any) {
 
             <div className="container page">
                 <div className="row">
-                    <Main/>
-
-                    <div className="col-md-3">
-
-                    </div>
+                    {/*<MainView/>*/}
+                    <Employee/>
                 </div>
             </div>
 

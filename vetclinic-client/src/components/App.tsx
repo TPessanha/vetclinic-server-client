@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {APP_LOAD, REDIRECT} from '../constants/actionTypes';
-import agent from "../agent";
+import agent from "../api";
 import {useDispatch, useSelector} from "react-redux";
 import Header from "./Header";
 
