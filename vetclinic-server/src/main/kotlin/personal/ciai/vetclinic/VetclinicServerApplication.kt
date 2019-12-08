@@ -66,11 +66,11 @@ class Init(
         if (debugAndTesting) {
             val clients = addClients(roles)
             addPets(clients)
-            addVets()
+            addVets(roles)
         }
     }
 
-    private fun addVets() {
+    private fun addVets(roles: List<Role>) {
         val vet1 =
             Veterinarian(
                 0,
@@ -84,6 +84,9 @@ class Init(
                 true,
                 employeeId = 2
             )
+
+        vet1.roles.add(roles[1])
+        vet1.roles.add(roles[2])
         veterinarianRepository.save(vet1)
 
         var blocks = BitSet(720)

@@ -69,4 +69,14 @@ open class User(
 
     fun getAuthorities() =
         roles.map { SimpleGrantedAuthority(it.toAuthority()) }.toMutableList()
+
+    fun getMajorRole(): String {
+        for (r: Role in roles) {
+            if (r.name.name.equals("ADMIN"))
+                return "ADMIN";
+            else if(r.name.name.equals("VET"))
+                return "VET"
+        }
+        return "CLIENT"
+    }
 }
