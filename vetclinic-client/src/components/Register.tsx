@@ -5,14 +5,24 @@ import api from '../api';
 import {useDispatch, useSelector} from 'react-redux';
 import {REGISTER_PAGE_UNLOADED, SINGUP, UPDATE_FIELD_AUTH} from "../constants/actionTypes";
 import useForm from "react-hook-form";
+import {A, useRoutes} from 'hookrouter';
+import Home from "./Home/Home";
+import Login from './Login';
+
+const routes = {
+    "/login": () => <Login/>,
+};
+
+
 
 
 export const Singup = (props: any) => {
     const dispatch = useDispatch();
+    const routeResult = useRoutes(routes);
     const username = useSelector((state: any) => state.auth.username);
     const email = useSelector((state: any) => state.auth.email);
     const password = useSelector((state: any) => state.auth.password);
-    const inProgress = useSelector((state: any) => state.auth.inProgress);
+    const isLoading = useSelector((state: any) => state.auth.isLoading);
     const {handleSubmit, register, errors} = useForm();
 
 
@@ -54,11 +64,11 @@ export const Singup = (props: any) => {
                     <div className="col-md-6 offset-md-3 col-xs-12">
                         <h1 className="text-xs-center">Sign Up</h1>
                         <p className="text-xs-center">
-                            <Link to="/login">
+                            <A href="/login">
                                 Already Have an Account?
-                            </Link>
+                            </A>
                         </p>
-
+                        {routeResult}
 
                         <form onSubmit={handleSubmit(onHandleSubmit)}>
                             <fieldset>
@@ -110,7 +120,7 @@ export const Singup = (props: any) => {
                                 <button
                                     className="btn btn-lg btn-primary pull-xs-right"
                                     type="submit"
-                                    disabled={inProgress}>
+                                    disabled={isLoading}>
                                     Sign up
                                 </button>
 

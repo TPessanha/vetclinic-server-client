@@ -7,6 +7,7 @@ import {
     LOGIN,
     LOGIN_PAGE_UNLOADED,
     LOGOUT,
+    LOGOUT_PAGE_UNLOADED,
     REDIRECT,
     REGISTER_PAGE_UNLOADED,
     SINGUP
@@ -35,6 +36,8 @@ export default (state = defaultState, action: any) => {
             };
         case REDIRECT:
             return {...state, redirectTo: null};
+        case LOGOUT_PAGE_UNLOADED:
+            return {...state, isLoggedIn: false};
         case LOGOUT:
             return {...state, redirectTo: '/', token: null, currentUser: null};
         case ADMINISTRATOR_CREATED:

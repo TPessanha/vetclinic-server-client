@@ -1,14 +1,22 @@
-import {Link} from 'react-router-dom';
 import React, {useEffect} from 'react';
 import api from '../api';
 import {useDispatch, useSelector} from 'react-redux';
 import {LOGIN, LOGIN_PAGE_UNLOADED, UPDATE_FIELD_AUTH} from '../constants/actionTypes';
 import useForm from "react-hook-form";
+import Home from "./Home/Home";
+import {Singup} from "./Register";
+import {useRoutes, A} from 'hookrouter';
 
+const routes = {
+    "/": () => <Home/>,
+    "/register": () => <Singup/>,
+};
 
 function Login(props: any) {
     const dispatch = useDispatch();
     const {handleSubmit, register, errors} = useForm();
+    const routeResult = useRoutes(routes);
+    const isLoggedIn = useSelector((state: any) => state.common.isLoggedIn);
 
 
     const onChangeUserName = (value: any) => {
@@ -33,7 +41,7 @@ function Login(props: any) {
         return (() => {
             onUnload();
         })
-    },[]);
+    }, []);
 
     return <>
         <div className="auth-page">
@@ -43,11 +51,11 @@ function Login(props: any) {
                     <div className="col-md-6 offset-md-3 col-xs-12">
                         <h1 className="text-xs-center">Login In</h1>
                         <p className="text-xs-center">
-                            <Link to="/register">
+                            <A href="/register">
                                 Need an Account?
-                            </Link>
+                            </A>
                         </p>
-
+                        {routeResult}
                         <form onSubmit={handleSubmit(onHandleSubmit)}>
                             <fieldset>
 
@@ -81,7 +89,7 @@ function Login(props: any) {
                                 <button
                                     className="btn btn-lg btn-primary pull-xs-right"
                                     type="submit"
-                                    disabled={props.inProgress}>
+                                    disabled={props.isLoading}>
                                     Login
                                 </button>
 

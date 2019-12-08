@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import Header from "./Header";
 import {store} from "../store";
 import {push} from "react-router-redux";
+import {ClientDashboard} from "./Client/ClientDashboard";
 
 
 const App = () => {
@@ -14,7 +15,6 @@ const App = () => {
     const currentUser = useSelector((state: any) => state.common.currentUser);
     const redirectTo = useSelector((state: any) => state.common.redirectTo);
     const token = useSelector((state: any) => state.common.token);
-
 
     const onLoad = (payload: any, token: any) => dispatch({type: APP_LOAD, payload, token, skipTracking: true});
     const onRedirect = () => dispatch({type: REDIRECT});
@@ -52,6 +52,7 @@ const App = () => {
                     appName={appName}
                     currentUser={currentUser}/>
             </div>
+            <div> <ClientDashboard></ClientDashboard></div>
         </>
     }
 

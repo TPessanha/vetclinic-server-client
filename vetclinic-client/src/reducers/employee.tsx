@@ -12,30 +12,30 @@ export default (state = {}, action: any) => {
         case APP_LOAD:
             return {
                 ...state,
-                inProgress: false
+                isLoading: false
             };
         case EMPLOYEE_PAGE_LOADED:
             console.log(action);
             return {
                 ...state,
-                inProgress: false,
-                employees: action.value,
+                isLoading: false,
+                employee: action.value,
             };
         case EMPLOYEE_VET_LOADED:
             return {
                 ...state,
-                inProgress: false,
-                employees_Veterinarian: action.payload
+                isLoading: false,
+                veterinarians: action.payload
             };
         case EMPLOYEE_ADMIN_LOADED:
             return {
                 ...state,
-                inProgress: false,
-                employees_Administrator: action.payload
+                isLoading: false,
+                administrators: action.payload
             };
         case ASYNC_START:
             if (action.subtype === EMPLOYEE_VET_LOADED || action.subtype === EMPLOYEE_ADMIN_LOADED || action.subtype === EMPLOYEE_VET_LOADED) {
-                return {...state, inProgress: true};
+                return {...state, isLoading: true};
             }
             //return previous state
             return {...state};

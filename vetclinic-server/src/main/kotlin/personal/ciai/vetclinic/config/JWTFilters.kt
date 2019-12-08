@@ -49,12 +49,12 @@ private fun addResponseToken(authentication: Authentication, response: HttpServl
         .compact()
 
     response.addHeader("Authorization", "Bearer $token")
+    response.addHeader("username", authentication.name)
 }
 
 class UserPasswordAuthenticationFilterToJWT(
     defaultFilterProcessesUrl: String?,
-    private val anAuthenticationManager: AuthenticationManager,
-    userService: UserService
+    private val anAuthenticationManager: AuthenticationManager
 ) : AbstractAuthenticationProcessingFilter(defaultFilterProcessesUrl) {
 
     override fun attemptAuthentication(

@@ -7,12 +7,14 @@ import {Singup} from "./Register";
 import NotFound from "./Erros/NotFound";
 import Administrator from "./Administrator/Administrator";
 import {UserType} from "../api";
+import Logout from './Logout';
 
 
 const routes = {
     "/": () => <Home/>,
     "/login": () => <Login/>,
     "/register": () => <Singup/>,
+    "/logout": () => <Logout/>,
     "/admin/:id": ({id}: any) => <Administrator id={id}/>,
     // "/vet/:id": ({id}: any) => <Veterinarian id={id}/>,
     // "/cli/:id": ({id}: any) => <Client id={id}/>

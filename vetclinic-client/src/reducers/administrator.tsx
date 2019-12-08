@@ -10,7 +10,7 @@ export default (state: any, action: any) => {
         case ADMINISTRATOR_PAGE_LOADED:
             return {
                 ...state,
-                administrator: action.payload[0].administrator,
+                administrator: action.value,
             };
         case ADMINISTRATOR_PAGE_UNLOADED:
             return {};

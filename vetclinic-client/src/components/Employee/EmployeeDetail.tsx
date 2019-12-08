@@ -6,13 +6,13 @@ export const EmployeeDetail = (props: any) => {
 
     return employee ? <>
             <div className="card-header"> {employee.name}
-                <div className="card-img">
-                    <Link
-                        to={`/@${employee.image}`}
-                        className="element-user">
-                        <img src={employee.image} className="element-user-img" alt={employee.username}/>
-                    </Link>
-                </div>
+                {/*<div className="card-img">*/}
+                {/*    <Link*/}
+                {/*        to={`/@${employee.image}`}*/}
+                {/*        className="element-user">*/}
+                {/*        <img src={employee.image} className="element-user-img" alt={employee.username}/>*/}
+                {/*    </Link>*/}
+                {/*</div>*/}
                 <div className="card-body">
                     <div className="card-block">
                         <p className="card-text">Email: </p>

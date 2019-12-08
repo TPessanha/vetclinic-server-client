@@ -4,14 +4,15 @@ import {useSelector} from "react-redux";
 
 
 export const Employee = () => {
-    const isLoading = useSelector((state: any) => state.employee.inProgress);
+    // const isLoading = useSelector((state: any) => state.employee.isLoading);
 
-    return isLoading ? <></> : <>
+    return <>
         <div className="container center">
             <p className="text-xs-center">List Of Employees</p>
                 <EmployeeContainer/>
         </div>
 
     </>;
+    // !isLoading ? <></> :
 
 };

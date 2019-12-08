@@ -55,7 +55,7 @@ private class WebSecurityConfig(
             .and().headers().frameOptions().sameOrigin() // H2CONSOLE
             .and()
             .addFilterBefore(
-                UserPasswordAuthenticationFilterToJWT("/login", super.authenticationManagerBean(), userService),
+                UserPasswordAuthenticationFilterToJWT("/login", super.authenticationManagerBean()),
                 BasicAuthenticationFilter::class.java
             )
             .addFilterBefore(

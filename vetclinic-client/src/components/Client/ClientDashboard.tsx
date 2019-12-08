@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-class ClientDashboard extends React.Component {
+export class ClientDashboard extends React.Component {
   constructor(props:any) {
     super(props);
     this.state = {

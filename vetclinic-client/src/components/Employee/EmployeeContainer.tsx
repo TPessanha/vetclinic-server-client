@@ -3,8 +3,8 @@ import {useSelector} from "react-redux";
 import {EmployeeList} from "./EmployeeList";
 
 export const EmployeeContainer = () => {
-    const admin = useSelector((state: any) => state.employee.employees_Administrator);
-    const vet = useSelector((state: any) => state.employee.employees_Veterinarian);
+    const admin = useSelector((state: any) => state.employee.administrators);
+    const vet = useSelector((state: any) => state.employee.veterinarians);
     const [employees, setEmployee] = useState();
 
     useEffect(() => {
@@ -14,7 +14,7 @@ export const EmployeeContainer = () => {
         }
     });
 
-    return employees ? <>
+    return  employees ? <>
         <div >
             <EmployeeList employees={employees || []}/>
         </div>

@@ -21,7 +21,7 @@ let token: string = null;
 
 const plugin = (req: any) => {
     if (token && token.length > 0) {
-        req.set('authorization', `Token ${token}`);
+        req.set('authorization', `${token}`);
     }
     // req.set('Access-Control-Allow-Origin', 'http://localhost:3000');
 };
@@ -43,8 +43,10 @@ const requests = {
 
 
 const Auth = {
-    current: () =>
-        requests.get('/'),
+    current: () => {
+
+        return requests.get('/')
+    },
     login: (username: string, password: string) =>
         requests.post('/login', withUser(username, password)),
     signup: (username: string, email: string, password: string) =>
@@ -70,6 +72,8 @@ const Auth = {
 const Administrator = {
     all: () =>
         requests.get(`/administrators`),
+    current: () =>
+        requests.get(`/administrators/`),
     delete: (id: number) =>
         requests.delete(`/administrators/${id}`),
     get: (id: number) =>
@@ -84,7 +88,9 @@ const Veterinarian = {
     all: () =>
         requests.get(`/veterinarians`),
     get: (vetId: number) =>
-        requests.get(`/veterinarians?vetid=${vetId}`),
+        requests.get(`/veterinarians/${vetId}`),
+    current: () =>
+        requests.get(`/veterinarians/`),
     delete: (vetId: string) =>
         requests.delete(`/veterinarians/${vetId}`),
     update: (veterinarian: any) =>
@@ -103,10 +109,12 @@ const Employee = {
     }
 };
 const Client = {
+    current: () =>
+        requests.get(`/client/`),
     get: (clientId: number) =>
-        requests.get(`/client?id=${clientId}`),
+        requests.get(`/client/${clientId}`),
     update: (client: any) =>
-        requests.put(`/veterinarians/${client.id}`, {Client: client}),
+        requests.put(`/client/${client.id}`, {Client: client}),
 };
 
 
@@ -115,6 +123,11 @@ const User = {
         (Veterinarian.get(id)
             ? UserType.VETERINARIAN : (Administrator.get(id)
                 ? UserType.ADMINISTRATOR : (Client.get(id)
+                    ? UserType.CLIENT : UserType.UNREGISTERED))),
+    current: () =>
+        (Veterinarian.current()
+            ? UserType.VETERINARIAN : (Administrator.current()
+                ? UserType.ADMINISTRATOR : (Client.current()
                     ? UserType.CLIENT : UserType.UNREGISTERED)))
 };
 
