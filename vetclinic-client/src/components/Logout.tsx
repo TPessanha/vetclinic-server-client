@@ -33,7 +33,11 @@ function Logout(props: any) {
     }, []);
 
 
-    return <>   {routeResult}    </>;
+    return <>
+
+        {routeResult}
+
+        </>;
 }
 
 export default Logout;

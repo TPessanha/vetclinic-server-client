@@ -16,7 +16,8 @@ import {
 const defaultState = {
     appName: 'VetClinic',
     token: "",
-    viewChangeCounter: 0
+    viewChangeCounter: 0,
+    currentUser: null
 };
 
 export default (state = defaultState, action: any) => {
@@ -26,13 +27,14 @@ export default (state = defaultState, action: any) => {
                 ...state,
                 token: action.token || "",
                 appLoaded: true,
-                currentUser: action.payload ? action.payload.user : null,
+                currentUser: action.payload ? action.payload : null,
                 isLoggedIn: action.token ? true : false
             };
         case GET_USER:
             return {
                 ...state,
-                currentUser: action.payload ? action.payload.user : null,
+                currentUser: !action.error ? action.payload : state.currentUser,
+                userType: action.payload ? action.payload.userType : null,
             };
         case REDIRECT:
             return {...state, redirectTo: null};

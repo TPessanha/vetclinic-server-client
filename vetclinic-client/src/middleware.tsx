@@ -46,6 +46,7 @@ const localStorageMiddleware = (store: any) => (next: any) => (action: any) => {
     if (action.type === SINGUP || action.type === LOGIN) {
         if (!action.error) {
             window.localStorage.setItem('token', action.headers.authorization);
+            window.localStorage.setItem('username', action.headers.username);
             api.setToken(action.headers.authorization);
         }
     } else if (action.type === LOGOUT) {

@@ -43,30 +43,10 @@ const requests = {
 
 
 const Auth = {
-    current: () => {
-
-        return requests.get('/')
-    },
     login: (username: string, password: string) =>
         requests.post('/login', withUser(username, password)),
     signup: (username: string, email: string, password: string) =>
-        requests.post('/signup', withUser(username, password, email)),
-    save: (user: any) => {
-        let type = User.type(user.id);
-
-        if (UserType.ADMINISTRATOR === type) {
-            return Administrator.update(user);
-        }
-
-        if (UserType.CLIENT === type) {
-            return Client.update(user);
-        }
-
-        if (UserType.VETERINARIAN === type) {
-            return Veterinarian.update(user);
-        }
-    }
-
+        requests.post('/signup', withUser(username, password, email))
 };
 
 const Administrator = {
@@ -119,16 +99,20 @@ const Client = {
 
 
 const User = {
-    type: (id: number) =>
-        (Veterinarian.get(id)
-            ? UserType.VETERINARIAN : (Administrator.get(id)
-                ? UserType.ADMINISTRATOR : (Client.get(id)
-                    ? UserType.CLIENT : UserType.UNREGISTERED))),
-    current: () =>
-        (Veterinarian.current()
-            ? UserType.VETERINARIAN : (Administrator.current()
-                ? UserType.ADMINISTRATOR : (Client.current()
-                    ? UserType.CLIENT : UserType.UNREGISTERED)))
+    // type: (id: number) =>
+    //     (Veterinarian.get(id)
+    //         ? UserType.VETERINARIAN : (Administrator.get(id)
+    //             ? UserType.ADMINISTRATOR : (Client.get(id)
+    //                 ? UserType.CLIENT : UserType.UNREGISTERED))),
+    // current: () =>
+    //     (Veterinarian.current()
+    //         ? UserType.VETERINARIAN : (Administrator.current()
+    //             ? UserType.ADMINISTRATOR : (Client.current()
+    //                 ? UserType.CLIENT : UserType.UNREGISTERED))),
+
+    getByUserName: (username: string) => request.get(`/user/${username}`)
+
+
 };
 
 

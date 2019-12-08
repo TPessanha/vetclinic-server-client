@@ -1,13 +1,9 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, {useState} from 'react';
 
-export class ChangeInfoEvent extends React.Component {
-  shoot = (a: any) => {
-    alert(a);
-  }
-  render() {
+export const ChangeInfoEvent = (props: any) => {
+
+    const [shoot, setShoot] = useState();
     return (
-      <button onClick={() => this.shoot("Provide the data to be changed")}>Change Info</button>
+        <button onClick={() => setShoot("Provide the data to be changed")}>Change Info</button>
     );
-  }
-}
+};

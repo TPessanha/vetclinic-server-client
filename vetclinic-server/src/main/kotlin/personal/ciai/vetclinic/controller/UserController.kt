@@ -12,13 +12,16 @@ import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 */
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import personal.ciai.vetclinic.dto.BasicSafeInfoDTO
 import personal.ciai.vetclinic.dto.ClientDTO
 import personal.ciai.vetclinic.dto.CredentialsDTO
+import personal.ciai.vetclinic.exception.NotFoundException
 import personal.ciai.vetclinic.service.ClientService
 import personal.ciai.vetclinic.service.UserService
 
@@ -70,5 +73,29 @@ class UserController(@Autowired val clientService: ClientService, @Autowired val
         @ApiParam(value = "The Client DTO", required = true) @PathVariable
         client: ClientDTO
     ) {
+    }
+
+    @ApiOperation(
+        value = "Get the user",
+        consumes = "application/json"
+    )
+    @ApiResponses(
+        value = [
+            (ApiResponse(code = 200, message = "Successfully return user ")),
+            (ApiResponse(code = 401, message = "You are not authorized to view the resource")),
+            (ApiResponse(
+                code = 403,
+                message = "Accessing the resource you were tyring to reach is forbidden"
+            ))
+        ]
+    )
+    @GetMapping("/user/{username}")
+    fun getUserByUserName(
+        @ApiParam(value = "The Client username", required = true) @PathVariable
+        username: String
+    ): BasicSafeInfoDTO? {
+        return this.userService.getUserEntityByUsernameWithRoles(username)
+            .map { it -> BasicSafeInfoDTO(it) }
+            .orElseThrow { NotFoundException("User not founded") }
     }
 }
