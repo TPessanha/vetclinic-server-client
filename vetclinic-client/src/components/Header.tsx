@@ -6,10 +6,9 @@ import Login from "./Login";
 import {Singup} from "./Register";
 import NotFound from "./Erros/NotFound";
 import Administrator from "./Administrator/Administrator";
-import api, {UserType} from "../api";
+import {UserType} from "../api";
 import Logout from './Logout';
 import {ClientDashboard} from "./Client/ClientDashboard";
-import {GET_USER} from "../constants/actionTypes";
 
 
 const routes = {
@@ -113,7 +112,7 @@ const LoggedInView = (props: any) => {
                     </li>
                     <li className="nav-item">
                         <A
-                            href={`user/${currentUser.username}`}
+                            href={`${currentUser.role}/:${currentUser.id}`}
                             className="nav-link">
                             {currentUser.name}
                         </A>
@@ -159,21 +158,15 @@ function Header(props: any) {
     const isLoggedIn = useSelector((state: any) => state.common.isLoggedIn);
 
 
-    const onGetUsertype = () => {
-        return dispatch({
-            type: GET_USER, payload: Promise.all([
-                api.Administrator.get(currentUser.id),
-                api.Veterinarian.get(currentUser.id),
-                api.Client.get(currentUser.id)
-            ])
-        });
-    };
-
-    useEffect(() => {
-        if (currentUser && currentUser.id && !userType) {
-            onGetUsertype()
-        }
-    }   );
+    // const onGetUsertype = () => {
+    //     return dispatch({
+    //         type: GET_USER, payload: Promise.all([
+    //             api.Administrator.get(currentUser.id),
+    //             api.Veterinarian.get(currentUser.id),
+    //             api.Client.get(currentUser.id)
+    //         ])
+    //     });
+    // };
 
     return <>
         <nav className="navbar navbar-light">

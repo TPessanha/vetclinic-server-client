@@ -27,10 +27,6 @@ const App = () => {
             onLoad(tokens && username ? api.User.getByUserName(username) : null, tokens)
 
         }
-        // if (currentUser && !userType) {
-        //     onGetUser()
-        // }
-
 
     });
 
