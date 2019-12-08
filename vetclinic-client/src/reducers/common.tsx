@@ -2,7 +2,7 @@ import {
     ADMINISTRATOR_CREATED,
     ADMINISTRATOR_PAGE_UNLOADED,
     APP_LOAD,
-    DELETE_ADMINISTRATOR,
+    GET_USER,
     HOME_PAGE_UNLOADED,
     LOGIN,
     LOGIN_PAGE_UNLOADED,
@@ -25,7 +25,13 @@ export default (state = defaultState, action: any) => {
                 ...state,
                 token: action.token || "",
                 appLoaded: true,
-                currentUser: action.payload ? action.payload.user : null
+                currentUser: action.payload ? action.payload.user : null,
+                isLoggedIn: action.token ? true : false
+            };
+        case GET_USER:
+            return {
+                ...state,
+                currentUser: action.payload ? action.payload.user : null,
             };
         case REDIRECT:
             return {...state, redirectTo: null};
@@ -40,11 +46,10 @@ export default (state = defaultState, action: any) => {
             return {
                 ...state,
                 redirectTo: action.error ? null : '/',
-                token: action.error ? null : action.payload.user.token,
-                currentUser: action.error ? null : action.payload.user
+                token: action.error ? null : action.headers.authorization,
+                currentUser: null,
             };
-        case DELETE_ADMINISTRATOR:
-            return {...state, redirectTo: '/'};
+
         case ADMINISTRATOR_PAGE_UNLOADED:
         case HOME_PAGE_UNLOADED:
         case LOGIN_PAGE_UNLOADED:

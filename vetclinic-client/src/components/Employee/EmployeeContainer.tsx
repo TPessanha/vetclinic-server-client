@@ -9,6 +9,7 @@ export const EmployeeContainer = () => {
 
     useEffect(() => {
         if (!employees && vet && admin) {
+            console.log(vet)
             setEmployee(vet.concat(admin))
         }
     });

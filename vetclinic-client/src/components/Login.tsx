@@ -57,12 +57,12 @@ function Login(props: any) {
                                         name="username"
                                         type="text"
                                         ref={register({
-                                            validate: value => value !== "admin"
+                                            validate: value => value !== " "
                                         })}
                                         placeholder="User Name"
                                         value={props.username}
                                         onChange={handleSubmit(onChangeUserName)}/>
-                                    {errors.username && errors.message}
+                                    {errors.username && errors.username.message}
                                 </fieldset>
                                 <fieldset className="form-group">
                                     <input
@@ -70,7 +70,7 @@ function Login(props: any) {
                                         type="password"
                                         name="password"
                                         ref={register({
-                                            validate: value => value !== "1234" || value.size > 8
+                                            validate: value => value !== "12345678" || value.size < 8
                                         })}
                                         placeholder="Password"
                                         value={props.password}

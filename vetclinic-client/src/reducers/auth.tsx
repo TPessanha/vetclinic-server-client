@@ -11,6 +11,7 @@ export default (state = {}, action: any) => {
     switch (action.type) {
         case LOGIN:
         case SINGUP:
+            console.log(state)
             return {
                 ...state,
                 inProgress: false,

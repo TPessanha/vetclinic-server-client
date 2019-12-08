@@ -53,7 +53,8 @@ private fun addResponseToken(authentication: Authentication, response: HttpServl
 
 class UserPasswordAuthenticationFilterToJWT(
     defaultFilterProcessesUrl: String?,
-    private val anAuthenticationManager: AuthenticationManager
+    private val anAuthenticationManager: AuthenticationManager,
+    userService: UserService
 ) : AbstractAuthenticationProcessingFilter(defaultFilterProcessesUrl) {
 
     override fun attemptAuthentication(

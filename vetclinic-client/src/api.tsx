@@ -8,15 +8,22 @@ const request = requestPromise(http, global.Promise);
 
 const Api = 'http://localhost:8080';
 
-const responseBody = (res: Body) => res.body;
+const responseBody = (res: Response) => {
+    return {
+        body: res.body,
+        headers: res.headers
+    };
+};
 
-let token:any;
+// @ts-ignore
+let token: string = null;
 
 
-const tokenPlugin = (req: any) => {
-    if (token) {
+const plugin = (req: any) => {
+    if (token && token.length > 0) {
         req.set('authorization', `Token ${token}`);
     }
+    // req.set('Access-Control-Allow-Origin', 'http://localhost:3000');
 };
 
 export enum UserType {
@@ -25,20 +32,23 @@ export enum UserType {
 
 const requests = {
     delete: (url: string) =>
-        request.del(`${Api}${url}`).use(tokenPlugin).then(responseBody),
+        request.del(`${url}`).use(plugin).then(responseBody),
     get: (url: string) =>
-        request.get(`${Api}${url}`).use(tokenPlugin).then(responseBody),
+        request.get(`${url}`).use(plugin).then(responseBody),
     put: (url: string, body: any) =>
-        request.put(`${Api}${url}`, body).use(tokenPlugin).then(responseBody),
+        request.put(`${url}`, JSON.stringify(body)).use(plugin).then(responseBody),
     post: (url: string, body: any) =>
-        request.post(`${Api}${url}`, body).use(tokenPlugin).then(responseBody)
+        request.post(`${url}`, JSON.stringify(body)).use(plugin).then(responseBody)
 };
 
+
 const Auth = {
+    current: () =>
+        requests.get('/'),
     login: (username: string, password: string) =>
-        requests.post('/login', {CredentialsDTO: {username: username, password: password}}),
+        requests.post('/login', withUser(username, password)),
     signup: (username: string, email: string, password: string) =>
-        requests.post('/signup', {ClientDTO: {username: username, email: email, password: password}}),
+        requests.post('/signup', withUser(username, password, email)),
     save: (user: any) => {
         let type = User.type(user.id);
 
@@ -109,6 +119,22 @@ const User = {
 };
 
 
+function withUser(username: string, password: string, email = "-") {
+
+    return {
+
+        address: "-",
+        username: username,
+        phoneNumber: "-1",
+        id: "0",
+        email: email,
+        roles: [],
+        name: "-",
+        password: password
+
+    };
+}
+
 export default {
     Administrator,
     Employee,
@@ -116,7 +142,7 @@ export default {
     Client,
     User,
     Auth,
-    setToken: (_token: string) => {
+    setToken: (_token: any) => {
         token = _token;
     }
 };

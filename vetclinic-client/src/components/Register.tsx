@@ -17,13 +17,13 @@ export const Singup = (props: any) => {
 
 
     const onChangeEmail = (value: any) => {
-        dispatch({type: UPDATE_FIELD_AUTH, key: 'email', value:value.email})
+        dispatch({type: UPDATE_FIELD_AUTH, key: 'email', value: value.email})
     };
     const onChangePassword = (value: any) => {
-        dispatch({type: UPDATE_FIELD_AUTH, key: 'password', value:value.password})
+        dispatch({type: UPDATE_FIELD_AUTH, key: 'password', value: value.password})
     };
     const onChangeUsername = (value: any) => {
-        dispatch({type: UPDATE_FIELD_AUTH, key: 'username', value:value.username})
+        dispatch({type: UPDATE_FIELD_AUTH, key: 'username', value: value.username})
     };
     const onSubmit = (username: string, email: string, password: string) => {
         const payload = api.Auth.signup(username, email, password);
@@ -68,6 +68,9 @@ export const Singup = (props: any) => {
                                         className="form-control "
                                         name="username"
                                         type="text"
+                                        ref={register({
+                                            validate: value => value !== " "
+                                        })}
                                         placeholder="User Name"
                                         value={username}
                                         onChange={handleSubmit(onChangeUsername)}/>
@@ -95,7 +98,10 @@ export const Singup = (props: any) => {
                                     <input
                                         className="form-control "
                                         type="password"
-
+                                        name="password"
+                                        ref={register({
+                                            validate: value => value !== "12345678" || value.size < 8
+                                        })}
                                         placeholder="Password"
                                         value={password}
                                         onChange={handleSubmit(onChangePassword)}/>

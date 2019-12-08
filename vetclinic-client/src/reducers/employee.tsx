@@ -12,9 +12,10 @@ export default (state = {}, action: any) => {
         case APP_LOAD:
             return {
                 ...state,
-                inProgress: true
+                inProgress: false
             };
         case EMPLOYEE_PAGE_LOADED:
+            console.log(action);
             return {
                 ...state,
                 inProgress: false,

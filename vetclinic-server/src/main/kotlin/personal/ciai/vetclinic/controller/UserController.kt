@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController
 import personal.ciai.vetclinic.dto.ClientDTO
 import personal.ciai.vetclinic.dto.CredentialsDTO
 import personal.ciai.vetclinic.service.ClientService
+import personal.ciai.vetclinic.service.UserService
 
 @Api(
     value = "VetClinic Management System - User API",
@@ -28,7 +29,7 @@ import personal.ciai.vetclinic.service.ClientService
 
 @RestController
 @RequestMapping("")
-class UserController(@Autowired val clientService: ClientService) {
+class UserController(@Autowired val clientService: ClientService, @Autowired val userService: UserService) {
     @ApiOperation(
         value = "Login as a registered user",
         consumes = "application/json"

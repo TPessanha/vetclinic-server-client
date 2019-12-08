@@ -16,7 +16,8 @@ const promiseMiddleware = (store: any) => (next: any) => (action: any) => {
                     return
                 }
                 console.log('RESULT', res);
-                action.payload = res;
+                action.payload = res.body;
+                action.headers = res.headers;
                 store.dispatch({type: ASYNC_END, promise: action.payload});
                 store.dispatch(action);
             },
@@ -27,7 +28,7 @@ const promiseMiddleware = (store: any) => (next: any) => (action: any) => {
                 }
                 console.log('ERROR', error);
                 action.error = true;
-                action.payload = error.response ? error.response.body : "Failed";
+                action.payload = error;
                 if (!action.skipTracking) {
                     store.dispatch({type: ASYNC_END, promise: action.payload});
                 }
@@ -44,12 +45,12 @@ const promiseMiddleware = (store: any) => (next: any) => (action: any) => {
 const localStorageMiddleware = (store: any) => (next: any) => (action: any) => {
     if (action.type === SINGUP || action.type === LOGIN) {
         if (!action.error) {
-            window.localStorage.setItem('jwt', action.payload.user.token);
-            api.setToken(action.payload.user.token);
+            window.localStorage.setItem('token', action.headers.authorization);
+            api.setToken(action.headers.authorization);
         }
     } else if (action.type === LOGOUT) {
-        window.localStorage.setItem('jwt', '');
-        api.setToken("");
+        window.localStorage.setItem('token', '');
+        api.setToken(null);
     }
 
     next(action);
