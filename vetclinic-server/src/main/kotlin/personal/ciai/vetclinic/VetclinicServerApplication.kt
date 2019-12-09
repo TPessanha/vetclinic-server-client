@@ -15,13 +15,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Component
 import personal.ciai.vetclinic.config.ConfigurationProperties
 import personal.ciai.vetclinic.model.Administrator
+import personal.ciai.vetclinic.model.Appointment
+import personal.ciai.vetclinic.model.AppointmentStatus
 import personal.ciai.vetclinic.model.Client
 import personal.ciai.vetclinic.model.Pet
 import personal.ciai.vetclinic.model.Role
 import personal.ciai.vetclinic.model.Role.RoleName
 import personal.ciai.vetclinic.model.Schedule
+import personal.ciai.vetclinic.model.TimeSlot
 import personal.ciai.vetclinic.model.Veterinarian
 import personal.ciai.vetclinic.repository.AdministratorRepository
+import personal.ciai.vetclinic.repository.AppointmentRepository
 import personal.ciai.vetclinic.repository.ClientRepository
 import personal.ciai.vetclinic.repository.PetRepository
 import personal.ciai.vetclinic.repository.RoleRepository
@@ -49,6 +53,8 @@ class Init(
     @Autowired
     val veterinarianRepository: VeterinarianRepository,
     @Autowired
+    val appointmentRepository: AppointmentRepository,
+    @Autowired
     val roleRepository: RoleRepository,
     @Autowired
     val scheduleRepository: ScheduleRepository,
@@ -65,12 +71,21 @@ class Init(
         addAdmin(roles)
         if (debugAndTesting) {
             val clients = addClients(roles)
-            addPets(clients)
-            addVets(roles)
+            val pet = addPets(clients)
+            val vet = addVets(roles)
+            addAppointments(vet, clients[0],pet);
         }
     }
 
-    private fun addVets(roles: List<Role>) {
+    private fun addAppointments(vet:Veterinarian, client:Client, pet:Pet) {
+        val app = Appointment(1,10, 2019, TimeSlot(2,3), vet,pet,client,"Testing 1",AppointmentStatus.Pending)
+        val app2 = Appointment(2,10, 2019, TimeSlot(5,6), vet,pet,client,"Testing 2",AppointmentStatus.Pending)
+
+        appointmentRepository.save(app);
+        appointmentRepository.save(app2);
+    }
+
+    private fun addVets(roles: List<Role>): Veterinarian {
         val vet1 =
             Veterinarian(
                 0,
@@ -105,9 +120,11 @@ class Init(
 
         scheduleRepository.save(sche)
         scheduleRepository.save(sche2)
+
+        return vet1;
     }
 
-    private fun addPets(clients: List<Client>) {
+    private fun addPets(clients: List<Client>): Pet {
         val p1 = Pet(
             id = 0, species = "cat", age = 2, owner = clients[0]
         )
@@ -121,6 +138,8 @@ class Init(
         petRepository.save(p1)
         petRepository.save(p2)
         petRepository.save(p3)
+
+        return p1;
     }
 
     private fun addClients(roles: List<Role>): List<Client> {

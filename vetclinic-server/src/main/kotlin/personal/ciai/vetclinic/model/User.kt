@@ -73,8 +73,8 @@ open class User(
     fun getMajorRole(): String {
         for (r: Role in roles) {
             if (r.name.name.equals("ADMIN"))
-                return "ADMIN";
-            else if(r.name.name.equals("VET"))
+                return "ADMIN"
+            else if (r.name.name.equals("VET"))
                 return "VET"
         }
         return "CLIENT"

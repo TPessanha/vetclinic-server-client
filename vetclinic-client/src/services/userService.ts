@@ -2,6 +2,7 @@
 // import { userActions } from "../actions/user";
 // import User from "../model/User";
 import { history } from "../utils/history";
+import { getTokenInfo } from "../utils/tokenUtils";
 
 export const userService = {
     login,
@@ -25,8 +26,7 @@ function handleResponse(response: Response) {
     if (response.ok) {
         if (response.headers.get("redirect")) {
             const redirect = response.headers.get("redirect") as string;
-            const id = redirect.substring(redirect.lastIndexOf("/"));
-            localStorage.setItem("userid", id);
+            localStorage.setItem("home", redirect);
             history.push(redirect);
         }
         return response.headers.get("Authorization");
@@ -39,5 +39,13 @@ function handleResponse(response: Response) {
 
 function logout() {
     localStorage.removeItem("jwt");
+    localStorage.removeItem("home");
     history.push("/");
+}
+
+export function checkJWT() {
+    const token = getTokenInfo();
+    const time = new Date().getTime() / 1000;
+
+    if (token.exp < time) logout();
 }

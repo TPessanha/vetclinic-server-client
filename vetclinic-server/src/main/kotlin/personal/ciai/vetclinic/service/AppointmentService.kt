@@ -82,7 +82,7 @@ class AppointmentService(
     fun changeVeterinarianAppointmentStatus(appointmentDTO: AppointmentDTO) {
         val savedAppoint = getAppointmentEntityById(appointmentDTO.id)
 
-        val newStatus = AppointmentStatus.valueOf(appointmentDTO.status.toString())
+        val newStatus = AppointmentStatus.values()[appointmentDTO.status]
         if (newStatus == savedAppoint.status)
             throw PreconditionFailedException("Appointment already ${newStatus.name}")
 
@@ -93,7 +93,7 @@ class AppointmentService(
             else -> throw PreconditionFailedException()
         }
 
-        saveAppointment(appointmentDTO)
+        saveAppointment(appointmentDTO, appointmentDTO.id)
     }
 
     private fun refuseAppointment(appointmentDTO: AppointmentDTO) {

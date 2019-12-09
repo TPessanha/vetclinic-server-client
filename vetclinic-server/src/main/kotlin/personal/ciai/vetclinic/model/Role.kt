@@ -28,5 +28,4 @@ class Role(
         VET,
         CLIENT
     }
-
 }

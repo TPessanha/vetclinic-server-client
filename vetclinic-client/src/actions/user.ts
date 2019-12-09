@@ -30,7 +30,6 @@ function login(username: string, password: string) {
 
                     dispatch(success(token));
                 }
-                // history.push("/");
             },
             error => {
                 dispatch(failure(error.toString()));
