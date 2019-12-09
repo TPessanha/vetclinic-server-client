@@ -87,12 +87,12 @@ const LoggedInView = (props: any) => {
                     </li>
                 </> : userType === UserType.VETERINARIAN ? <>
                     <li className="nav-item">
-                        <A href={'/veterinarians/:' + currentUser.id} className="nav-link">
+                        <A href={'/veterinarians/' + currentUser.id} className="nav-link">
                             Veterinarian Page
                         </A>
                     </li>
                     <li className="nav-item">
-                        <A href={'//veterinarians/:' + currentUser.id + '/appointments'} className="nav-link">
+                        <A href={'/veterinarians/' + currentUser.id + '/appointments'} className="nav-link">
                             Veterinarian Appointments
                         </A>
                     </li>

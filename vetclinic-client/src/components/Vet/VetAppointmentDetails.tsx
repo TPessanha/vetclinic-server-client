@@ -6,8 +6,8 @@ import {useParams} from "react-router";
 import reducer from "../../reducer";
 
 
-const VetAppointmentDetails = () => {
-    const {id} = useParams();
+const VetAppointmentDetails = (props:any) => {
+    const id = useSelector((state: any) => state.common.currentUser.id);
     const dispatch = useDispatch();
     const a = useSelector((state: any) => state.selectedAppointment)
 
