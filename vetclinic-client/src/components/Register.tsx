@@ -85,26 +85,8 @@ export const Singup = (props: any) => {
                                 <fieldset className="form-group">
                                     <input
                                         className="form-control "
-                                        name="username"
-                                        type="text"
-                                        ref={register({
-                                            validate: value => value !== " "
-                                        })}
-                                        placeholder="User Name"
-                                        value={username}
-                                        onChange={handleSubmit(onChangeUsername)}/>
-                                </fieldset>
-
-                                <fieldset className="form-group">
-                                    <input
-                                        className="form-control "
                                         name="email"
-                                        ref={register({
-                                            pattern: {
-                                                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                                                message: "invalid email address"
-                                            }
-                                        })}
+
 
                                         type="text"
                                         placeholder="Email"
@@ -112,15 +94,24 @@ export const Singup = (props: any) => {
                                         onChange={handleSubmit(onChangeEmail)}/>
                                     {errors.email && errors.email.message}
                                 </fieldset>
+                                <fieldset className="form-group">
+                                    <input
+                                        className="form-control "
+                                        name="username"
+                                        type="text"
+
+                                        placeholder="User Name"
+                                        value={username}
+                                        onChange={handleSubmit(onChangeUsername)}/>
+                                </fieldset>
+
 
                                 <fieldset className="form-group">
                                     <input
                                         className="form-control "
                                         type="password"
                                         name="password"
-                                        ref={register({
-                                            validate: value => value !== "12345678" || value.size < 8
-                                        })}
+
                                         placeholder="Password"
                                         value={password}
                                         onChange={handleSubmit(onChangePassword)}/>

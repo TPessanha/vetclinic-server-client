@@ -11,7 +11,6 @@ import Logout from './Logout';
 import {ClientDashboard} from "./Client/ClientDashboard";
 import {User} from "./User/User";
 import {REDIRECT} from "../constants/actionTypes";
-import {Link} from "react-router-dom";
 
 
 const routes = {
@@ -95,7 +94,7 @@ const LoggedInView = (props: any) => {
                     </li>
                 </> : userType === UserType.ADMINISTRATOR ? <>
                     <li className="nav-item">
-                        <a  onClick={() => onClickRedirect("users")} className="nav-link">
+                        <a onClick={() => onClickRedirect("users")} className="nav-link">
                             See All User
                         </a>
                     </li>
@@ -168,6 +167,7 @@ function Header(props: any) {
     const routeResult = useRoutes(routes);
     const appName = useSelector((state: any) => state.common.appName);
     const userType = useSelector((state: any) => state.common.userType);
+    const token = useSelector((state: any) => state.common.token);
     const currentUser = useSelector((state: any) => state.common.currentUser);
     const isLoggedIn = useSelector((state: any) => state.common.isLoggedIn);
 
@@ -177,7 +177,9 @@ function Header(props: any) {
             <div className="container">
                 <A href="/" className="navbar-brand">{appName}</A>
                 <LoggedOutView isLoggedIn={isLoggedIn}/>
-                <LoggedInView currentUser={currentUser} userType={userType} isLoggedIn={isLoggedIn}/>
+                {token ? <> <LoggedInView currentUser={currentUser} userType={userType}
+                                          isLoggedIn={isLoggedIn}/> </> : <></>}
+
             </div>
         </nav>
         {routeResult || <NotFound/>}
