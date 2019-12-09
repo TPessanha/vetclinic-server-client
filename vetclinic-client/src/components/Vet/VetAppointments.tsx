@@ -13,7 +13,7 @@ const VetAppointments = (props: any) => {
     useEffect(() => {
         dispatch(vetActions.load_list(id as string));
     });
-    if (id)
+    if (id) {
         return (
             <div
                 style={{
@@ -26,7 +26,7 @@ const VetAppointments = (props: any) => {
             </div>
         );
 
-
+    }
     return <></>
 };
 

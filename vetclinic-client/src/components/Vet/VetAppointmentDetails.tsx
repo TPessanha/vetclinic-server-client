@@ -12,7 +12,7 @@ const VetAppointmentDetails = (props:any) => {
     const a = useSelector((state: any) => state.selectedAppointment)
 
     // eslint-disable-next-line
-    if (a.id == -1) return <div>No appointment selected</div>;
+    if (!a || a.id == -1) return <div>No appointment selected</div>;
 
     let CompletedBtn = (
         <Button
