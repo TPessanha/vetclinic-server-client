@@ -22,8 +22,11 @@ function Logout(props: any) {
 
 
     useEffect(() => {
+
         const tokens = window.localStorage.getItem('token');
         if (tokens) {
+            window.localStorage.clear()
+
             api.setToken(null);
         }
         onLoad()

@@ -2,8 +2,9 @@ import React, {useEffect} from "react";
 import VetAppointmentList from "./VetAppointmentList";
 
 import {useDispatch, useSelector} from "react-redux";
-import {vetActions} from "../../actions/VetActions";
 import VetAppointmentDetails from "./VetAppointmentDetails";
+import api from "../../api";
+import {VETERINARIAN_PAGE_LOADED} from "../../constants/actionTypes";
 
 
 const VetAppointments = (props: any) => {
@@ -11,7 +12,7 @@ const VetAppointments = (props: any) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(vetActions.load_list(id as string));
+        dispatch({type: VETERINARIAN_PAGE_LOADED, payload: api.Veterinarian.getVetAppointments(id)});
     });
     if (id) {
         return (

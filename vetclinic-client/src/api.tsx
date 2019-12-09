@@ -69,6 +69,8 @@ const Veterinarian = {
         requests.get(`/veterinarians`),
     get: (vetId: number) =>
         requests.get(`/veterinarians/${vetId}`),
+    getVetAppointments: (vetId: any) =>
+        requests.get(`/veterinarians/${vetId}/appointments`),
     current: () =>
         requests.get(`/veterinarians/`),
     delete: (vetId: string) =>

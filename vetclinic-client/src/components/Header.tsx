@@ -72,7 +72,7 @@ const LoggedInView = (props: any) => {
 
 
     useEffect(() => {
-            if (isLoggedIn) {
+            if (isLoggedIn && currentUser) {
 
                 const d = userType === UserType.CLIENT ? <>
                     <li className="nav-item">
@@ -106,7 +106,7 @@ const LoggedInView = (props: any) => {
                 setDisplay(d)
             }
 
-        }, [isLoggedIn]
+        }, [isLoggedIn, currentUser]
     )
 
     if (isLoggedIn) {
