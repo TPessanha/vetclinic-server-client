@@ -1,5 +1,5 @@
 import api from './api';
-import {ASYNC_END, ASYNC_START, LOGIN, LOGOUT, SINGUP} from './constants/actionTypes';
+import {ASYNC_END, ASYNC_START, LOGIN, LOGOUT, LOGOUT_PAGE_LOADED, SINGUP} from './constants/actionTypes';
 
 
 const promiseMiddleware = (store: any) => (next: any) => (action: any) => {
@@ -53,7 +53,7 @@ const localStorageMiddleware = (store: any) => (next: any) => (action: any) => {
             window.localStorage.setItem('userType', action.headers.type);
             api.setToken(action.headers.authorization);
         }
-    } else if (action.type === LOGOUT) {
+    } else if (action.type === LOGOUT || action.type === LOGOUT_PAGE_LOADED) {
         window.localStorage.clear();
         api.setToken(null);
     }

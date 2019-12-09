@@ -26,6 +26,7 @@ function Logout(props: any) {
         if (tokens) {
             api.setToken(null);
         }
+        onLoad()
         onUnload();
         // return (() => {
         //     onUnload();
