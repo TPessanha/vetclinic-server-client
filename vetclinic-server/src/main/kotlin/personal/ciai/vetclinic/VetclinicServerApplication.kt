@@ -73,16 +73,16 @@ class Init(
             val clients = addClients(roles)
             val pet = addPets(clients)
             val vet = addVets(roles)
-            addAppointments(vet, clients[0],pet);
+            addAppointments(vet, clients[0], pet)
         }
     }
 
-    private fun addAppointments(vet:Veterinarian, client:Client, pet:Pet) {
-        val app = Appointment(1,10, 2019, TimeSlot(2,3), vet,pet,client,"Testing 1",AppointmentStatus.Pending)
-        val app2 = Appointment(2,10, 2019, TimeSlot(5,6), vet,pet,client,"Testing 2",AppointmentStatus.Pending)
+    private fun addAppointments(vet: Veterinarian, client: Client, pet: Pet) {
+        val app = Appointment(1, 10, 2019, TimeSlot(2, 3), vet, pet, client, "Testing 1", AppointmentStatus.Pending)
+        val app2 = Appointment(2, 10, 2019, TimeSlot(5, 6), vet, pet, client, "Testing 2", AppointmentStatus.Pending)
 
-        appointmentRepository.save(app);
-        appointmentRepository.save(app2);
+        appointmentRepository.save(app)
+        appointmentRepository.save(app2)
     }
 
     private fun addVets(roles: List<Role>): Veterinarian {
@@ -121,7 +121,7 @@ class Init(
         scheduleRepository.save(sche)
         scheduleRepository.save(sche2)
 
-        return vet1;
+        return vet1
     }
 
     private fun addPets(clients: List<Client>): Pet {
@@ -139,7 +139,7 @@ class Init(
         petRepository.save(p2)
         petRepository.save(p3)
 
-        return p1;
+        return p1
     }
 
     private fun addClients(roles: List<Role>): List<Client> {
