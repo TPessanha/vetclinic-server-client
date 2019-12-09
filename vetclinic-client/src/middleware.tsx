@@ -54,7 +54,7 @@ const localStorageMiddleware = (store: any) => (next: any) => (action: any) => {
             api.setToken(action.headers.authorization);
         }
     } else if (action.type === LOGOUT) {
-        window.localStorage.setItem('token', '');
+        window.localStorage.clear();
         api.setToken(null);
     }
 
