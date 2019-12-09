@@ -1,13 +1,12 @@
-import React, { useState } from "react";
-import { vetService } from "../../services/VetService";
+import React, {useState} from "react";
+import {vetService} from "../../services/VetService";
 import Veterinarian from "../../model/Veterinarian";
-import { useParams } from "react-router";
 import VetDetailsForm from "./VetDetails";
-import { useHistory } from "react-router-dom";
-import { Button } from "react-bootstrap";
+import {useHistory} from "react-router-dom";
+import {Button} from "react-bootstrap";
 
-const VetMainPage: React.FC = props => {
-    const { id } = useParams();
+const VetMainPage = (props: any) => {
+    const {id} = props.id;
     const history = useHistory();
     const [vetDetails, setVetDetails] = useState<Veterinarian | null>(null);
     const [errorMsg, setErrorMsg] = useState("");
@@ -36,7 +35,7 @@ const VetMainPage: React.FC = props => {
                         }}
                     >
                         <div>
-                            <VetDetailsForm vet={vetDetails} />
+                            <VetDetailsForm vet={vetDetails}/>
                         </div>
                     </div>
                     <div

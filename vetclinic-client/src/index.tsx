@@ -6,6 +6,7 @@ import {Route, Router, Switch} from 'react-router-dom';
 
 import App from './components/App';
 import "./index.scss";
+import VetMainPage from "./components/Vet/VetMainPage";
 
 
 ReactDOM.render((

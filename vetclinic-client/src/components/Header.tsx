@@ -12,7 +12,7 @@ import {ClientDashboard} from "./Client/ClientDashboard";
 import {User} from "./User/User";
 import {REDIRECT} from "../constants/actionTypes";
 import VetMainPage from "./Vet/VetMainPage";
-
+import VetAppointement from "./Vet/VetAppointments";
 
 
 const routes = {
@@ -21,12 +21,13 @@ const routes = {
     "/register": () => <Singup/>,
     "/logout": () => <Logout/>,
     "/users": () => <User/>,
-    "/vet": () => <VetMainPage/>,
     "/admin/:username": ({id}: any) => <Administrator id={id}/>,
     "/cliend/:username": ({username}: any) => <ClientDashboard username={username}/>,
-    // "/user/:username": ({username}: any) => <User username={username}/>,
-    // "/vet/:id": ({id}: any) => <Veterinarian id={id}/>,
-    // "/cli/:id": ({id}: any) => <Client id={id}/>
+    "/administrators/:id": () => <VetMainPage/>,
+    "/veterinarians/:id/appointments": ({id}: any) => <VetAppointement id={id}/>,
+    "/veterinarians/:id": ({id}: any) => <VetMainPage id={id}/>,
+    "/client/:id": ({id}: any) => <VetMainPage id={id}/>,
+
 };
 
 const LoggedOutView = (props: any) => {
@@ -86,8 +87,13 @@ const LoggedInView = (props: any) => {
                     </li>
                 </> : userType === UserType.VETERINARIAN ? <>
                     <li className="nav-item">
-                        <A href="/vet" className="nav-link">
+                        <A href={'/veterinarians/:' + currentUser.id} className="nav-link">
                             Veterinarian Page
+                        </A>
+                    </li>
+                    <li className="nav-item">
+                        <A href={'//veterinarians/:' + currentUser.id + '/appointments'} className="nav-link">
+                            Veterinarian Appointments
                         </A>
                     </li>
                 </> : userType === UserType.ADMINISTRATOR ? <>
@@ -146,13 +152,6 @@ const LoggedInView = (props: any) => {
                         Logout
                     </A>
                 </li>
-                {/*<li className="nav-item">*/}
-                {/*    <A*/}
-                {/*        href={`/${currentUser.username}`}*/}
-                {/*        className="nav-link">*/}
-                {/*        {currentUser.name}*/}
-                {/*    </A>*/}
-                {/*</li>*/}
             </ul>
         </>;
     }

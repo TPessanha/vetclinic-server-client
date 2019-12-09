@@ -1,8 +1,8 @@
 // import { Store } from "redux";
 // import { userActions } from "../actions/user";
 // import User from "../model/User";
-import { history } from "../utils/history";
-import { getTokenInfo } from "../utils/tokenUtils";
+import {history} from "../store";
+import {getTokenInfo} from "../utils/tokenUtils";
 
 export const userService = {
     login,
@@ -16,7 +16,7 @@ function login(username: String, password: String) {
     const requestOptions = {
         method: "POST",
         headers: myHeaders,
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({username, password})
     };
 
     return fetch("/login", requestOptions).then(handleResponse);
@@ -46,6 +46,5 @@ function logout() {
 export function checkJWT() {
     const token = getTokenInfo();
     const time = new Date().getTime() / 1000;
-
-    if (token.exp < time) logout();
+    if (token && token.exp < time) logout();
 }

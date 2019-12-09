@@ -13,7 +13,7 @@ import {
 } from '../constants/actionTypes';
 
 const defaultState = {
-    appName: 'VetClinic',
+    appName: 'Pet Clinic',
     token: "",
     viewChangeCounter: 0,
     userType: null,

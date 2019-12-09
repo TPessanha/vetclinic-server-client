@@ -7,8 +7,8 @@ import {vetActions} from "../../actions/VetActions";
 import VetAppointmentDetails from "./VetAppointmentDetails";
 
 
-const VetAppointments = () => {
-    const {id} = useParams();
+const VetAppointments = (props:any) => {
+    const {id} =props.id;
     const dispatch = useDispatch();
 
     useEffect(() => {
