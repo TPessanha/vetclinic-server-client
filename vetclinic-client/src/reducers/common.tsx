@@ -28,10 +28,11 @@ export default (state = defaultState, action: any) => {
                 token: action.token || "",
                 appLoaded: true,
                 currentUser: action.payload ? action.payload : null,
-                isLoggedIn: action.token ? true : false
+                isLoggedIn: action.token ? true : false,
+                userType: action.userType
             };
         case REDIRECT:
-            return {...state, redirectTo: null};
+            return {...state, redirectTo: action.redirectTo};
         case LOGOUT_PAGE_UNLOADED:
             return {...state, isLoggedIn: false};
         case LOGOUT:

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
     EMPLOYEE_ADMIN_LOADED,
@@ -7,11 +7,21 @@ import {
     HOME_PAGE_UNLOADED
 } from '../../constants/actionTypes';
 import api from "../../api";
+import {User} from "../User/User";
+import {useRoutes} from "hookrouter";
 import {Employee} from "../Employee/Employee";
 
 
+const routes = {
+    "/users": () => <User/>,
+};
+
 function Home() {
     const dispatch = useDispatch();
+    const routeResult = useRoutes(routes);
+    const redirectTo = useSelector((state: any) => state.common.redirectTo);
+    const [currentView, setCurrentView] = useState("employee")
+
 
     const onLoad = () =>
         dispatch({type: HOME_PAGE_LOADED});
@@ -40,6 +50,19 @@ function Home() {
         })
     });
 
+    useEffect(() => {
+
+            if (redirectTo) {
+                setCurrentView(redirectTo)
+            }
+
+
+            return (() => {
+                onUnload();
+            })
+        }, [redirectTo]
+    );
+
 
     return <>
         <div className="container page">
@@ -52,7 +75,7 @@ function Home() {
 
             <div className="container page">
                 <div className="row">
-                    <Employee/>
+                    {currentView && currentView === "users" ? <User/> : <Employee/>}
                 </div>
             </div>
 

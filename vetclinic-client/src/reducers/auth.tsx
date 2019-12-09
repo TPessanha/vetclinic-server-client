@@ -20,7 +20,6 @@ export default (state = {}, action: any) => {
             };
         case LOGIN_PAGE_UNLOADED:
         case LOGOUT_PAGE_UNLOADED:
-        case LOGOUT_PAGE_UNLOADED:
         case REGISTER_PAGE_UNLOADED:
             return {};
         case ASYNC_START:

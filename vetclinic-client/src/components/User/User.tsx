@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {USER_LIST_PAGE_LOADED, USER_LIST_PAGE_UNLOADED} from "../../constants/actionTypes";
 import api from "../../api";
 import {UserContainer} from "./UserContainer";
@@ -9,10 +9,15 @@ export const User = () => {
     // const isLoading = useSelector((state: any) => state.employee.isLoading);
     const dispatch = useDispatch();
 
-    const onLoad = () =>
-        dispatch({type: USER_LIST_PAGE_LOADED, payload: api.User.all()});
+    const onLoad = () => {
+        dispatch({
+            type: USER_LIST_PAGE_LOADED,
+            payload : Promise.all([api.Administrator.all(), api.Veterinarian.all(), api.Client.all()])
+        });
+    }
     const onUnload = () =>
         dispatch({type: USER_LIST_PAGE_UNLOADED});
+
     useEffect(() => {
         onLoad();
         return (() => {
@@ -22,7 +27,7 @@ export const User = () => {
 
     return <>
         <div className="container center">
-            <p className="text-xs-center">List Of Employees</p>
+            <p className="text-xs-center">List Of User</p>
             <UserContainer/>
         </div>
 

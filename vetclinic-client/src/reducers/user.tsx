@@ -1,6 +1,7 @@
 import {APP_LOAD, ASYNC_START, USER_LIST_PAGE_LOADED, USER_LIST_PAGE_UNLOADED,} from '../constants/actionTypes';
 
-export default (state = {}, action: any) => {
+
+export default (state: any = {}, action: any) => {
     switch (action.type) {
         case APP_LOAD:
             return {
@@ -8,14 +9,12 @@ export default (state = {}, action: any) => {
                 isLoading: false
             };
         case USER_LIST_PAGE_LOADED:
-            const users = action.payload;
-            if (!users)
-                return {...state};
-
+            if (!action.error || !state || state.users)
+                return {...state}
             return {
                 ...state,
                 isLoading: false,
-                users: action.payload ? action.payload() : null
+                users: state.users ? state.users.concat(action.payload) : action.payload
             };
 
         case ASYNC_START:

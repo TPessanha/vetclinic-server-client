@@ -10,6 +10,8 @@ import {UserType} from "../api";
 import Logout from './Logout';
 import {ClientDashboard} from "./Client/ClientDashboard";
 import {User} from "./User/User";
+import {REDIRECT} from "../constants/actionTypes";
+import {Link} from "react-router-dom";
 
 
 const routes = {
@@ -58,9 +60,16 @@ const LoggedInView = (props: any) => {
     const userType = props.userType;
     const isLoggedIn = props.isLoggedIn;
     const [display, setDisplay] = useState(<></>)
+    const dispatch = useDispatch();
+
+
+    const onClickRedirect = (to: any) => {
+        dispatch({type: REDIRECT, redirectTo: to})
+    }
+
 
     useEffect(() => {
-            if (isLoggedIn ) {
+            if (isLoggedIn) {
 
                 const d = userType === UserType.CLIENT ? <>
                     <li className="nav-item">
@@ -86,15 +95,15 @@ const LoggedInView = (props: any) => {
                     </li>
                 </> : userType === UserType.ADMINISTRATOR ? <>
                     <li className="nav-item">
-                        <A href="/users" className="nav-link">
+                        <a  onClick={() => onClickRedirect("users")} className="nav-link">
                             See All User
-                        </A>
+                        </a>
                     </li>
                 </> : <></>;
                 setDisplay(d)
             }
 
-         }, [isLoggedIn]
+        }, [isLoggedIn]
     )
 
     if (isLoggedIn) {
@@ -155,13 +164,12 @@ const LoggedInView = (props: any) => {
 };
 
 function Header(props: any) {
-    const dispatch = useDispatch();
+
     const routeResult = useRoutes(routes);
     const appName = useSelector((state: any) => state.common.appName);
     const userType = useSelector((state: any) => state.common.userType);
     const currentUser = useSelector((state: any) => state.common.currentUser);
     const isLoggedIn = useSelector((state: any) => state.common.isLoggedIn);
-
 
 
     return <>

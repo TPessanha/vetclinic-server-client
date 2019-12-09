@@ -86,11 +86,11 @@ const Employee = {
 
 const Client = {
     all: () =>
-        requests.get(`/client`),
+        requests.get(`/clients`),
     get: (clientId: number) =>
-        requests.get(`/client/${clientId}`),
+        requests.get(`/clients/${clientId}`),
     update: (client: any) =>
-        requests.put(`/client/${client.id}`, {Client: client}),
+        requests.put(`/clients/${client.id}`, {Client: client}),
 };
 
 

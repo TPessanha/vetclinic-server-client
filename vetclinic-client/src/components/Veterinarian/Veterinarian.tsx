@@ -3,7 +3,7 @@ import {VeterinarianContainer} from "./VeterinarianContainer";
 import {useSelector} from "react-redux";
 
 
-export const Employee = () => {
+export const Veterinarian = () => {
     const isLoading = useSelector((state: any) => state.veterinarian.isLoading);
 
     return <>

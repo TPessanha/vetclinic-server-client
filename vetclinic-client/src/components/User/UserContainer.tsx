@@ -3,24 +3,13 @@ import {useSelector} from "react-redux";
 import {UserList} from "./UserList";
 
 export const UserContainer = () => {
-    const loadedUsers = useSelector((state: any) => state.users.users);
-    const [users, setUser] = useState();
+    const loadedUsers = useSelector((state: any) => state.user.users);
 
-    useEffect(() => {
-        if (!users && loadedUsers) {
-            try {
-                setUser(loadedUsers)
 
-            } catch (e) {
-                console.log(e)
-            }
 
-        }
-    });
-
-    return users ? <>
+    return loadedUsers ? <>
         <div>
-            <UserList users={users || []}/>
+            <UserList users={loadedUsers || []}/>
         </div>
     </> : <></>
 

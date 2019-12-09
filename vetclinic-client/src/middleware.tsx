@@ -16,8 +16,11 @@ const promiseMiddleware = (store: any) => (next: any) => (action: any) => {
                     return
                 }
                 console.log('RESULT', res);
-                action.payload = res.body;
-                action.headers = res.headers;
+                if (!(res instanceof Array)) {
+
+                    action.payload = res.body;
+                    action.headers = res.headers;
+                }else  action.payload = res
                 store.dispatch({type: ASYNC_END, promise: action.payload});
                 store.dispatch(action);
             },
@@ -47,6 +50,7 @@ const localStorageMiddleware = (store: any) => (next: any) => (action: any) => {
         if (!action.error) {
             window.localStorage.setItem('token', action.headers.authorization);
             window.localStorage.setItem('username', action.headers.username);
+            window.localStorage.setItem('userType', action.headers.type);
             api.setToken(action.headers.authorization);
         }
     } else if (action.type === LOGOUT) {
