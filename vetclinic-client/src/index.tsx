@@ -5,6 +5,7 @@ import {history, store} from './store';
 import {Route, Router, Switch} from 'react-router-dom';
 
 import App from './components/App';
+import "./index.scss";
 
 
 ReactDOM.render((

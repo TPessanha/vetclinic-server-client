@@ -173,11 +173,6 @@ class VeterinarianController(
     @GetMapping("/{vetId:[0-9]+}/appointments")
     @AllowedForGetVeterinarian
     fun getVeterinarianAppointments(
-        @ApiParam(name = "employeeId", value = "(Required) The ID of the employee", required = true) @PathVariable(
-            value = "employeeId",
-            required = true
-        )
-        employeeId: Int,
         @ApiParam(name = "vetId", required = true, value = "(Required) Veterinarian identificator (id)")
         @PathVariable(value = "vetId", required = true) vetId: Int
     ) = veterinarianService.getVeterinarianAppointments(vetId)

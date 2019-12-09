@@ -32,7 +32,10 @@ import personal.ciai.vetclinic.service.UserService
 
 @RestController
 @RequestMapping("")
-class UserController(@Autowired val clientService: ClientService, @Autowired val userService: UserService) {
+class UserController(
+    @Autowired val clientService: ClientService,
+    @Autowired val userService: UserService
+) {
     @ApiOperation(
         value = "Login as a registered user",
         consumes = "application/json"

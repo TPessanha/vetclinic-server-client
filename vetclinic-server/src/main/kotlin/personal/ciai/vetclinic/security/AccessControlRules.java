@@ -80,7 +80,7 @@ public class AccessControlRules {
         @PreAuthorize(AllowedForEditPet.condition)
         public @interface AllowedForEditPet {
             String condition =
-                "hasRole('ADMIN') or " + IsPetOwner.condition + " and " + UserRules.IsPrincipalAccountOwner.condition;
+                    "hasRole('ADMIN') or " + IsPetOwner.condition + " and " + UserRules.IsPrincipalAccountOwner.condition;
         }
 
         @Target({ElementType.METHOD, ElementType.TYPE})
@@ -137,7 +137,7 @@ public class AccessControlRules {
         @PreAuthorize(AllowedForGetVeterinarian.condition)
         public @interface AllowedForGetVeterinarian {
             String condition = AllowedForAddVeterinarian.condition
-                + " or " + AllowedForEditVeterinarian.condition;
+                    + " or " + AllowedForEditVeterinarian.condition;
         }
     }
 
@@ -216,9 +216,9 @@ public class AccessControlRules {
         @PreAuthorize(AllowedForGetOneAppointment.condition)
         public @interface AllowedForGetOneAppointment {
             String condition =
-                "hasRole('ADMIN') or hasRole('VET') or (" +
-                    UserRules.IsPrincipalAccountOwner.condition + " and " + PetsRules.IsPetOwner.condition +
-                    ")";
+                    "hasRole('ADMIN') or hasRole('VET') or (" +
+                            UserRules.IsPrincipalAccountOwner.condition + " and " + PetsRules.IsPetOwner.condition +
+                            ")";
         }
 
         @Target({ElementType.METHOD, ElementType.TYPE})

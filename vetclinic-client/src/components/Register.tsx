@@ -1,4 +1,4 @@
-import {Link, Redirect} from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
 
 import React, {useEffect} from 'react';
 import api from '../api';
@@ -12,8 +12,6 @@ import Login from './Login';
 const routes = {
     "/login": () => <Login/>,
 };
-
-
 
 
 export const Singup = (props: any) => {
@@ -37,8 +35,7 @@ export const Singup = (props: any) => {
         dispatch({type: UPDATE_FIELD_AUTH, key: 'username', value: value.username})
     };
     const onSubmit = (username: string, email: string, password: string) => {
-        const payload = api.Auth.signup(username, email, password);
-        dispatch({type: SINGUP, payload})
+        dispatch({type: SINGUP, payload: api.Auth.signup(username, email, password)})
     };
 
     const onUnload = () => dispatch({type: REGISTER_PAGE_UNLOADED});

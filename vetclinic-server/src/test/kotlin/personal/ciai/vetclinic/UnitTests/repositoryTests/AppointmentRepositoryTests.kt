@@ -41,7 +41,7 @@ class AppointmentRepositoryTests {
     @Test
     @Transactional
     fun `basic test on findAll`() {
-        assertEquals(appointments.findAll().toList(), emptyList<Appointment>())
+        assertEquals(appointments.findAll().toList().size, 2)
     }
 
     @Test

@@ -11,6 +11,8 @@ import Logout from './Logout';
 import {ClientDashboard} from "./Client/ClientDashboard";
 import {User} from "./User/User";
 import {REDIRECT} from "../constants/actionTypes";
+import VetMainPage from "./Vet/VetMainPage";
+
 
 
 const routes = {
@@ -19,6 +21,7 @@ const routes = {
     "/register": () => <Singup/>,
     "/logout": () => <Logout/>,
     "/users": () => <User/>,
+    "/vet": () => <VetMainPage/>,
     "/admin/:username": ({id}: any) => <Administrator id={id}/>,
     "/cliend/:username": ({username}: any) => <ClientDashboard username={username}/>,
     // "/user/:username": ({username}: any) => <User username={username}/>,
@@ -83,13 +86,8 @@ const LoggedInView = (props: any) => {
                     </li>
                 </> : userType === UserType.VETERINARIAN ? <>
                     <li className="nav-item">
-                        <A href="/" className="nav-link">
-                            Schedules
-                        </A>
-                    </li>
-                    <li className="nav-item">
-                        <A href="/" className="nav-link">
-                            Appointments
+                        <A href="/vet" className="nav-link">
+                            Veterinarian Page
                         </A>
                     </li>
                 </> : userType === UserType.ADMINISTRATOR ? <>

@@ -30,7 +30,7 @@ object JWTSecret {
     private const val passphrase = "este é um grande segredo que tem que ser mantido escondido"
     val KEY: String = Base64.getEncoder().encodeToString(passphrase.toByteArray())
     const val SUBJECT = "JSON Web Token for CIAI 2019/20"
-    val VALIDITY = TimeUnit.MINUTES.toMillis(10).toInt() // 10 minutos in milliseconds
+    val VALIDITY = TimeUnit.MINUTES.toMillis(60).toInt() // 60 minutos in milliseconds
 }
 
 private fun addResponseToken(authentication: Authentication, response: HttpServletResponse) {
@@ -83,13 +83,24 @@ class UserPasswordAuthenticationFilterToJWT(
         filterChain: FilterChain?,
         auth: Authentication
     ) {
-
         // When returning from the Filter loop, add the token to the response
         addResponseToken(auth, response)
         val userEntity = users.getUserEntityByUsernameWithRoles(auth.name)
         val id = userEntity.get().id
 
+//            response?.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+//            response?.setHeader("Access-Control-Allow-Credentials", "true");
+//            response?.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+//            response?.setHeader("Access-Control-Max-Age", "3600");
+//            response?.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
+
         val majorRole = userEntity.get().getMajorRole()
+        when (majorRole) {
+            "ADMIN" -> response?.addHeader("redirect", "/administrators/$id")
+            "VET" -> response?.addHeader("redirect", "./veterinarians/$id")
+            else -> response?.addHeader("redirect", "./client/$id")
+        }
+
         when (majorRole) {
             "ADMIN" -> response.addHeader("type", "administrators")
             "VET" -> response.addHeader("type", "veterinarians")

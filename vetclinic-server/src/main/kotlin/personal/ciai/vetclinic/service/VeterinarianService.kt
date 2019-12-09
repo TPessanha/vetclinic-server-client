@@ -45,8 +45,8 @@ class VeterinarianService(
 
     fun delete(id: Int) {
         val vet: Veterinarian = getVeterinarianEntity(id)
-            vet.enabled = false
-            vetRepository.save(vet)
+        vet.enabled = false
+        vetRepository.save(vet)
     }
 
     fun getVeterinarianAppointments(vetId: Int): List<AppointmentDTO> {
