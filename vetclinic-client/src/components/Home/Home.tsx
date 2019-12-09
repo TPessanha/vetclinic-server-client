@@ -52,7 +52,6 @@ function Home() {
 
             <div className="container page">
                 <div className="row">
-                    {/*<MainView/>*/}
                     <Employee/>
                 </div>
             </div>

@@ -54,7 +54,8 @@ private fun addResponseToken(authentication: Authentication, response: HttpServl
 
 class UserPasswordAuthenticationFilterToJWT(
     defaultFilterProcessesUrl: String?,
-    private val anAuthenticationManager: AuthenticationManager
+    private val anAuthenticationManager: AuthenticationManager,
+    private val users: UserService
 ) : AbstractAuthenticationProcessingFilter(defaultFilterProcessesUrl) {
 
     override fun attemptAuthentication(
@@ -85,6 +86,15 @@ class UserPasswordAuthenticationFilterToJWT(
 
         // When returning from the Filter loop, add the token to the response
         addResponseToken(auth, response)
+        val userEntity = users.getUserEntityByUsernameWithRoles(auth.name)
+        val id = userEntity.get().id
+
+        val majorRole = userEntity.get().getMajorRole()
+        when (majorRole) {
+            "ADMIN" -> response.addHeader("type", "administrators")
+            "VET" -> response.addHeader("type", "veterinarians")
+            else -> response.addHeader("type", "client")
+        }
     }
 }
 

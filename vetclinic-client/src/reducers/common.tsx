@@ -2,7 +2,6 @@ import {
     ADMINISTRATOR_CREATED,
     ADMINISTRATOR_PAGE_UNLOADED,
     APP_LOAD,
-    GET_USER,
     HOME_PAGE_UNLOADED,
     LOGIN,
     LOGIN_PAGE_UNLOADED,
@@ -17,6 +16,7 @@ const defaultState = {
     appName: 'VetClinic',
     token: "",
     viewChangeCounter: 0,
+    userType: null,
     currentUser: null
 };
 
@@ -29,12 +29,6 @@ export default (state = defaultState, action: any) => {
                 appLoaded: true,
                 currentUser: action.payload ? action.payload : null,
                 isLoggedIn: action.token ? true : false
-            };
-        case GET_USER:
-            return {
-                ...state,
-                currentUser: !action.error ? action.payload : state.currentUser,
-                userType: action.payload ? action.payload.userType : null,
             };
         case REDIRECT:
             return {...state, redirectTo: null};
@@ -52,9 +46,9 @@ export default (state = defaultState, action: any) => {
                 ...state,
                 redirectTo: action.error ? null : '/',
                 token: action.error ? null : action.headers.authorization,
+                userType: action.error ? null : action.headers.type,
                 currentUser: null,
             };
-
         case ADMINISTRATOR_PAGE_UNLOADED:
         case HOME_PAGE_UNLOADED:
         case LOGIN_PAGE_UNLOADED:

@@ -5,7 +5,8 @@ import {LOGIN, LOGIN_PAGE_UNLOADED, UPDATE_FIELD_AUTH} from '../constants/action
 import useForm from "react-hook-form";
 import Home from "./Home/Home";
 import {Singup} from "./Register";
-import {useRoutes, A} from 'hookrouter';
+import {A, useRoutes} from 'hookrouter';
+import {Redirect} from 'react-router-dom';
 
 const routes = {
     "/": () => <Home/>,
@@ -17,7 +18,6 @@ function Login(props: any) {
     const {handleSubmit, register, errors} = useForm();
     const routeResult = useRoutes(routes);
     const isLoggedIn = useSelector((state: any) => state.common.isLoggedIn);
-
 
     const onChangeUserName = (value: any) => {
         dispatch({type: UPDATE_FIELD_AUTH, key: 'username', value: value.username})
@@ -38,10 +38,20 @@ function Login(props: any) {
 
     useEffect(() => {
 
+
         return (() => {
             onUnload();
         })
     }, []);
+
+    if (isLoggedIn) {
+        return <>
+
+            <Redirect to='/'/>
+            <Home/>
+        </>
+            ;
+    }
 
     return <>
         <div className="auth-page">

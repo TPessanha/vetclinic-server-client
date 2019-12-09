@@ -27,7 +27,7 @@ const plugin = (req: any) => {
 };
 
 export enum UserType {
-    ADMINISTRATOR, VETERINARIAN, CLIENT, UNREGISTERED
+    ADMINISTRATOR = "administrators", VETERINARIAN = "veterinarians", CLIENT = "clients", UNREGISTERED = ""
 }
 
 const requests = {
@@ -80,17 +80,13 @@ const Veterinarian = {
 };
 
 const Employee = {
-    all: () => {
-        let result = [];
-        result.push(Administrator.all());
-        result.push(Veterinarian.all());
+    all: () => Promise.all([Administrator.all(), Veterinarian.all()])
 
-        return result
-    }
-};
+}
+
 const Client = {
-    current: () =>
-        requests.get(`/client/`),
+    all: () =>
+        requests.get(`/client`),
     get: (clientId: number) =>
         requests.get(`/client/${clientId}`),
     update: (client: any) =>
@@ -99,19 +95,8 @@ const Client = {
 
 
 const User = {
-    // type: (id: number) =>
-    //     (Veterinarian.get(id)
-    //         ? UserType.VETERINARIAN : (Administrator.get(id)
-    //             ? UserType.ADMINISTRATOR : (Client.get(id)
-    //                 ? UserType.CLIENT : UserType.UNREGISTERED))),
-    // current: () =>
-    //     (Veterinarian.current()
-    //         ? UserType.VETERINARIAN : (Administrator.current()
-    //             ? UserType.ADMINISTRATOR : (Client.current()
-    //                 ? UserType.CLIENT : UserType.UNREGISTERED))),
-
-    getByUserName: (username: string) => request.get(`/user/${username}`)
-
+    getByUserName: (username: string) => request.get(`/user/${username}`),
+    all: () => Promise.all([Administrator.all(), Veterinarian.all(), Client.all()])
 
 };
 

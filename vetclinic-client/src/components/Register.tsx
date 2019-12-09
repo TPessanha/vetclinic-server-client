@@ -1,4 +1,4 @@
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 
 import React, {useEffect} from 'react';
 import api from '../api';
@@ -24,6 +24,7 @@ export const Singup = (props: any) => {
     const password = useSelector((state: any) => state.auth.password);
     const isLoading = useSelector((state: any) => state.auth.isLoading);
     const {handleSubmit, register, errors} = useForm();
+    const isLoggedIn = useSelector((state: any) => state.common.isLoggedIn);
 
 
     const onChangeEmail = (value: any) => {
@@ -55,6 +56,14 @@ export const Singup = (props: any) => {
         })
     }, []);
 
+    if (isLoggedIn) {
+        return <>
+
+            <Redirect to='/'/>
+            <Home/>
+        </>
+            ;
+    }
 
     return <>
         <div className="auth-page">

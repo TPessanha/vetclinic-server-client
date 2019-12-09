@@ -9,6 +9,7 @@ import Administrator from "./Administrator/Administrator";
 import {UserType} from "../api";
 import Logout from './Logout';
 import {ClientDashboard} from "./Client/ClientDashboard";
+import {User} from "./User/User";
 
 
 const routes = {
@@ -16,6 +17,7 @@ const routes = {
     "/login": () => <Login/>,
     "/register": () => <Singup/>,
     "/logout": () => <Logout/>,
+    "/users": () => <User/>,
     "/admin/:username": ({id}: any) => <Administrator id={id}/>,
     "/cliend/:username": ({username}: any) => <ClientDashboard username={username}/>,
     // "/user/:username": ({username}: any) => <User username={username}/>,
@@ -53,12 +55,14 @@ const LoggedOutView = (props: any) => {
 
 const LoggedInView = (props: any) => {
     const currentUser = props.currentUser;
+    const userType = props.userType;
+    const isLoggedIn = props.isLoggedIn;
     const [display, setDisplay] = useState(<></>)
 
     useEffect(() => {
-            if (props.isLoggedIn && currentUser) {
+            if (isLoggedIn ) {
 
-                const d = props.userType === UserType.CLIENT ? <>
+                const d = userType === UserType.CLIENT ? <>
                     <li className="nav-item">
                         <A href="/" className="nav-link">
                             Pets
@@ -69,7 +73,7 @@ const LoggedInView = (props: any) => {
                             Appointments
                         </A>
                     </li>
-                </> : props.userType === UserType.VETERINARIAN ? <>
+                </> : userType === UserType.VETERINARIAN ? <>
                     <li className="nav-item">
                         <A href="/" className="nav-link">
                             Schedules
@@ -80,19 +84,20 @@ const LoggedInView = (props: any) => {
                             Appointments
                         </A>
                     </li>
-                </> : props.userType === UserType.ADMINISTRATOR ? <>
+                </> : userType === UserType.ADMINISTRATOR ? <>
                     <li className="nav-item">
-                        <A href="/" className="nav-link">
+                        <A href="/users" className="nav-link">
                             See All User
                         </A>
                     </li>
                 </> : <></>;
                 setDisplay(d)
             }
-        }, []
+
+         }, [isLoggedIn]
     )
 
-    if (props.isLoggedIn) {
+    if (isLoggedIn) {
 
 
         if (currentUser) {
@@ -158,15 +163,6 @@ function Header(props: any) {
     const isLoggedIn = useSelector((state: any) => state.common.isLoggedIn);
 
 
-    // const onGetUsertype = () => {
-    //     return dispatch({
-    //         type: GET_USER, payload: Promise.all([
-    //             api.Administrator.get(currentUser.id),
-    //             api.Veterinarian.get(currentUser.id),
-    //             api.Client.get(currentUser.id)
-    //         ])
-    //     });
-    // };
 
     return <>
         <nav className="navbar navbar-light">

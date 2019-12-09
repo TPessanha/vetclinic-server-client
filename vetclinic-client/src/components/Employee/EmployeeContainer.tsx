@@ -9,13 +9,18 @@ export const EmployeeContainer = () => {
 
     useEffect(() => {
         if (!employees && vet && admin) {
-            console.log(vet)
-            setEmployee(vet.concat(admin))
+            try {
+                setEmployee(vet.concat(admin))
+
+            } catch (e) {
+                console.log(e)
+            }
+
         }
     });
 
-    return  employees ? <>
-        <div >
+    return employees ? <>
+        <div>
             <EmployeeList employees={employees || []}/>
         </div>
     </> : <></>
