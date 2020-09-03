@@ -1,3 +1,16 @@
+## What is this repository
+This repository holds a server and a client for a pretend veterinarian clinic.
+The server is made using Spring framework and Kotlin.
+The client uses React.
+
+## Used technologies
+
+1. junit
+2. Mockito
+3. Spring Boot
+4. React/Redux
+5. Kotlin/typescript
+
 ## To know as a team member (Best Practices)
 
 It is best to use IntelliJ for the server project, if you want to use other IDE you are free to do so as long as it doesn't mess up the code.
